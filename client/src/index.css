@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 3D perspective container */
+.perspective {
+  perspective: 1000px;
+}
+
+/* Preserve 3D transform for children */
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+/* Rotate helpers (for smooth hover rotation) */
+.rotate-x-\[6deg\] {
+  transform: rotateX(6deg);
+}
+.rotate-y-\[6deg\] {
+  transform: rotateY(6deg);
+}
+
+.input-field {
+  @apply border border-gray-300 dark:border-gray-700 rounded-lg p-2 w-full;
+}
