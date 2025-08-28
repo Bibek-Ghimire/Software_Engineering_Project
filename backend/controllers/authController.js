@@ -1,51 +1,48 @@
-// controllers/authController.js (ES Module Syntax)
 import User from "../models/User.js";
-import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+// Generate JWT token
+const generateToken = (id, role) => {
+  return jwt.sign({ id, role }, process.env.JWT_SECRET, { expiresIn: "1h" });
+};
+
+// REGISTER USER
 export const registerUser = async (req, res) => {
-  const { name, email, password } = req.body;
   try {
-    const userExists = await User.findOne({ email });
-    if (userExists) return res.status(400).json({ message: "User already exists" });
+    const { name, email, password, role } = req.body;
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({ name, email, password: hashedPassword });
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
 
-    res.status(201).json({
-      message: "User registered successfully",
-      user: { name, email }
-    });
-  } catch (err) {
-    res.status(500).json({
-      message: "Server error",
-      error: err.message
-    });
+    const newUser = new User({ name, email, password, role });
+    await newUser.save();
+
+    res.status(201).json({ message: "User registered successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
+// LOGIN USER
 export const loginUser = async (req, res) => {
-  const { email, password } = req.body;
   try {
+    const { email, password } = req.body;
+
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "Invalid credentials" });
+    if (!user || !(await user.matchPassword(password))) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
-
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "2d"
-    });
+    const token = generateToken(user._id, user.role);
 
     res.json({
       message: "Login successful",
       token,
-      user: { name: user.name, email: user.email }
+      user: { id: user._id, name: user.name, email: user.email, role: user.role },
     });
-  } catch (err) {
-    res.status(500).json({
-      message: "Server error",
-      error: err.message
-    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };

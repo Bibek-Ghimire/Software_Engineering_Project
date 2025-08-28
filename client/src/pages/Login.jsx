@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { loginUser } from "../services/authService";
 import toast from "react-hot-toast";
 import { 
   Mail, 
@@ -19,50 +20,71 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [selectedRole, setSelectedRole] = useState(""); // Track role from dropdown
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    if (!email || !password) {
-      toast.error("Please fill in all fields");
+    if (!email || !password || !selectedRole) {
+      toast.error("Please fill in all fields and select a role");
       return;
     }
 
-  // Simulate API call
-  setTimeout(() => {
-    toast.success("Login successful! Welcome back.");
+    try {
+      const data = await loginUser({ email, password });
 
-    // ✅ Simulate fetching user data (e.g., from localStorage or backend)
-    const userData = JSON.parse(localStorage.getItem("user")) || {
-      role: "Student" // You can test with "Teacher"
-    };
+      // Save user and token
+      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("token", data.token);
 
-    // ✅ Navigate based on role
-    if (userData.role === "Student") {
-      navigate("/dashboard/student");
-    } else {
-      navigate("/dashboard/teacher");
+      // Role from backend
+      const backendRole = data.user.role.toLowerCase();
+
+      // Check if selected role matches backend role
+      if (backendRole !== selectedRole) {
+        toast.error(`This user is not registered as a ${selectedRole}`);
+        return;
+      }
+
+      toast.success("Login successful!");
+
+      // Navigate based on backend role
+      if (backendRole === "student") {
+        navigate("/dashboard/student");
+      } else if (backendRole === "teacher") {
+        navigate("/dashboard/teacher");
+      } else {
+        navigate("/"); // fallback
+      }
+    } catch (error) {
+      const message = error?.response?.data?.message || error.message || "Login failed";
+      toast.error(message);
     }
-  }, 1000);
-};
+  };
 
-// Social login handler moved outside handleLogin
-const handleSocialLogin = (provider) => {
+  const handleSocialLogin = (provider) => {
+  if (!selectedRole) {
+    toast.error("Please select a role before using social login");
+    return;
+  }
+
   toast.success(`Logging in with ${provider}...`);
 
   setTimeout(() => {
-    // ✅ Simulated role for social login (can be dynamic too)
-    const userData = {
-      role: "Teacher" // or "Student"
-    };
+    // Simulate role returned from social login (matching selectedRole)
+    const socialRole = selectedRole.toLowerCase(); // lowercase for consistency
 
-    if (userData.role === "Student") {
+    if (socialRole === "student") {
       navigate("/dashboard/student");
-    } else {
+    } else if (socialRole === "teacher") {
       navigate("/dashboard/teacher");
+    } else {
+      toast.error("Unknown role");
+      navigate("/"); // fallback
     }
   }, 1500);
 };
+
 
 
   return (
@@ -107,21 +129,24 @@ const handleSocialLogin = (provider) => {
           {/* Form */}
           <form onSubmit={handleLogin} className="space-y-4">
              {/* Role Selector */}
-  <div className="relative">
-    <select
-      required
-      className="w-full appearance-none bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-12 py-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300"
-    >
-      <option value="">Select Role</option>
-      <option value="student">👨‍🎓 Student</option>
-      <option value="teacher">👩‍🏫 Teacher</option>
-    </select>
-    <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 2C9.79 2 8 3.79 8 6s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 16c-4.41 0-8 1.79-8 4v2h16v-2c0-2.21-3.59-4-8-4z" />
-      </svg>
-    </div>
+{/* Role Selector */}
+<div className="relative">
+  <select
+    required
+    value={selectedRole} // bind to state
+    onChange={(e) => setSelectedRole(e.target.value)} // update state on change
+    className="w-full appearance-none bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-12 py-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300"
+  >
+    <option value="">Select Role</option>
+    <option value="student">👨‍🎓 Student</option>
+    <option value="teacher">👩‍🏫 Teacher</option>
+  </select>
+  <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2C9.79 2 8 3.79 8 6s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 16c-4.41 0-8 1.79-8 4v2h16v-2c0-2.21-3.59-4-8-4z" />
+    </svg>
   </div>
+</div>
 
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />

@@ -1,16 +1,27 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
-  Calendar,
   BookOpen,
   Users,
   MessageSquare,
   LogOut,
   GraduationCap,
+  UserCircle,
+  PlusCircle,
 } from "lucide-react";
 
 const Sidebar = () => {
+  const navigate = useNavigate(); // added navigate
+
+  const handleLogout = () => {
+    // Clear auth info
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    // Redirect to homepage
+    navigate("/");
+  };
+
   return (
     <div className="w-64 min-h-screen bg-white dark:bg-gray-800 shadow-xl px-4 py-6 flex flex-col justify-between sticky top-0">
       {/* Logo */}
@@ -22,19 +33,23 @@ const Sidebar = () => {
         {/* Navigation Links */}
         <nav className="space-y-2">
           <SidebarLink to="/dashboard/student" label="Dashboard" icon={<LayoutDashboard />} />
-          <SidebarLink to="/courses" label="My Courses" icon={<BookOpen />} />
+          <SidebarLink to="/courses" label="Courses" icon={<BookOpen />} />
           <SidebarLink to="/groups" label="Study Groups" icon={<Users />} />
-          <SidebarLink to="/discussions" label="Discussions" icon={<MessageSquare />} />
+          <SidebarLink to="/creategroup" label="Create Group" icon={<PlusCircle />} />
           <SidebarLink to="/resources" label="Resources" icon={<GraduationCap />} />
-          <SidebarLink to="/profile" label="View Profile" icon={<Users className="w-5 h-5" />} />
-
-
+          <SidebarLink to="/discussions" label="Discussions" icon={<MessageSquare />} />
+          <SidebarLink to="/profile" label="Profile" icon={<UserCircle />} />
         </nav>
       </div>
 
       {/* Logout */}
       <div className="border-t pt-4">
-        <SidebarLink to="/logout" label="Logout" icon={<LogOut />} />
+        <button
+          onClick={handleLogout}
+          className="flex items-center px-3 py-2 rounded-lg transition-colors text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 w-full text-left"
+        >
+          <LogOut className="mr-3 w-5 h-5" /> Logout
+        </button>
       </div>
     </div>
   );

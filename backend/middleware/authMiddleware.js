@@ -1,22 +1,21 @@
-// middleware/authMiddleware.js
 import jwt from "jsonwebtoken";
+import User from "../models/User.js";
 
-const authMiddleware = (req, res, next) => {
+const protect = async (req, res, next) => {
   const authHeader = req.headers.authorization;
-
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "No token provided, authorization denied" });
+    return res.status(401).json({ message: "Unauthorized" });
   }
 
   const token = authHeader.split(" ")[1];
-
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // contains { id: user._id }
+    req.user = await User.findById(decoded.id).select("-password");
     next();
-  } catch (error) {
-    return res.status(401).json({ message: "Token is not valid" });
+  } catch (err) {
+    res.status(401).json({ message: "Invalid token" });
   }
 };
 
-export default authMiddleware;
+// ✅ Named export (matches your `import { protect } ...`)
+export { protect };

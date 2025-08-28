@@ -1,250 +1,208 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { Linkedin, Github } from "lucide-react";
+import { getProfile } from "../services/profileService";
 
 const ProfileEdit = () => {
   const navigate = useNavigate();
-  const storedProfile = JSON.parse(localStorage.getItem("syncademy_profile"));
+  const [profile, setProfile] = useState({
+    name: "",
+    email: "",
+    college: "",
+    bio: "",
+    skills: [],
+    interests: [],
+    photo: null,
+    linkedin: "",
+    github: "",
+    resume: null,
+  });
 
-  const [name, setName] = useState(storedProfile?.name || "");
-  const [email, setEmail] = useState(storedProfile?.email || "");
-  const [college, setCollege] = useState(storedProfile?.college || "");
-  const [bio, setBio] = useState(storedProfile?.bio || "");
-  const [skills, setSkills] = useState(storedProfile?.skills || []);
   const [skillInput, setSkillInput] = useState("");
-
-  const [interests, setInterests] = useState(storedProfile?.interests || []);
   const [interestInput, setInterestInput] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const [photo, setPhoto] = useState(storedProfile?.photo || "");
-  const [linkedin, setLinkedin] = useState(storedProfile?.linkedin || "");
-  const [github, setGithub] = useState(storedProfile?.github || "");
-  const [resumeFile, setResumeFile] = useState(storedProfile?.resume || null);
+  useEffect(() => {
+    (async () => {
+      const data = await getProfile();
+      if (data) setProfile(data);
+    })();
+  }, []);
 
-  // Upload handlers
-  const handlePhotoChange = (e) => {
-    const file = e.target.files[0];
-    if (!file?.type.startsWith("image/")) return alert("Upload a valid image.");
-    const reader = new FileReader();
-    reader.onloadend = () => setPhoto(reader.result);
-    reader.readAsDataURL(file);
+   const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProfile({ ...profile, [name]: value });
   };
 
-  const handleResumeChange = (e) => {
+  const handleFileUpload = (e, field) => {
     const file = e.target.files[0];
-    if (file?.type !== "application/pdf") return alert("Upload a PDF file.");
-    const reader = new FileReader();
-    reader.onloadend = () => setResumeFile(reader.result);
-    reader.readAsDataURL(file);
+    if (file) setProfile({ ...profile, [field]: file });
   };
 
-  // Add/remove skills/interests
-  const addSkill = () => {
-    if (skillInput.trim() && !skills.includes(skillInput.trim())) {
-      setSkills([...skills, skillInput.trim()]);
+  const handleAddSkill = () => {
+    if (skillInput.trim()) {
+      setProfile({ ...profile, skills: [...profile.skills, skillInput] });
       setSkillInput("");
     }
   };
-  const removeSkill = (skill) => {
-    setSkills(skills.filter((s) => s !== skill));
-  };
 
-  const addInterest = () => {
-    if (interestInput.trim() && !interests.includes(interestInput.trim())) {
-      setInterests([...interests, interestInput.trim()]);
+  const handleAddInterest = () => {
+    if (interestInput.trim()) {
+      setProfile({ ...profile, interests: [...profile.interests, interestInput] });
       setInterestInput("");
     }
   };
-  const removeInterest = (interest) => {
-    setInterests(interests.filter((i) => i !== interest));
-  };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const updatedProfile = {
-      name,
-      email,
-      college,
-      bio,
-      skills,
-      interests,
-      photo,
-      linkedin,
-      github,
-      resume: resumeFile,
-    };
-    localStorage.setItem("syncademy_profile", JSON.stringify(updatedProfile));
-    navigate("/profile");
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+
+      const formData = new FormData();
+      formData.append("name", profile.name);
+      formData.append("college", profile.college || "");
+      formData.append("bio", profile.bio || "");
+      formData.append("linkedin", profile.linkedin || "");
+      formData.append("github", profile.github || "");
+      formData.append("skills", JSON.stringify(profile.skills));
+      formData.append("interests", JSON.stringify(profile.interests));
+
+      if (profile.photo instanceof File) formData.append("photo", profile.photo);
+      if (profile.resume instanceof File) formData.append("resume", profile.resume);
+
+      await axios.put("http://localhost:5000/api/profile", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      navigate("/profile");
+    } catch (err) {
+      console.error("❌ Error updating profile:", err.response?.data || err);
+      alert("Failed to save profile. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 p-6 flex items-center justify-center">
-      <form onSubmit={handleSubmit} className="bg-white shadow-xl rounded-3xl p-8 max-w-xl w-full">
-        <h2 className="text-3xl font-bold mb-6 text-blue-700">Edit Profile</h2>
-
-        {/* Profile Photo */}
-        <div className="mb-6 text-center">
-          {photo ? (
-            <img src={photo} alt="Profile" className="w-24 h-24 mx-auto rounded-full border-4 border-blue-500 mb-2 object-cover" />
-          ) : (
-            <div className="w-24 h-24 mx-auto rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-bold text-xl mb-2">
-              ?
-            </div>
-          )}
-          <input type="file" accept="image/*" onChange={handlePhotoChange} />
-        </div>
-
-        {/* Name */}
-        <label className="block mb-4">
-          <span className="font-semibold text-gray-700">Name</span>
-          <input
-            type="text"
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="mt-1 w-full border px-3 py-2 rounded-md border-gray-300 focus:ring-blue-300 focus:outline-none"
-          />
-        </label>
-
-        {/* Email (disabled) */}
-        <label className="block mb-4">
-          <span className="font-semibold text-gray-700">Email</span>
-          <input
-            type="email"
-            value={email}
-            disabled
-            className="mt-1 w-full border px-3 py-2 rounded-md bg-gray-100 text-gray-500"
-          />
-        </label>
-
-        {/* College */}
-        <label className="block mb-4">
-          <span className="font-semibold text-gray-700">College</span>
-          <input
-            type="text"
-            value={college}
-            onChange={(e) => setCollege(e.target.value)}
-            className="mt-1 w-full border px-3 py-2 rounded-md border-gray-300 focus:ring-blue-300 focus:outline-none"
-          />
-        </label>
-
-        {/* Bio */}
-        <label className="block mb-4">
-          <span className="font-semibold text-gray-700">Bio</span>
-          <textarea
-            rows={3}
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            className="mt-1 w-full border px-3 py-2 rounded-md border-gray-300 focus:ring-blue-300 focus:outline-none"
-          />
-        </label>
-
+    <div className="p-6 max-w-3xl mx-auto bg-white rounded-lg shadow">
+      <h2 className="text-3xl font-bold mb-6 text-blue-700">✏️ Edit Profile</h2>
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <input type="text" name="name" value={profile.name} onChange={handleChange} placeholder="Name" className="border p-2 w-full rounded" required />
+        <input type="email" name="email" value={profile.email} disabled className="border p-2 w-full bg-gray-100 rounded" />
+        <input type="text" name="college" value={profile.college} onChange={handleChange} placeholder="College" className="border p-2 w-full rounded" />
+        <textarea name="bio" value={profile.bio} onChange={handleChange} placeholder="Short Bio" className="border p-2 w-full rounded" />
+        
         {/* Skills */}
-        <div className="mb-4">
-          <label className="font-semibold text-gray-700">Skills</label>
-          <div className="flex gap-2 mt-1">
-            <input
-              type="text"
-              value={skillInput}
-              onChange={(e) => setSkillInput(e.target.value)}
-              placeholder="Add a skill"
-              className="flex-grow border px-3 py-2 rounded-md border-gray-300 focus:ring-blue-300 focus:outline-none"
-            />
-            <button
-              type="button"
-              onClick={addSkill}
-              className="bg-blue-500 text-white px-3 rounded hover:bg-blue-600"
-            >
-              +
-            </button>
-          </div>
-          <div className="flex flex-wrap gap-2 mt-2">
-            {skills.map((skill, idx) => (
-              <span key={idx} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center">
-                {skill}
-                <button
-                  type="button"
-                  onClick={() => removeSkill(skill)}
-                  className="ml-2 text-red-500 hover:text-red-700"
-                >
-                  ✖
-                </button>
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Interests */}
-        <div className="mb-4">
-          <label className="font-semibold text-gray-700">Interests</label>
-          <div className="flex gap-2 mt-1">
-            <input
-              type="text"
-              value={interestInput}
-              onChange={(e) => setInterestInput(e.target.value)}
-              placeholder="Add an interest"
-              className="flex-grow border px-3 py-2 rounded-md border-gray-300 focus:ring-blue-300 focus:outline-none"
-            />
-            <button
-              type="button"
-              onClick={addInterest}
-              className="bg-blue-500 text-white px-3 rounded hover:bg-blue-600"
-            >
-              +
-            </button>
-          </div>
-          <div className="flex flex-wrap gap-2 mt-2">
-            {interests.map((interest, idx) => (
-              <span key={idx} className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm flex items-center">
-                {interest}
-                <button
-                  type="button"
-                  onClick={() => removeInterest(interest)}
-                  className="ml-2 text-red-500 hover:text-red-700"
-                >
-                  ✖
-                </button>
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* LinkedIn */}
-        <label className="block mb-4">
-          <span className="font-semibold text-gray-700">LinkedIn</span>
-          <input
-            type="url"
-            value={linkedin}
-            onChange={(e) => setLinkedin(e.target.value)}
-            className="mt-1 w-full border px-3 py-2 rounded-md border-gray-300 focus:ring-blue-300 focus:outline-none"
-            placeholder="https://linkedin.com/in/your-profile"
-          />
-        </label>
-
-        {/* GitHub */}
-        <label className="block mb-4">
-          <span className="font-semibold text-gray-700">GitHub</span>
-          <input
-            type="url"
-            value={github}
-            onChange={(e) => setGithub(e.target.value)}
-            className="mt-1 w-full border px-3 py-2 rounded-md border-gray-300 focus:ring-blue-300 focus:outline-none"
-            placeholder="https://github.com/your-username"
-          />
-        </label>
-
-        {/* Resume */}
-        <label className="block mb-6">
-          <span className="font-semibold text-gray-700">Upload Resume (PDF)</span>
-          <input type="file" accept=".pdf" onChange={handleResumeChange} className="mt-1 block w-full" />
-          {resumeFile && <p className="mt-1 text-sm text-green-600">Resume uploaded ✔</p>}
-        </label>
-
+<div>
+  <label>Skills</label>
+  <div className="flex">
+    <input
+      value={skillInput}
+      onChange={(e) => setSkillInput(e.target.value)}
+      placeholder="Add Skill"
+      className="border p-2 flex-1 rounded"
+    />
+    <button
+      type="button"
+      onClick={handleAddSkill}
+      className="ml-2 px-3 py-1 bg-blue-500 text-white rounded"
+    >
+      Add
+    </button>
+  </div>
+  <div className="flex gap-2 mt-2 flex-wrap">
+    {profile.skills.map((s, i) => (
+      <span
+        key={i}
+        className="px-2 py-1 bg-gray-200 rounded flex items-center gap-1"
+      >
+        {s}
         <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition"
+          type="button"
+          onClick={() =>
+            setProfile({
+              ...profile,
+              skills: profile.skills.filter((_, idx) => idx !== i),
+            })
+          }
+          className="text-red-500 font-bold ml-1"
         >
-          Save Changes
+          ×
         </button>
+      </span>
+    ))}
+  </div>
+</div>
+
+{/* Interests */}
+<div>
+  <label>Interests</label>
+  <div className="flex">
+    <input
+      value={interestInput}
+      onChange={(e) => setInterestInput(e.target.value)}
+      placeholder="Add Interest"
+      className="border p-2 flex-1 rounded"
+    />
+    <button
+      type="button"
+      onClick={handleAddInterest}
+      className="ml-2 px-3 py-1 bg-green-500 text-white rounded"
+    >
+      Add
+    </button>
+  </div>
+  <div className="flex gap-2 mt-2 flex-wrap">
+    {profile.interests.map((i, idx) => (
+      <span
+        key={idx}
+        className="px-2 py-1 bg-gray-200 rounded flex items-center gap-1"
+      >
+        {i}
+        <button
+          type="button"
+          onClick={() =>
+            setProfile({
+              ...profile,
+              interests: profile.interests.filter((_, index) => index !== idx),
+            })
+          }
+          className="text-red-500 font-bold ml-1"
+        >
+          ×
+        </button>
+      </span>
+    ))}
+  </div>
+</div>
+
+
+        <div className="flex items-center border rounded p-2">
+          <Linkedin className="text-blue-600 w-5 h-5 mr-2" />
+          <input type="text" name="linkedin" value={profile.linkedin} onChange={handleChange} placeholder="LinkedIn URL" className="flex-1 outline-none bg-transparent" />
+        </div>
+
+        <div className="flex items-center border rounded p-2">
+          <Github className="text-gray-800 w-5 h-5 mr-2" />
+          <input type="text" name="github" value={profile.github} onChange={handleChange} placeholder="GitHub URL" className="flex-1 outline-none bg-transparent" />
+        </div>
+
+        <div>
+          <label>Profile Photo</label>
+          <input type="file" onChange={(e) => handleFileUpload(e, "photo")} />
+        </div>
+
+        <div>
+          <label>Resume</label>
+          <input type="file" onChange={(e) => handleFileUpload(e, "resume")} />
+        </div>
+
+        <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">{loading ? "Saving..." : "Save Changes"}</button>
       </form>
     </div>
   );

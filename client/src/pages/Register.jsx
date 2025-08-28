@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState } from "react"; 
 import { useNavigate, Link } from "react-router-dom";
+
 import toast from "react-hot-toast";
 import { 
   User, 
@@ -14,32 +15,44 @@ import {
   Shield
 } from "lucide-react";
 
+import { registerUser } from "../services/authService";
+
 const Register = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("student"); // default role
 
-  const handleRegister = (e) => {
-    e.preventDefault();
+  const handleRegister = async (e) => {
+  e.preventDefault();
 
-    if (!name || !email || !password) {
-      toast.error("Please fill in all fields");
-      return;
-    }
+  if (!name || !email || !password || !role) {
+    toast.error("Please fill in all fields");
+    return;
+  }
 
-    if (password.length < 6) {
-      toast.error("Password must be at least 6 characters");
-      return;
-    }
+  if (password.length < 6) {
+    toast.error("Password must be at least 6 characters");
+    return;
+  }
 
-    // Simulate API call
-    setTimeout(() => {
-      toast.success("Registration successful! Please login.");
-      navigate("/login");
-    }, 1000);
-  };
+  try {
+    // Call backend API with role
+    const data = await registerUser({ name, email, password, role });
+    console.log("Registered user:", data);
+
+    toast.success("Registration successful! Please login.");
+    navigate("/login");
+  } catch (error) {
+    // Show the backend error message if available
+    const message = error?.response?.data?.message || error.message || "Registration failed";
+    toast.error(message);
+    console.error("Registration error:", error.response || error);
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
@@ -87,14 +100,19 @@ const Register = () => {
           <form onSubmit={handleRegister} className="space-y-4">
              <div className="relative">
     <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-    <select
-      className="w-full appearance-none bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-12 py-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-300"
-      required
-    >
-      <option value="">Select Role</option>
-      <option value="student">👨‍🎓 Student</option>
-      <option value="teacher">👩‍🏫 Teacher</option>
-    </select>
+   <div className="relative">
+  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+  <select
+    className="w-full appearance-none bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-12 py-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-300"
+    value={role}                 // bind to state
+    onChange={(e) => setRole(e.target.value)} // update state on change
+    required
+  >
+    <option value="">Select Role</option>
+    <option value="student">👨‍🎓 Student</option>
+    <option value="teacher">👩‍🏫 Teacher</option>
+  </select>
+</div>
   </div>
             <div className="relative">
               <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />

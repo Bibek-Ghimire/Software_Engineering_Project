@@ -1,224 +1,208 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import axios from "axios";
+import { Linkedin, Github, Download, Edit2, Mail, Moon, Sun } from "lucide-react";
 import Sidebar from "../components/Sidebar";
-import { Linkedin, Github, CalendarDays, FileText, Award } from "lucide-react";
-
-// ✅ Function to create default profile if none found
-const createDefaultProfile = () => {
-  const defaultProfile = {
-    name: "Bibek Ghimire",
-    email: "bibek@example.com",
-    college: "ABC College of Engineering",
-    bio: "Frontend enthusiast, React lover, and peer mentor.",
-    photo: "https://via.placeholder.com/150",
-    skills: ["React", "Tailwind CSS", "Node.js"],
-    interests: ["Peer Learning", "UI/UX", "Community Building"],
-  };
-  localStorage.setItem("syncademy_profile", JSON.stringify(defaultProfile));
-  return defaultProfile;
-};
 
 const ProfileView = () => {
   const navigate = useNavigate();
-  const [profile, setProfile] = useState(null);
+  const [user, setUser] = useState(null);
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("theme") === "dark"
+  );
+
+  const fetchProfile = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get("http://localhost:5000/api/profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUser(res.data);
+    } catch (err) {
+      console.error(err);
+      navigate("/login");
+    }
+  };
 
   useEffect(() => {
-    try {
-      const stored = JSON.parse(localStorage.getItem("syncademy_profile"));
-      if (stored && stored.name) {
-        setProfile(stored);
-      } else {
-        const defaultProfile = createDefaultProfile();
-        setProfile(defaultProfile);
-      }
-    } catch (error) {
-      console.error("Failed to load profile:", error);
-      const defaultProfile = createDefaultProfile();
-      setProfile(defaultProfile);
-    }
+    fetchProfile();
   }, []);
 
-  if (!profile) {
+  // Handle theme toggle
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
+
+  if (!user) {
     return (
-      <div className="min-h-screen flex justify-center items-center text-center text-xl text-gray-600">
-        No profile found. Please log in or create your profile.
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-lg font-medium text-gray-600">Loading profile...</p>
       </div>
     );
   }
 
   return (
-    <>
-      
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-slate-900 dark:to-slate-800 p-6 flex items-center justify-center">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors">
+      {/* Sidebar */}
+      <Sidebar />
 
-         {/* Sidebar */}
-      <div className="w-64 fixed top-0 left-0 h-full z-30">
-        <Sidebar />
-      </div>
-
-      <div className="flex-grow ml-64 p-6 flex items-center justify-center">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6 }}
-          className="bg-white dark:bg-gray-900 border border-blue-200 dark:border-gray-700 shadow-2xl rounded-3xl w-full max-w-4xl p-8"
+      {/* Main Content */}
+      <div className="flex-1 p-6 lg:p-10 space-y-8 relative">
+        {/* Dark Mode Toggle */}
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="absolute top-4 right-4 p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 shadow hover:scale-110 transition"
         >
+          {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+        </button>
 
-
-          {/* Profile Header */}
-          <div className="text-center">
-            {profile.photo && (
+        {/* Profile Header */}
+        <div className="flex flex-col items-center relative">
+          <div className="relative">
+            {user.profilePicture ? (
               <img
-                src={profile.photo}
+                src={`http://localhost:5000${user.profilePicture}`}
                 alt="Profile"
-                className="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-blue-500 shadow-md"
+                className="w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover"
               />
+            ) : (
+              <div className="w-32 h-32 rounded-full bg-indigo-500 flex items-center justify-center text-white text-3xl font-bold shadow-lg">
+                {user.name[0]}
+              </div>
             )}
-            <h2 className="text-3xl font-bold text-blue-700 dark:text-white">
-              {profile.name}
-            </h2>
-            <p className="text-gray-600 dark:text-gray-300">{profile.email}</p>
-            {profile.college && (
-              <p className="mt-1 text-gray-500 dark:text-gray-400">
-                🎓 {profile.college}
-              </p>
-            )}
-            {profile.bio && (
-              <p className="mt-2 italic text-gray-500 dark:text-gray-400">
-                “{profile.bio}”
-              </p>
-            )}
-          </div>
-
-          {/* Timeline */}
-          <div className="mt-6 text-sm text-gray-500 dark:text-gray-400 flex items-center justify-center gap-2">
-            <CalendarDays size={18} />
-            <span>Joined: March 2024</span>
-          </div>
-
-          {/* Skills */}
-          {profile.skills?.length > 0 && (
-            <div className="mt-6 text-center">
-              <h3 className="font-semibold text-blue-600 dark:text-white mb-2">
-                💡 Skills:
-              </h3>
-              <div className="flex flex-wrap justify-center gap-2">
-                {profile.skills.map((skill, idx) => (
-                  <span
-                    key={idx}
-                    className="bg-blue-100 dark:bg-blue-800 text-blue-700 dark:text-white px-3 py-1 rounded-full text-sm"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Interests */}
-          {profile.interests?.length > 0 && (
-            <div className="mt-6 text-center">
-              <h3 className="font-semibold text-blue-600 dark:text-white mb-2">
-                🌟 Interests:
-              </h3>
-              <div className="flex flex-wrap justify-center gap-2">
-                {profile.interests.map((interest, idx) => (
-                  <span
-                    key={idx}
-                    className="bg-purple-100 dark:bg-purple-800 text-purple-700 dark:text-white px-3 py-1 rounded-full text-sm"
-                  >
-                    {interest}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Achievements */}
-          <div className="mt-8 text-center">
-            <h3 className="font-semibold text-blue-600 dark:text-white mb-3">
-              🏅 Achievements & Badges:
-            </h3>
-            <div className="flex justify-center gap-4 flex-wrap">
-              <div className="bg-yellow-100 dark:bg-yellow-800 text-yellow-700 dark:text-white px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2">
-                <Award size={16} /> Peer Mentor
-              </div>
-              <div className="bg-green-100 dark:bg-green-800 text-green-700 dark:text-white px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2">
-                <Award size={16} /> Top Contributor
-              </div>
-            </div>
-          </div>
-
-          {/* Learning Summary */}
-          <div className="mt-8 text-center">
-            <h3 className="font-semibold text-blue-600 dark:text-white mb-2">
-              📊 Learning Summary:
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 text-sm">
-              Groups Joined:{" "}
-              <span className="font-bold text-blue-700 dark:text-blue-300">6</span>{" "}
-              &nbsp;|&nbsp; Resources Shared:{" "}
-              <span className="font-bold text-blue-700 dark:text-blue-300">
-                15+
-              </span>
-            </p>
-          </div>
-
-         {/* Resume Upload */}
-          <div className="mt-8 text-center">
-  {profile.resume ? (
-    <a
-      href={profile.resume}
-      download="Resume.pdf"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-center px-5 py-3 bg-gradient-to-r from-green-500 to-green-700 text-white rounded-xl font-medium hover:brightness-110 transition-all shadow"
-    >
-      <FileText size={18} className="mr-2" />
-      View / Download Resume
-    </a>
-  ) : (
-    <p className="text-sm text-gray-500 italic">
-      No resume uploaded yet. Please upload from Edit Profile.
-    </p>
-  )}
-</div>
-
-          {/* Social Links */}
-          <div className="mt-8 flex justify-center gap-4">
-            <a
-              href="https://linkedin.com"
-              target="_blank"
-              rel="noreferrer"
-              className="text-blue-700 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 transition"
+            <button
+              onClick={() => navigate("/profile/edit")}
+              className="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow hover:bg-gray-100 transition"
             >
-              <Linkedin size={24} />
-            </a>
-            <a
-              href="https://github.com"
-              target="_blank"
-              rel="noreferrer"
-              className="text-gray-800 hover:text-black dark:text-gray-300 dark:hover:text-white transition"
-            >
-              <Github size={24} />
-            </a>
+              <Edit2 className="w-5 h-5 text-indigo-600" />
+            </button>
+          </div>
+          <h2 className="text-2xl font-bold mt-4">{user.name}</h2>
+          <p className="text-gray-500 dark:text-gray-300 text-sm">
+            {user.college || "Student"}
+          </p>
+        </div>
+
+        {/* Profile Details */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+          {/* Left Column */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Basic Info */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+              <h3 className="font-semibold text-lg mb-4 border-b pb-2">Basic Information</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <InfoItem label="Full Name" value={user.name} />
+                <InfoItem label="Email" value={user.email} icon={<Mail className="w-4 h-4" />} />
+                <InfoItem label="College" value={user.college || "Not provided"} />
+              </div>
+            </div>
+
+            {/* Bio in separate card */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+              <h3 className="font-semibold text-lg mb-3">Bio</h3>
+              <p className="text-gray-700 dark:text-gray-300">
+                {user.bio || "Not provided"}
+              </p>
+            </div>
+
+            {/* Skills */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+              <h3 className="font-semibold text-lg mb-3">Skills</h3>
+              <div className="flex flex-wrap gap-2">
+                {user.skills?.length
+                  ? user.skills.map((s, i) => (
+                      <span
+                        key={i}
+                        className="px-3 py-1 bg-indigo-100 text-indigo-700 dark:bg-indigo-700 dark:text-white rounded-full text-sm font-medium"
+                      >
+                        {s}
+                      </span>
+                    ))
+                  : <p className="text-gray-500">No skills added</p>}
+              </div>
+            </div>
+
+            {/* Interests */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+              <h3 className="font-semibold text-lg mb-3">Interests</h3>
+              <div className="flex flex-wrap gap-2">
+                {user.interests?.length
+                  ? user.interests.map((i, idx) => (
+                      <span
+                        key={idx}
+                        className="px-3 py-1 bg-pink-100 text-pink-700 dark:bg-pink-700 dark:text-white rounded-full text-sm font-medium"
+                      >
+                        {i}
+                      </span>
+                    ))
+                  : <p className="text-gray-500">No interests added</p>}
+              </div>
+            </div>
+
+            {/* Resume */}
+            {user.resume && (
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+                <h3 className="font-semibold text-lg mb-3">Resume</h3>
+                <a
+                  href={`http://localhost:5000${user.resume}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-2 text-indigo-600 hover:underline dark:text-indigo-400"
+                >
+                  View Resume <Download className="w-4 h-4" />
+                </a>
+              </div>
+            )}
           </div>
 
-          {/* Edit Button */}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => navigate("/profile/edit")}
-            className="mt-8 inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-xl shadow-lg hover:brightness-110 transition-all"
-          >
-            Edit Profile
-          </motion.button>
-        </motion.div>
+          {/* Right Column */}
+          <div className="space-y-6">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+              <h3 className="font-semibold text-lg mb-4 border-b pb-2">Links & Contact</h3>
+              <div className="space-y-3">
+                {user.linkedin && (
+                  <a
+                    href={user.linkedin}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-2 text-blue-600 hover:underline dark:text-blue-400"
+                  >
+                    <Linkedin className="w-5 h-5" /> LinkedIn
+                  </a>
+                )}
+                {user.github && (
+                  <a
+                    href={user.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-2 text-gray-700 hover:underline dark:text-gray-300"
+                  >
+                    <Github className="w-5 h-5" /> GitHub
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      </div>
-    </>
+    </div>
   );
 };
+
+// Small reusable component for profile info
+const InfoItem = ({ label, value, icon }) => (
+  <div>
+    <p className="text-gray-500 text-sm flex items-center gap-1">
+      {label} {icon && icon}
+    </p>
+    <p className="font-medium mt-1">{value}</p>
+  </div>
+);
 
 export default ProfileView;
