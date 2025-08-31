@@ -6,7 +6,7 @@ import Register from "./pages/Register";
 import TeacherDashboard from "./pages/Teacher/TeacherDashboard";
 import Home from "./pages/Home";
 import Resources from "./pages/Resources";
-import AddResource from "./pages/AddResource";
+// import AddResource from "./pages/AddResource";
 import ProfileView from "./pages/ProfileView";
 import ProfileEdit from "./pages/ProfileEdit";
 import NotFound from "./pages/NotFound"; // we'll create this
@@ -18,9 +18,13 @@ import Groups from "./pages/Groups";
 import CreateGroup from "./pages/CreateGroup";
 import Discussion from "./pages/Discussion";
 import CoursesPage from "./pages/Teacher/CoursesPage";
+import AddResource from './pages/Teacher/AddResource';
 import CoursesView from "./pages/Teacher/CoursesPage";
 import CourseEdit from "./pages/Teacher/CoursesPage";
 import StudyGroupsPage from "./pages/Teacher/StudyGroupsPage"
+import TeacherProfile from './pages/Teacher/TeacherProfile';
+import Leaderboard from './pages/Teacher/Leaderboard';
+import TeacherProfileView from './pages/Teacher/TeacherProfileView';
 
 function App() {
   return (
@@ -35,14 +39,20 @@ function App() {
         <Route path="/courses" element={<AllCourses />} />
         <Route path="/notifications" element={<NotificationPage />} />
         <Route path="/resources" element={<Resources />} />
-        <Route path="/add-resource" element={<AddResource />} />
+        {/* <Route path="/add-resource" element={<AddResource />} /> */}
         <Route path="/profile" element={<ProfileView />} />
         <Route path="/profile/edit" element={<ProfileEdit />} />
         <Route path="/leaderboard" element={<LeaderBoard />} />
         <Route path="/groups" element={<Groups />} />
         <Route path="/creategroup" element={<CreateGroup />} />
+        <Route path="/teacher/resources" element={<AddResource />} />
+        <Route path="/teacher/leaderboard" element={<Leaderboard />} />
+        <Route path="/teacher/:id" element={<TeacherProfile />} />
+
+        
         <Route path="/discussions" element={<Discussion />} />
         <Route path="/teacher/course" element={<CoursesPage />} />
+        <Route path="/teacher/profile" element={<TeacherProfile />} />
         <Route path="/courses/view/:id" element={<CoursesView />} />
         <Route path="/courses/edit/:id" element={<CourseEdit />} />
         <Route path="/creategroup" element={<StudyGroupsPage />} /> {/* ✅ new route */}

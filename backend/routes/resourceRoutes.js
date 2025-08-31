@@ -12,11 +12,16 @@ import {
 
 const router = express.Router();
 
-// File upload setup
+// Setup Multer storage with correct absolute path
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "backend/uploads"),
+  destination: (req, file, cb) => cb(null, path.join(__dirname, "../uploads")), // fixed path
   filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname)),
 });
+
 const upload = multer({ storage });
 
 // Routes

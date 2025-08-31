@@ -8,15 +8,31 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     role: { type: String, enum: ["student", "teacher"], default: "student" },
 
-    // Profile fields
-    college: { type: String },
-    bio: { type: String },
+    // Teacher-specific fields
+    department: { type: String, default: "" },
+    qualification: { type: String, default: "" },
+    subject: { type: String, default: "" },
+    bio: { type: String, default: "" },
+    achievements: { type: [String], default: [] },
+    profilePicture: { type: String, default: "" },
+    resume: { type: String, default: "" },
+    github: { type: String, default: "" },
+    linkedin: { type: String, default: "" },
+
+    // Leaderboard-specific fields
+    coursesCreated: { type: Number, default: 0 },
+    engagementScore: { type: Number, default: 0 },
+    batch: {
+      type: String,
+      enum: ["Diamond", "Platinum", "Gold", "Silver", "Bronze", "Basic"],
+      default: "Basic",
+    },
+
+
+    // Student-specific fields
     skills: { type: [String], default: [] },
     interests: { type: [String], default: [] },
-    profilePicture: { type: String },
-    resume: { type: String },
-    github: { type: String },
-    linkedin: { type: String },
+    college: { type: String, default: "" },
   },
   { timestamps: true }
 );
@@ -29,7 +45,7 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-// Compare entered password with hashed password
+// Compare password
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };

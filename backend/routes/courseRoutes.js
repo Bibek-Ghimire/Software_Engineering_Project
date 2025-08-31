@@ -94,15 +94,16 @@ router.delete("/:id", protect, async (req, res) => {
     if (!course) return res.status(404).json({ message: "Course not found" });
 
     // Only the teacher who created can delete
-    if (course.teacher.toString() !== req.user.id)
+    if (!course.teacher || course.teacher.toString() !== req.user.id)
       return res.status(403).json({ message: "Not authorized" });
 
-    await course.remove();
+    await Course.findByIdAndDelete(course._id);
     res.status(200).json({ message: "Course deleted successfully" });
   } catch (err) {
     console.error("Error deleting course:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 export default router;

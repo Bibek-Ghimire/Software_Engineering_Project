@@ -1,13 +1,11 @@
+// src/pages/CourseEdit.jsx
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { BookOpen, Sun, Moon } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const CourseEdit = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user"));
-
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -15,19 +13,36 @@ const CourseEdit = () => {
     duration: "",
     price: "",
   });
+  const [loading, setLoading] = useState(true);
+  const [darkMode, setDarkMode] = useState(localStorage.getItem("theme") === "dark");
 
+  const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
+
+  // Redirect if not logged in
+  useEffect(() => {
+    if (!token) navigate("/login");
+  }, [token]);
+
+  // Dark mode toggle
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
+
+  // Fetch course details
   const fetchCourse = async () => {
     try {
+      setLoading(true);
       const res = await axios.get(`http://localhost:5000/api/courses/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      if (res.data.teacher._id !== user._id) {
-        alert("You are not authorized to edit this course");
-        navigate("/courses");
-        return;
-      }
-
       setFormData({
         title: res.data.title,
         description: res.data.description,
@@ -37,48 +52,101 @@ const CourseEdit = () => {
       });
     } catch (err) {
       console.error(err);
-      alert("Error fetching course");
+      alert("Failed to fetch course details!");
       navigate("/courses");
+    } finally {
+      setLoading(false);
     }
   };
 
-  useEffect(() => { fetchCourse(); }, [id]);
+  useEffect(() => {
+    fetchCourse();
+  }, [id]);
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleUpdate = async () => {
+  const handleUpdateCourse = async () => {
+    const { title, description, level, duration, price } = formData;
+    if (!title || !description || !duration || !price) return alert("All fields are required!");
     try {
-      await axios.put(`http://localhost:5000/api/courses/${id}`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.put(
+        `http://localhost:5000/api/courses/${id}`,
+        { ...formData },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       alert("Course updated successfully!");
-      navigate(`/courses/view/${id}`);
+      navigate("/courses", { state: { updated: true } }); // ✅ trigger refresh in CoursesPage
     } catch (err) {
       console.error(err);
-      alert("Error updating course");
+      alert(err.response?.data?.message || "Error updating course!");
     }
   };
 
+  if (loading) return <div className="p-8 text-center">Loading course...</div>;
+
   return (
-    <div className="p-6 max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Edit Course</h1>
-      <div className="grid grid-cols-1 gap-4">
-        <input name="title" placeholder="Title" value={formData.title} onChange={handleChange} className="input" />
-        <input name="description" placeholder="Description" value={formData.description} onChange={handleChange} className="input" />
-        <select name="level" value={formData.level} onChange={handleChange} className="input">
-          <option>Beginner</option>
-          <option>Intermediate</option>
-          <option>Expert</option>
-        </select>
-        <input name="duration" placeholder="Duration" value={formData.duration} onChange={handleChange} className="input" />
-        <input name="price" type="number" placeholder="Price $" value={formData.price} onChange={handleChange} className="input" />
-      </div>
-      <div className="flex gap-4 mt-6">
-        <button onClick={handleUpdate} className="px-4 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition">
-          Update Course
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white transition-colors duration-300 p-6">
+      {/* Dark Mode Toggle */}
+      <div className="flex justify-end mb-4">
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 shadow hover:scale-110 transition"
+        >
+          {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
         </button>
-        <button onClick={() => navigate(`/courses/view/${id}`)} className="px-4 py-2 bg-gray-400 text-white rounded-xl hover:bg-gray-500 transition">
-          Cancel
+      </div>
+
+      {/* Edit Course Form */}
+      <div className="mb-8 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
+        <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-2">
+          <BookOpen className="w-6 h-6" /> Edit Course
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <input
+            name="title"
+            placeholder="Title"
+            value={formData.title}
+            onChange={handleChange}
+            className="input px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+          />
+          <input
+            name="description"
+            placeholder="Description"
+            value={formData.description}
+            onChange={handleChange}
+            className="input px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+          />
+          <select
+            name="level"
+            value={formData.level}
+            onChange={handleChange}
+            className="input px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+          >
+            <option>Beginner</option>
+            <option>Intermediate</option>
+            <option>Expert</option>
+          </select>
+          <input
+            name="duration"
+            placeholder="Duration"
+            value={formData.duration}
+            onChange={handleChange}
+            className="input px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+          />
+          <input
+            name="price"
+            type="number"
+            placeholder="Price $"
+            value={formData.price}
+            onChange={handleChange}
+            className="input px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+          />
+        </div>
+        <button
+          onClick={handleUpdateCourse}
+          className="mt-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-2 rounded-2xl shadow-lg hover:scale-105 transform transition"
+        >
+          Update Course
         </button>
       </div>
     </div>

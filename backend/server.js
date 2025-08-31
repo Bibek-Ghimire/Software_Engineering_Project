@@ -15,9 +15,10 @@ import resourceRoutes from "./routes/resourceRoutes.js";
 import groupRoutes from "./routes/groupRoutes.js";
 import discussionRoutes from "./routes/discussionRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
-
+import teacherRoutes from "./routes/teacherRoutes.js";
 // Middleware
 import { protect } from "./middleware/authMiddleware.js";
+import leaderboardRoutes from "./routes/leaderboardRoutes.js";
 
 // -------------------------
 // Config & App Init
@@ -37,11 +38,10 @@ app.use(express.json()); // parse JSON
 // -------------------------
 // Test Route
 // -------------------------
-app.post("/test", (req, res) => {
-  console.log("Headers:", req.headers["content-type"]);
-  console.log("Incoming body:", req.body);
-  res.json({ received: req.body });
+app.get("/api/test", (req, res) => {
+  res.json({ message: "Server is running" });
 });
+
 
 // -------------------------
 // API Routes
@@ -52,7 +52,8 @@ app.use("/api/resources", resourceRoutes);
 app.use("/api/groups", groupRoutes);
 app.use("/api/discussions", discussionRoutes);
 app.use("/api/profile", profileRoutes);
-
+app.use("/api/teachers", teacherRoutes);
+app.use("/api/leaderboard", leaderboardRoutes);
 // Example protected route
 app.get("/api/protected", protect, (req, res) => {
   res.json({ message: `Hello ${req.user.name}, you are authorized!` });

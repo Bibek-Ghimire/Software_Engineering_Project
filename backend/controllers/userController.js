@@ -20,3 +20,12 @@ export const createUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const getAllTeachers = async (req, res) => {
+  try {
+    const teachers = await User.find({ role: "teacher" }).select("-password"); // exclude passwords
+    res.json(teachers);
+  } catch (error) {
+    res.status(500).json({ message: "Server error fetching teachers" });
+  }
+};

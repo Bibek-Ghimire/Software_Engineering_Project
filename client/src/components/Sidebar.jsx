@@ -6,6 +6,7 @@ import {
   Users,
   MessageSquare,
   LogOut,
+  Award,
   GraduationCap,
   UserCircle,
   PlusCircle,
@@ -37,6 +38,7 @@ const Sidebar = () => {
           <SidebarLink to="/groups" label="Study Groups" icon={<Users />} />
           <SidebarLink to="/creategroup" label="Create Group" icon={<PlusCircle />} />
           <SidebarLink to="/resources" label="Resources" icon={<GraduationCap />} />
+          <SidebarLink to="/teacher/leaderboard" label="Leaderboard" icon={<Award />} />
           <SidebarLink to="/discussions" label="Discussions" icon={<MessageSquare />} />
           <SidebarLink to="/profile" label="Profile" icon={<UserCircle />} />
         </nav>
