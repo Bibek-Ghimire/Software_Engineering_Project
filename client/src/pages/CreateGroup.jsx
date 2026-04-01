@@ -16,7 +16,7 @@ function CreateGroup() {
   });
 
   const [darkMode, setDarkMode] = useState(
-    localStorage.getItem("theme") === "dark"
+    localStorage.getItem("theme") === "dark",
   );
 
   // Handle theme toggle
@@ -71,7 +71,11 @@ function CreateGroup() {
           onClick={() => setDarkMode(!darkMode)}
           className="absolute top-4 right-4 p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 shadow hover:scale-110 transition"
         >
-          {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          {darkMode ? (
+            <Sun className="w-5 h-5" />
+          ) : (
+            <Moon className="w-5 h-5" />
+          )}
         </button>
 
         <form
@@ -79,7 +83,7 @@ function CreateGroup() {
           className="bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-xl w-full max-w-lg space-y-6 border border-gray-200 dark:border-gray-700"
         >
           <h2 className="text-3xl font-bold text-blue-700 dark:text-blue-300 text-center">
-            🚀 Create Study Group
+            Create Study Group
           </h2>
 
           {/* Group Name */}

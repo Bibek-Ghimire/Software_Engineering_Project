@@ -12,14 +12,38 @@ const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/groups" element={<Groups />} />
-        <Route path="/resources" element={<Resources />} />
-        <Route path="/create-group" element={<CreateGroup />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="*" element={<NotFound />} />
+        <Route
+          path="/"
+          element={<Login />}
+        />
+        <Route
+          path="/register"
+          element={<Register />}
+        />
+        <Route
+          path="/dashboard"
+          element={<Dashboard />}
+        />
+        <Route
+          path="/groups"
+          element={<Groups />}
+        />
+        <Route
+          path="/resources"
+          element={<Resources />}
+        />
+        <Route
+          path="/create-group"
+          element={<CreateGroup />}
+        />
+        <Route
+          path="/profile"
+          element={<Profile />}
+        />
+        <Route
+          path="*"
+          element={<NotFound />}
+        />
       </Routes>
     </BrowserRouter>
   );

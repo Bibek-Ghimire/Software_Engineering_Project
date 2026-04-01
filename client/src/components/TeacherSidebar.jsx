@@ -24,11 +24,31 @@ const TeacherSidebar = () => {
   };
 
   const links = [
-    { to: "/teacher/profile", label: "Profile", icon: <User className="w-5 h-5" /> },
-    { to: "/teacher/resources", label: "Resources", icon: <FileText className="w-5 h-5" /> },
-    { to: "/teacher/leaderboard", label: "Leaderboard", icon: <Award className="w-5 h-5" /> },
-    { to: "/teacher/course", label: "Add Course", icon: <PlusCircle className="w-5 h-5" /> },
-    { to: "/teacher/course-requests", label: "Course Requests", icon: <BookOpen className="w-5 h-5" /> },
+    {
+      to: "/teacher/profile",
+      label: "Profile",
+      icon: <User className="w-5 h-5" />,
+    },
+    {
+      to: "/teacher/resources",
+      label: "Resources",
+      icon: <FileText className="w-5 h-5" />,
+    },
+    {
+      to: "/teacher/leaderboard",
+      label: "Leaderboard",
+      icon: <Award className="w-5 h-5" />,
+    },
+    {
+      to: "/teacher/course",
+      label: "Add Course",
+      icon: <PlusCircle className="w-5 h-5" />,
+    },
+    {
+      to: "/teacher/course-requests",
+      label: "Course Requests",
+      icon: <BookOpen className="w-5 h-5" />,
+    },
   ];
 
   return (
@@ -39,12 +59,20 @@ const TeacherSidebar = () => {
     >
       {/* Top: Logo & Collapse */}
       <div className="flex items-center justify-between px-4 py-6">
-        {!collapsed && <h1 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">Syncademy</h1>}
+        {!collapsed && (
+          <h1 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+            Syncademy
+          </h1>
+        )}
         <button
           className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition"
           onClick={() => setCollapsed(!collapsed)}
         >
-          {collapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
+          {collapsed ? (
+            <ChevronRight className="w-5 h-5" />
+          ) : (
+            <ChevronLeft className="w-5 h-5" />
+          )}
         </button>
       </div>
 

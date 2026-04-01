@@ -1,6 +1,17 @@
 // src/pages/Resource.jsx
 import React, { useState, useEffect } from "react";
-import { FileText, Download, Sun, Moon, Search, BookOpen, User, File, Filter, Folder } from "lucide-react";
+import {
+  FileText,
+  Download,
+  Sun,
+  Moon,
+  Search,
+  BookOpen,
+  User,
+  File,
+  Filter,
+  Folder,
+} from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import axios from "axios";
 import { ClipLoader } from "react-spinners";
@@ -8,7 +19,9 @@ import { ClipLoader } from "react-spinners";
 const Resource = () => {
   const [resources, setResources] = useState([]);
   const [filteredResources, setFilteredResources] = useState([]);
-  const [darkMode, setDarkMode] = useState(localStorage.getItem("theme") === "dark");
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("theme") === "dark",
+  );
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
@@ -62,20 +75,55 @@ const Resource = () => {
           res.title.toLowerCase().includes(query) ||
           res.description.toLowerCase().includes(query) ||
           res.teacher?.name?.toLowerCase().includes(query) ||
-          res.fileType.toLowerCase().includes(query)
-      )
+          res.fileType.toLowerCase().includes(query),
+      ),
     );
   };
 
   // Get file type icon and color
   const getFileTypeInfo = (fileType) => {
-    const type = fileType?.toLowerCase() || '';
-    if (type.includes('pdf')) return { icon: '📄', color: 'from-red-100 to-red-200 dark:from-red-900/30 dark:to-red-800/30', textColor: 'text-red-700 dark:text-red-400' };
-    if (type.includes('doc') || type.includes('word')) return { icon: '📘', color: 'from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30', textColor: 'text-blue-700 dark:text-blue-400' };
-    if (type.includes('ppt') || type.includes('presentation')) return { icon: '📊', color: 'from-orange-100 to-orange-200 dark:from-orange-900/30 dark:to-orange-800/30', textColor: 'text-orange-700 dark:text-orange-400' };
-    if (type.includes('video') || type.includes('mp4')) return { icon: '🎥', color: 'from-purple-100 to-purple-200 dark:from-purple-900/30 dark:to-purple-800/30', textColor: 'text-purple-700 dark:text-purple-400' };
-    if (type.includes('image') || type.includes('jpg') || type.includes('png')) return { icon: '🖼️', color: 'from-green-100 to-green-200 dark:from-green-900/30 dark:to-green-800/30', textColor: 'text-green-700 dark:text-green-400' };
-    return { icon: '📁', color: 'from-gray-100 to-gray-200 dark:from-gray-700/30 dark:to-gray-600/30', textColor: 'text-gray-700 dark:text-gray-400' };
+    const type = fileType?.toLowerCase() || "";
+    if (type.includes("pdf"))
+      return {
+        icon: "📄",
+        color:
+          "from-red-100 to-red-200 dark:from-red-900/30 dark:to-red-800/30",
+        textColor: "text-red-700 dark:text-red-400",
+      };
+    if (type.includes("doc") || type.includes("word"))
+      return {
+        icon: "📘",
+        color:
+          "from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30",
+        textColor: "text-blue-700 dark:text-blue-400",
+      };
+    if (type.includes("ppt") || type.includes("presentation"))
+      return {
+        icon: "📊",
+        color:
+          "from-orange-100 to-orange-200 dark:from-orange-900/30 dark:to-orange-800/30",
+        textColor: "text-orange-700 dark:text-orange-400",
+      };
+    if (type.includes("video") || type.includes("mp4"))
+      return {
+        icon: "🎥",
+        color:
+          "from-purple-100 to-purple-200 dark:from-purple-900/30 dark:to-purple-800/30",
+        textColor: "text-purple-700 dark:text-purple-400",
+      };
+    if (type.includes("image") || type.includes("jpg") || type.includes("png"))
+      return {
+        icon: "🖼️",
+        color:
+          "from-green-100 to-green-200 dark:from-green-900/30 dark:to-green-800/30",
+        textColor: "text-green-700 dark:text-green-400",
+      };
+    return {
+      icon: "📁",
+      color:
+        "from-gray-100 to-gray-200 dark:from-gray-700/30 dark:to-gray-600/30",
+      textColor: "text-gray-700 dark:text-gray-400",
+    };
   };
 
   if (loading) {
@@ -87,8 +135,13 @@ const Resource = () => {
         <div className="flex-1 ml-64 flex items-center justify-center">
           <div className="text-center">
             <div className="p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-blue-200/50 dark:border-gray-600/50">
-              <ClipLoader size={60} color={darkMode ? "#60a5fa" : "#2563eb"} />
-              <p className="text-blue-600 dark:text-blue-400 font-medium mt-4">Loading resources...</p>
+              <ClipLoader
+                size={60}
+                color={darkMode ? "#60a5fa" : "#2563eb"}
+              />
+              <p className="text-blue-600 dark:text-blue-400 font-medium mt-4">
+                Loading resources...
+              </p>
             </div>
           </div>
         </div>
@@ -110,7 +163,11 @@ const Resource = () => {
           onClick={() => setDarkMode(!darkMode)}
           className="absolute top-6 right-6 p-3 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-lg hover:shadow-xl hover:scale-110 border border-blue-200/50 dark:border-gray-600/50 transition-all duration-300 z-10"
         >
-          {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          {darkMode ? (
+            <Sun className="w-5 h-5" />
+          ) : (
+            <Moon className="w-5 h-5" />
+          )}
         </button>
 
         {/* Header Section */}
@@ -124,7 +181,8 @@ const Resource = () => {
                 Learning Resources
               </h1>
               <p className="text-blue-600/80 dark:text-blue-300/80 text-lg mt-2">
-                Explore curated notes, guides, slides, and videos shared by instructors
+                Explore curated notes, guides, slides, and videos shared by
+                instructors
               </p>
             </div>
           </div>
@@ -155,13 +213,13 @@ const Resource = () => {
                   {filteredResources.length}
                 </div>
                 <div className="text-sm text-blue-600/70 dark:text-blue-400/70">
-                  {search ? 'Found' : 'Total'} Resources
+                  {search ? "Found" : "Total"} Resources
                 </div>
               </div>
               <div className="w-px h-10 bg-blue-200 dark:bg-gray-600"></div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
-                  {new Set(filteredResources.map(res => res.fileType)).size}
+                  {new Set(filteredResources.map((res) => res.fileType)).size}
                 </div>
                 <div className="text-sm text-blue-600/70 dark:text-blue-400/70">
                   File Types
@@ -170,7 +228,13 @@ const Resource = () => {
               <div className="w-px h-10 bg-blue-200 dark:bg-gray-600"></div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
-                  {new Set(filteredResources.map(res => res.teacher?.name).filter(Boolean)).size}
+                  {
+                    new Set(
+                      filteredResources
+                        .map((res) => res.teacher?.name)
+                        .filter(Boolean),
+                    ).size
+                  }
                 </div>
                 <div className="text-sm text-blue-600/70 dark:text-blue-400/70">
                   Instructors
@@ -188,13 +252,12 @@ const Resource = () => {
                 <Folder className="w-10 h-10 text-blue-600 dark:text-blue-400" />
               </div>
               <h3 className="text-2xl font-bold text-blue-800 dark:text-blue-300 mb-3">
-                {search ? 'No Matching Resources' : 'No Resources Available'}
+                {search ? "No Matching Resources" : "No Resources Available"}
               </h3>
               <p className="text-blue-600/70 dark:text-blue-400/70 text-lg">
-                {search 
-                  ? 'Try adjusting your search terms or browse all resources' 
-                  : 'Check back soon for new learning materials!'
-                }
+                {search
+                  ? "Try adjusting your search terms or browse all resources"
+                  : "Check back soon for new learning materials!"}
               </p>
               {search && (
                 <button
@@ -219,7 +282,9 @@ const Resource = () => {
                   className="group bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl border border-blue-200/50 dark:border-gray-600/50 overflow-hidden transition-all duration-300 hover:scale-105 hover:border-blue-300/70 dark:hover:border-blue-500/50 flex flex-col"
                 >
                   {/* File Type Header */}
-                  <div className={`p-4 bg-gradient-to-r ${fileInfo.color} border-b border-blue-100/50 dark:border-gray-700/50`}>
+                  <div
+                    className={`p-4 bg-gradient-to-r ${fileInfo.color} border-b border-blue-100/50 dark:border-gray-700/50`}
+                  >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="text-2xl">{fileInfo.icon}</div>
@@ -227,7 +292,9 @@ const Resource = () => {
                           <h3 className="font-bold text-blue-800 dark:text-blue-200 text-lg leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
                             {res.title}
                           </h3>
-                          <span className={`text-xs font-medium px-2 py-1 rounded-full ${fileInfo.color} ${fileInfo.textColor} mt-1 inline-block`}>
+                          <span
+                            className={`text-xs font-medium px-2 py-1 rounded-full ${fileInfo.color} ${fileInfo.textColor} mt-1 inline-block`}
+                          >
                             {res.fileType}
                           </span>
                         </div>
@@ -250,17 +317,23 @@ const Resource = () => {
                             <User className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                           </div>
                           <span className="text-gray-600 dark:text-gray-300">
-                            <span className="font-medium text-blue-700 dark:text-blue-300">Instructor:</span> {res.teacher.name}
+                            <span className="font-medium text-blue-700 dark:text-blue-300">
+                              Instructor:
+                            </span>{" "}
+                            {res.teacher.name}
                           </span>
                         </div>
                       )}
-                      
+
                       <div className="flex items-center gap-3 text-sm">
                         <div className="p-1.5 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
                           <File className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                         </div>
                         <span className="text-gray-600 dark:text-gray-300">
-                          <span className="font-medium text-blue-700 dark:text-blue-300">Type:</span> {res.fileType}
+                          <span className="font-medium text-blue-700 dark:text-blue-300">
+                            Type:
+                          </span>{" "}
+                          {res.fileType}
                         </span>
                       </div>
                     </div>
@@ -272,7 +345,6 @@ const Resource = () => {
                     >
                       <Download className="w-5 h-5" />
                       Download Resource
-                      
                     </button>
                   </div>
                 </div>
@@ -280,23 +352,6 @@ const Resource = () => {
             })}
           </div>
         )}
-
-        {/* Footer Section */}
-        <div className="mt-16 text-center">
-          <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl shadow-lg border border-blue-200/30 dark:border-gray-600/30 p-8 max-w-2xl mx-auto">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="p-2 bg-gradient-to-r from-blue-100 to-blue-200 dark:from-blue-900/50 dark:to-blue-800/50 rounded-lg">
-                <BookOpen className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-              </div>
-              <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-300">
-                Want to Contribute?
-              </h3>
-            </div>
-            <p className="text-blue-600/80 dark:text-blue-400/80 text-sm leading-relaxed">
-              Have valuable learning materials to share? Contact your instructor or admin to contribute resources to our learning community.
-            </p>
-          </div>
-        </div>
 
         {/* Decorative Elements */}
         <div className="fixed top-0 left-0 w-full h-full pointer-events-none overflow-hidden">

@@ -33,14 +33,46 @@ const Sidebar = () => {
 
         {/* Navigation Links */}
         <nav className="space-y-2">
-          <SidebarLink to="/dashboard/student" label="Dashboard" icon={<LayoutDashboard />} />
-          <SidebarLink to="/courses" label="Courses" icon={<BookOpen />} />
-          <SidebarLink to="/groups" label="Study Groups" icon={<Users />} />
-          <SidebarLink to="/creategroup" label="Create Group" icon={<PlusCircle />} />
-          <SidebarLink to="/resources" label="Resources" icon={<GraduationCap />} />
-          <SidebarLink to="/teacher/leaderboard" label="Leaderboard" icon={<Award />} />
-          <SidebarLink to="/discussions" label="Discussions" icon={<MessageSquare />} />
-          <SidebarLink to="/profile" label="Profile" icon={<UserCircle />} />
+          <SidebarLink
+            to="/dashboard/student"
+            label="Dashboard"
+            icon={<LayoutDashboard />}
+          />
+          <SidebarLink
+            to="/courses"
+            label="Courses"
+            icon={<BookOpen />}
+          />
+          <SidebarLink
+            to="/groups"
+            label="Study Groups"
+            icon={<Users />}
+          />
+          <SidebarLink
+            to="/creategroup"
+            label="Create Group"
+            icon={<PlusCircle />}
+          />
+          <SidebarLink
+            to="/resources"
+            label="Resources"
+            icon={<GraduationCap />}
+          />
+          <SidebarLink
+            to="/leaderboard"
+            label="Leaderboard"
+            icon={<Award />}
+          />
+          <SidebarLink
+            to="/discussions"
+            label="Discussions"
+            icon={<MessageSquare />}
+          />
+          <SidebarLink
+            to="/profile"
+            label="Profile"
+            icon={<UserCircle />}
+          />
         </nav>
       </div>
 
