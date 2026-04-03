@@ -21,7 +21,7 @@ api.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // Optional: intercept responses for global error handling
@@ -30,11 +30,16 @@ api.interceptors.response.use(
   (error) => {
     // If network error (backend not running)
     if (!error.response) {
-      return Promise.reject({ message: "Cannot connect to the backend. Make sure the server is running." });
+      return Promise.reject({
+        message:
+          "Cannot connect to the backend. Make sure the server is running.",
+      });
     }
     // Return backend error or generic message
-    return Promise.reject(error.response.data || { message: "Something went wrong" });
-  }
+    return Promise.reject(
+      error.response.data || { message: "Something went wrong" },
+    );
+  },
 );
 
 export default api;
