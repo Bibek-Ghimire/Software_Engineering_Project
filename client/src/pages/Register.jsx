@@ -13,6 +13,7 @@ import {
   UserPlus,
   CheckCircle,
   Shield,
+  X,
 } from "lucide-react";
 
 import { registerUser } from "../services/authService";
@@ -24,6 +25,48 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("student"); // default role
+  const [interests, setInterests] = useState([]);
+  const [interestInput, setInterestInput] = useState("");
+
+  // Predefined topics
+  const suggestedTopics = [
+    "Web Development",
+    "Data Science",
+    "Mobile Development",
+    "Machine Learning",
+    "Cloud Computing",
+    "Database Design",
+    "DevOps",
+    "UI/UX Design",
+    "Cybersecurity",
+    "AI",
+    "Python",
+    "JavaScript",
+    "React",
+    "Node.js",
+    "Java",
+  ];
+
+  const handleAddInterest = (topic) => {
+    if (!interests.includes(topic) && interests.length < 5) {
+      setInterests([...interests, topic]);
+      setInterestInput("");
+    }
+  };
+
+  const handleRemoveInterest = (topic) => {
+    setInterests(interests.filter((t) => t !== topic));
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && interestInput.trim()) {
+      e.preventDefault();
+      if (!interests.includes(interestInput) && interests.length < 5) {
+        setInterests([...interests, interestInput]);
+        setInterestInput("");
+      }
+    }
+  };
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -38,9 +81,20 @@ const Register = () => {
       return;
     }
 
+    if (interests.length === 0) {
+      toast.error("Please select at least one interest");
+      return;
+    }
+
     try {
-      // Call backend API with role
-      const data = await registerUser({ name, email, password, role });
+      // Call backend API with role and interests
+      const data = await registerUser({
+        name,
+        email,
+        password,
+        role,
+        interests,
+      });
       console.log("Registered user:", data);
 
       toast.success("Registration successful! Please login.");
@@ -57,7 +111,7 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900 text-gray-800 dark:text-gray-200 overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 text-gray-800 dark:text-gray-200 overflow-x-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
@@ -146,6 +200,68 @@ const Register = () => {
                   <Eye className="w-5 h-5" />
                 )}
               </button>
+            </div>
+
+            {/* Interests Section */}
+            <div className="mt-6 pt-4 border-t border-white/20">
+              <label className="text-sm font-semibold text-white block mb-3">
+                Select Your Interests (Min. 1)
+              </label>
+
+              {/* Interest Input */}
+              <div className="relative mb-3">
+                <input
+                  type="text"
+                  placeholder="Type a topic and press Enter..."
+                  className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 text-sm"
+                  value={interestInput}
+                  onChange={(e) => setInterestInput(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                />
+              </div>
+
+              {/* Selected Interests */}
+              <div className="flex flex-wrap gap-2 mb-3">
+                {interests.map((interest) => (
+                  <div
+                    key={interest}
+                    className="bg-purple-500/30 border border-purple-400 text-white rounded-full px-3 py-1 text-sm flex items-center gap-2 group"
+                  >
+                    {interest}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveInterest(interest)}
+                      className="hover:bg-purple-600/50 rounded-full p-0.5 transition-colors"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              {/* Suggested Topics */}
+              <div className="text-xs text-gray-300 mb-2">Quick select:</div>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {suggestedTopics.map((topic) => (
+                  <button
+                    key={topic}
+                    type="button"
+                    onClick={() => handleAddInterest(topic)}
+                    disabled={
+                      interests.includes(topic) || interests.length >= 5
+                    }
+                    className={`px-3 py-1 text-xs rounded-full transition-all ${
+                      interests.includes(topic)
+                        ? "bg-purple-500/50 text-gray-400 opacity-50"
+                        : interests.length >= 5
+                          ? "bg-gray-500/20 text-gray-400 opacity-50"
+                          : "bg-white/10 text-white hover:bg-white/20 cursor-pointer border border-white/20"
+                    }`}
+                  >
+                    {topic}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Terms and Conditions */}

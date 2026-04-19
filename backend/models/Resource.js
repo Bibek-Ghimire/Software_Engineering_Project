@@ -6,9 +6,14 @@ const resourceSchema = new mongoose.Schema(
     description: { type: String, required: true },
     fileUrl: { type: String, required: true },
     fileType: { type: String, required: true },
-    teacher: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    teacher: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    keywords: [{ type: String }], // For recommendation matching
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.model("Resource", resourceSchema);

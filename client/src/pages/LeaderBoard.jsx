@@ -1,6 +1,5 @@
 // src/pages/Leaderboard.jsx
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import {
   ChevronDown,
   ChevronUp,
@@ -141,12 +140,12 @@ const LeaderBoard = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-slate-800 dark:to-gray-900 transition-all duration-700">
+    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 transition-all duration-700">
       {/* Sidebar */}
       <div className="w-64 fixed top-0 left-0 h-full z-30">
         <Sidebar />
       </div>
-      <div className="ml-64 min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-slate-800 dark:to-indigo-900 w-full">
+      <div className="ml-64 min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 w-full">
         {/* Header Section */}
         <div className="relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-pink-600/10"></div>

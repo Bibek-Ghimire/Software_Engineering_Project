@@ -5,24 +5,34 @@ import User from "../models/User.js";
 const protect = async (req, res, next) => {
   let token;
 
-  if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
     try {
       token = req.headers.authorization.split(" ")[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+      console.log(`🔐 Auth: Decoded ID: ${decoded.id}`);
       const user = await User.findById(decoded.id).select("-password");
+
       if (!user) {
-        return res.status(401).json({ message: "User not found" });
+        console.error(`❌ Auth: User NOT found with ID: ${decoded.id}`);
+        return res
+          .status(401)
+          .json({ message: "Auth middleware: User not found" });
       }
 
-      req.user = user; // contains role, profilePicture, etc.
+      console.log(`✅ Auth: User found: ${user.name}`);
+      req.user = user;
       next();
     } catch (error) {
-      console.error("Auth error:", error);
-      return res.status(401).json({ message: "Not authorized, token failed" });
+      console.error("❌ Auth error:", error.message);
+      return res.status(401).json({ message: "Auth middleware: Token failed" });
     }
   } else {
-    return res.status(401).json({ message: "Not authorized, no token" });
+    console.log("❌ No Bearer token in headers");
+    return res.status(401).json({ message: "Auth middleware: No token" });
   }
 };
 
@@ -42,7 +52,10 @@ const authorize = (...roles) => {
 const protectTeacher = async (req, res, next) => {
   let token;
 
-  if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
     try {
       token = req.headers.authorization.split(" ")[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);

@@ -1,5 +1,5 @@
 // src/pages/CourseEdit.jsx
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { BookOpen, Sun, Moon } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -14,16 +14,17 @@ const CourseEdit = () => {
     price: "",
   });
   const [loading, setLoading] = useState(true);
-  const [darkMode, setDarkMode] = useState(localStorage.getItem("theme") === "dark");
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("theme") === "dark",
+  );
 
   const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
 
   // Redirect if not logged in
   useEffect(() => {
     if (!token) navigate("/login");
-  }, [token]);
+  }, [token, navigate]);
 
   // Dark mode toggle
   useEffect(() => {
@@ -37,7 +38,7 @@ const CourseEdit = () => {
   }, [darkMode]);
 
   // Fetch course details
-  const fetchCourse = async () => {
+  const fetchCourse = useCallback(async () => {
     try {
       setLoading(true);
       const res = await axios.get(`http://localhost:5000/api/courses/${id}`, {
@@ -57,22 +58,24 @@ const CourseEdit = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id, token, navigate]);
 
   useEffect(() => {
     fetchCourse();
-  }, [id]);
+  }, [fetchCourse]);
 
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleUpdateCourse = async () => {
-    const { title, description, level, duration, price } = formData;
-    if (!title || !description || !duration || !price) return alert("All fields are required!");
+    const { title, description, duration, price } = formData;
+    if (!title || !description || !duration || !price)
+      return alert("All fields are required!");
     try {
       await axios.put(
         `http://localhost:5000/api/courses/${id}`,
         { ...formData },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
       alert("Course updated successfully!");
       navigate("/courses", { state: { updated: true } }); // ✅ trigger refresh in CoursesPage
@@ -92,7 +95,11 @@ const CourseEdit = () => {
           onClick={() => setDarkMode(!darkMode)}
           className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 shadow hover:scale-110 transition"
         >
-          {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          {darkMode ? (
+            <Sun className="w-5 h-5" />
+          ) : (
+            <Moon className="w-5 h-5" />
+          )}
         </button>
       </div>
 

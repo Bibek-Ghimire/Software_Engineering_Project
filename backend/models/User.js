@@ -28,13 +28,20 @@ const userSchema = new mongoose.Schema(
       default: "Basic",
     },
 
-
     // Student-specific fields
     skills: { type: [String], default: [] },
     interests: { type: [String], default: [] },
+    batchId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Batch",
+      default: null,
+    },
+    interestedCourses: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Course" },
+    ],
     college: { type: String, default: "" },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // Hash password before saving

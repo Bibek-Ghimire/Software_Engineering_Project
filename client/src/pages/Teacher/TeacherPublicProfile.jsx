@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { motion } from "framer-motion";
-import { User, Mail, GraduationCap, BookOpen, Award, FileText } from "lucide-react";
+import { motion } from "framer-motion"; // eslint-disable-line no-unused-vars
+import {
+  User,
+  Mail,
+  GraduationCap,
+  BookOpen,
+  Award,
+  FileText,
+} from "lucide-react";
 
 const TeacherPublicProfile = () => {
   const { id } = useParams();
@@ -12,7 +19,9 @@ const TeacherPublicProfile = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:5000/api/teachers/${id}`);
+        const { data } = await axios.get(
+          `http://localhost:5000/api/teachers/${id}`,
+        );
         // Normalize optional arrays to avoid .length errors
         setProfile({
           ...data,
@@ -142,7 +151,9 @@ const TeacherPublicProfile = () => {
               View / Download Resume
             </a>
           ) : (
-            <p className="text-gray-600 dark:text-gray-300">No resume uploaded yet</p>
+            <p className="text-gray-600 dark:text-gray-300">
+              No resume uploaded yet
+            </p>
           )}
         </div>
       </motion.div>

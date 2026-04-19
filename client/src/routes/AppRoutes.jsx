@@ -7,6 +7,7 @@ import Resources from "../pages/Resources";
 import CreateGroup from "../pages/CreateGroup";
 import Profile from "../pages/Profile";
 import NotFound from "../pages/NotFound";
+import StudyBatchPage from "../pages/StudyBatchPage";
 
 const AppRoutes = () => {
   return (
@@ -39,6 +40,10 @@ const AppRoutes = () => {
         <Route
           path="/profile"
           element={<Profile />}
+        />
+        <Route
+          path="/study-batch"
+          element={<StudyBatchPage />}
         />
         <Route
           path="*"

@@ -7,8 +7,9 @@ const groupSchema = new mongoose.Schema(
     members: [{ type: String }], // array of names
     memberCount: { type: Number, default: 1 },
     courseDetail: { type: String },
+    keywords: [{ type: String }], // For recommendation matching
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const Group = mongoose.model("Group", groupSchema);

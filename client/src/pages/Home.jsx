@@ -34,7 +34,7 @@ import {
   Rocket,
   Coffee,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion"; // eslint-disable-line no-unused-vars
 import Logo from "../assets/images/Logo.png";
 import team from "../assets/images/team.jpg";
 import linkedin from "../assets/images/linkedin.png";
@@ -137,7 +137,6 @@ const testimonials = [
 
 const Home = () => {
   const navigate = useNavigate();
-  const [hoveredFeature, setHoveredFeature] = useState(null);
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") ||
       (window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -166,7 +165,7 @@ const Home = () => {
   const handleNavigation = (path) => navigate(path);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900 text-gray-800 dark:text-gray-200 overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 text-gray-800 dark:text-gray-200 overflow-x-hidden">
       {/* Enhanced Header */}
       <header className="relative">
         {/* Background Pattern */}
@@ -367,8 +366,6 @@ const Home = () => {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              onMouseEnter={() => setHoveredFeature(index)}
-              onMouseLeave={() => setHoveredFeature(null)}
               className="group relative"
             >
               <div

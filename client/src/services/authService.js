@@ -60,3 +60,17 @@ export const getProtectedData = async (token) => {
     throw new Error(error.response?.data?.message || "Access denied");
   }
 };
+
+// LOGOUT USER
+export const logoutUser = async (token) => {
+  try {
+    const response = await axiosInstance.post("/logout", {}, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Logout failed");
+  }
+};

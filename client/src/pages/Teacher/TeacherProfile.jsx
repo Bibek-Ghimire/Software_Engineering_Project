@@ -1,6 +1,5 @@
 // src/pages/TeacherProfile.jsx
-import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useState, useMemo } from "react";
 import {
   Edit,
   Mail,
@@ -29,7 +28,7 @@ const TeacherProfile = () => {
   const location = useLocation();
   const viewOnly = location.state?.viewOnly || false; // <-- viewOnly flag
 
-  const initialProfile = {
+  const initialProfile = useMemo(() => ({
     name: localStorage.getItem("name") || "",
     email: localStorage.getItem("email") || "",
     qualification: "",
@@ -43,7 +42,7 @@ const TeacherProfile = () => {
     linkedin: "",
     resume: "",
     college: "",
-  };
+  }), []);
 
   const [profile, setProfile] = useState(initialProfile);
   const [formData, setFormData] = useState(initialProfile);
@@ -73,7 +72,7 @@ const TeacherProfile = () => {
       }
     };
     fetchProfile();
-  }, [token]);
+  }, [token, initialProfile]);
 
   // ---------------- Handlers ----------------
   const handleChange = (e) =>
@@ -195,7 +194,7 @@ const TeacherProfile = () => {
 
   if (loading)
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100">
+      <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-sky-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-xl font-semibold text-sky-700 animate-pulse">
@@ -207,12 +206,12 @@ const TeacherProfile = () => {
 
   // ---------------- UI ----------------
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-slate-800 dark:to-gray-900 transition-all duration-700">
+    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 transition-all duration-700">
       {/* Sidebar */}
       <div className="w-64 fixed top-0 left-0 h-full z-30">
         <TeacherSidebar />
       </div>
-      <div className="ml-72 min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-slate-800 dark:to-indigo-900 w-full">
+      <div className="ml-72 min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 w-full">
         {/* Decorative background elements */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-sky-200/20 to-blue-300/15 rounded-full blur-3xl -translate-y-48 translate-x-48 animate-pulse"></div>
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-blue-200/15 to-sky-300/20 rounded-full blur-3xl translate-y-32 -translate-x-32 animate-pulse"></div>

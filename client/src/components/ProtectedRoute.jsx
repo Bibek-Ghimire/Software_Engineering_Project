@@ -3,7 +3,13 @@ import { useAuth } from "../context/AuthContext";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
-  return isAuthenticated ? children : <Navigate to="/" />;
+  const token = localStorage.getItem("token");
+  const user = localStorage.getItem("user");
+
+  // Ensure both token and user data exist
+  const isValid = isAuthenticated && token && user;
+
+  return isValid ? children : <Navigate to="/" />;
 };
 
 export default ProtectedRoute;

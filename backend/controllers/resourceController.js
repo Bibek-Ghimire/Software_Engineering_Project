@@ -25,7 +25,7 @@ export const createResource = async (req, res) => {
       return res.status(401).json({ message: "User not authenticated" });
     }
 
-    const { title, description } = req.body;
+    const { title, description, keywords } = req.body;
     const file = req.file;
 
     if (!title || !description || !file) {
@@ -34,12 +34,19 @@ export const createResource = async (req, res) => {
 
     const teacherId = req.user._id?.toString() || req.user.id?.toString();
 
+    // Generate keywords from title if not provided
+    let resourceKeywords = keywords || [];
+    if (!keywords || keywords.length === 0) {
+      resourceKeywords = title.split(/\s+/).filter((word) => word.length > 3);
+    }
+
     const newResource = new Resource({
       title,
       description,
       fileUrl: `/uploads/${file.filename}`,
       fileType: file.mimetype,
       teacher: teacherId,
+      keywords: resourceKeywords,
     });
 
     await newResource.save();
@@ -77,7 +84,7 @@ export const updateResource = async (req, res) => {
           const oldFilePath = path.join(
             __dirname,
             "../uploads",
-            path.basename(resource.fileUrl)
+            path.basename(resource.fileUrl),
           );
           if (fs.existsSync(oldFilePath)) {
             fs.unlinkSync(oldFilePath);
@@ -92,7 +99,7 @@ export const updateResource = async (req, res) => {
     }
 
     console.log("DEBUG User trying to update/delete:", userId);
-console.log("DEBUG Resource teacher:", resource.teacher?.toString());
+    console.log("DEBUG Resource teacher:", resource.teacher?.toString());
 
     resource.title = title || resource.title;
     resource.description = description || resource.description;
@@ -129,7 +136,7 @@ export const deleteResource = async (req, res) => {
         const filePath = path.join(
           __dirname,
           "../uploads",
-          path.basename(resource.fileUrl)
+          path.basename(resource.fileUrl),
         );
         if (fs.existsSync(filePath)) {
           fs.unlinkSync(filePath);
@@ -140,7 +147,7 @@ export const deleteResource = async (req, res) => {
     }
 
     console.log("DEBUG User trying to update/delete:", userId);
-console.log("DEBUG Resource teacher:", resource.teacher?.toString());
+    console.log("DEBUG Resource teacher:", resource.teacher?.toString());
 
     await resource.deleteOne();
     res.status(200).json({ message: "Resource deleted" });

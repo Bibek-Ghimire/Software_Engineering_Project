@@ -1,13 +1,21 @@
 import React, { useState } from "react";
 import { PlusCircle, Users, Search, BookOpen } from "lucide-react";
-import bgImage from "../assets/images/groups-bg.jpg"; // use any image of your choice
-import groupBanner from "../assets/images/group-banner.png"; // optional secondary image
+import groupBanner from "../assets/images/group-banner.png";
 
 const StudyGroups = () => {
   const [groups, setGroups] = useState([
-    { name: "Web Dev Enthusiasts", description: "Learn React, Node, and more!" },
-    { name: "AI & ML Learners", description: "Discuss machine learning algorithms and projects." },
-    { name: "DSA Warriors", description: "Daily DSA problems and mock interviews." },
+    {
+      name: "Web Dev Enthusiasts",
+      description: "Learn React, Node, and more!",
+    },
+    {
+      name: "AI & ML Learners",
+      description: "Discuss machine learning algorithms and projects.",
+    },
+    {
+      name: "DSA Warriors",
+      description: "Daily DSA problems and mock interviews.",
+    },
   ]);
   const [newGroup, setNewGroup] = useState("");
   const [description, setDescription] = useState("");
@@ -21,18 +29,16 @@ const StudyGroups = () => {
   };
 
   return (
-    <div
-      className="min-h-screen bg-cover bg-center bg-no-repeat py-16 px-6 md:px-12"
-      style={{ backgroundImage: `url(${bgImage})` }}
-    >
-      {/* Overlay */}
-      <div className="bg-black/60 backdrop-blur-sm p-8 rounded-2xl shadow-2xl">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 py-16 px-6 md:px-12">
+      {/* Content Wrapper */}
+      <div className="bg-white/80 dark:bg-blue-900/20 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-blue-200/50 dark:border-blue-800/30">
         <div className="text-center mb-10">
           <h1 className="text-4xl md:text-5xl font-extrabold text-white drop-shadow">
             Discover & Join Study Groups
           </h1>
           <p className="text-gray-300 mt-3 text-lg">
-            Collaborate, learn, and grow with like-minded peers across Syncademy.
+            Collaborate, learn, and grow with like-minded peers across
+            Syncademy.
           </p>
         </div>
 

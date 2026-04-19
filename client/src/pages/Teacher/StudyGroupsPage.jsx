@@ -1,5 +1,5 @@
 // src/pages/StudyGroupsPage.jsx
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { Users, Trash2, Pencil, UserPlus } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -11,7 +11,7 @@ const StudyGroupsPage = () => {
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
 
-  const fetchGroups = async () => {
+  const fetchGroups = useCallback(async () => {
     try {
       setLoading(true);
       const res = await axios.get("http://localhost:5000/api/groups", {
@@ -24,11 +24,11 @@ const StudyGroupsPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
 
   useEffect(() => {
     fetchGroups();
-  }, []);
+  }, [fetchGroups]);
 
   const handleDeleteGroup = async (id) => {
     if (!window.confirm("Are you sure you want to delete this group?")) return;
@@ -48,7 +48,7 @@ const StudyGroupsPage = () => {
       await axios.post(
         `http://localhost:5000/api/groups/join/${id}`,
         {},
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
       fetchGroups();
       alert("Joined successfully!");
@@ -61,9 +61,9 @@ const StudyGroupsPage = () => {
   if (loading) return <div className="p-8 text-center">Loading groups...</div>;
 
   return (
-    <div className="p-6 min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white transition-colors duration-300">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 p-8 text-gray-800 dark:text-white transition-colors duration-300">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-8 max-w-6xl mx-auto">
         <h2 className="text-2xl font-semibold flex items-center gap-2">
           <Users className="w-6 h-6 text-blue-500" /> Study Groups
         </h2>
@@ -123,10 +123,9 @@ const StudyGroupsPage = () => {
                   </button>
                 )}
 
-              {user?.role === "student" &&
-                group.members?.includes(user.id) && (
-                  <span className="text-gray-400 italic">Joined</span>
-                )}
+              {user?.role === "student" && group.members?.includes(user.id) && (
+                <span className="text-gray-400 italic">Joined</span>
+              )}
             </div>
           </div>
         ))}

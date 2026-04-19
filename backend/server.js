@@ -16,6 +16,8 @@ import groupRoutes from "./routes/groupRoutes.js";
 import discussionRoutes from "./routes/discussionRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import teacherRoutes from "./routes/teacherRoutes.js";
+import recommendationRoutes from "./routes/recommendationRoutes.js";
+import batchRoutes from "./routes/batchRoutes.js";
 // Middleware
 import { protect } from "./middleware/authMiddleware.js";
 import leaderboardRoutes from "./routes/leaderboardRoutes.js";
@@ -31,7 +33,11 @@ const app = express();
 // -------------------------
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "http://localhost:5175",
+    ],
     credentials: true,
   }),
 );
@@ -54,7 +60,9 @@ app.use("/api/groups", groupRoutes);
 app.use("/api/discussions", discussionRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/teachers", teacherRoutes);
+app.use("/api/recommendations", recommendationRoutes);
 app.use("/api/leaderboard", leaderboardRoutes);
+app.use("/api/batches", batchRoutes);
 // Example protected route
 app.get("/api/protected", protect, (req, res) => {
   res.json({ message: `Hello ${req.user.name}, you are authorized!` });
@@ -71,13 +79,16 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // -------------------------
 // MongoDB Connection
 // -------------------------
+console.log(
+  `📦 Connecting to MongoDB: ${process.env.MONGO_URI?.substring(0, 60)}...`,
+);
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))
-  .catch((err) => console.log("❌ MongoDB connection error:", err));
+  .catch((err) => console.log("MongoDB connection error:", err));
 
 // -------------------------
 // Start Server
 // -------------------------
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

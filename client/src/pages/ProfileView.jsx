@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
@@ -22,7 +22,7 @@ const ProfileView = () => {
     localStorage.getItem("theme") === "dark",
   );
 
-  const fetchProfile = async () => {
+  const fetchProfile = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get("http://localhost:5000/api/profile", {
@@ -33,11 +33,11 @@ const ProfileView = () => {
       console.error(err);
       navigate("/");
     }
-  };
+  }, [navigate]);
 
   useEffect(() => {
     fetchProfile();
-  }, [id]); // ✅ re-run if id changes
+  }, [fetchProfile]);
 
   // Handle theme toggle
   useEffect(() => {
@@ -52,10 +52,10 @@ const ProfileView = () => {
 
   if (!user) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-sky-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-xl font-semibold text-sky-700 animate-pulse">
+          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-xl font-semibold text-blue-700 animate-pulse">
             Loading profile...
           </p>
         </div>
@@ -64,7 +64,7 @@ const ProfileView = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 text-gray-900 dark:text-white transition-all duration-500">
+    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 text-gray-900 dark:text-white transition-all duration-500">
       {/* Sidebar */}
       <Sidebar />
 

@@ -60,7 +60,7 @@ function CreateGroup() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white transition-colors duration-300">
+    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 text-gray-800 dark:text-white transition-colors duration-300">
       {/* Sidebar */}
       <Sidebar />
 
@@ -69,7 +69,7 @@ function CreateGroup() {
         {/* Dark Mode Toggle */}
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className="absolute top-4 right-4 p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 shadow hover:scale-110 transition"
+          className="absolute top-4 right-4 p-3 rounded-full bg-white/90 dark:bg-blue-900/60 backdrop-blur-sm text-blue-600 dark:text-blue-300 shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 border border-blue-200/50 dark:border-blue-800/40 ring-2 ring-blue-100/50 dark:ring-blue-800/50"
         >
           {darkMode ? (
             <Sun className="w-5 h-5" />

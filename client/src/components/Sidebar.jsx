@@ -24,15 +24,15 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-64 min-h-screen bg-white dark:bg-gray-800 shadow-xl px-4 py-6 flex flex-col justify-between sticky top-0">
+    <div className="w-64 min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-blue-950 dark:to-gray-900 shadow-lg px-4 py-6 flex flex-col justify-between sticky top-0 border-r border-blue-200/60 dark:border-blue-900/40">
       {/* Logo */}
       <div>
-        <h1 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400 mb-8 px-2">
+        <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-8 px-2">
           Syncademy
         </h1>
 
         {/* Navigation Links */}
-        <nav className="space-y-2">
+        <nav className="space-y-1">
           <SidebarLink
             to="/dashboard/student"
             label="Dashboard"
@@ -77,12 +77,13 @@ const Sidebar = () => {
       </div>
 
       {/* Logout */}
-      <div className="border-t pt-4">
+      <div className="border-t border-blue-200/60 dark:border-blue-900/40 pt-4">
         <button
           onClick={handleLogout}
-          className="flex items-center px-3 py-2 rounded-lg transition-colors text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 w-full text-left"
+          className="flex items-center px-3 py-2 rounded-lg transition-all duration-300 text-sm font-medium text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/60 w-full text-left group"
         >
-          <LogOut className="mr-3 w-5 h-5" /> Logout
+          <LogOut className="mr-3 w-5 h-5 group-hover:scale-110 transition-transform" />{" "}
+          Logout
         </button>
       </div>
     </div>
@@ -93,10 +94,10 @@ const SidebarLink = ({ to, label, icon }) => (
   <NavLink
     to={to}
     className={({ isActive }) =>
-      `flex items-center px-3 py-2 rounded-lg transition-colors text-sm font-medium ${
+      `flex items-center px-3 py-2.5 rounded-lg transition-all duration-300 text-sm font-medium ${
         isActive
-          ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-500 dark:text-white"
-          : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+          ? "bg-blue-200 text-blue-800 dark:bg-blue-700/60 dark:text-blue-100 shadow-md"
+          : "text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/40 hover:text-blue-800 dark:hover:text-blue-200"
       }`
     }
   >
