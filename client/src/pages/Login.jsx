@@ -77,30 +77,13 @@ const Login = () => {
   };
 
   const handleSocialLogin = (provider) => {
-    if (!selectedRole) {
-      toast.error("Please select a role before using social login");
-      return;
-    }
-
-    toast.success(`Logging in with ${provider}...`);
-
-    setTimeout(() => {
-      // Simulate role returned from social login (matching selectedRole)
-      const socialRole = selectedRole.toLowerCase(); // lowercase for consistency
-
-      if (socialRole === "student") {
-        navigate("/dashboard/student");
-      } else if (socialRole === "teacher") {
-        navigate("/dashboard/teacher");
-      } else {
-        toast.error("Unknown role");
-        navigate("/"); // fallback
-      }
-    }, 1500);
+    toast.error(
+      `${provider} login is not available yet. Please use email and password to login.`,
+    );
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 text-gray-800 dark:text-gray-200 overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-indigo-50 to-blue-50 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 text-gray-800 dark:text-gray-200 overflow-x-hidden">
       {/* Theme Toggle Button */}
       <div className="absolute top-6 right-6 z-20">
         <ThemeToggle />
@@ -108,11 +91,6 @@ const Login = () => {
 
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
-        <div
-          className="absolute -bottom-40 -left-40 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"
-          style={{ animationDelay: "1000ms" }}
-        ></div>
         <div
           className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"
           style={{ animationDelay: "500ms" }}
@@ -120,13 +98,13 @@ const Login = () => {
       </div>
 
       <div className="relative z-10 min-h-screen flex items-center justify-center p-6">
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-2xl rounded-2xl p-8 w-full max-w-md">
+        <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-xl rounded-2xl p-8 w-full max-w-md">
           {/* Header */}
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent mb-2">
               Welcome Back
             </h2>
-            <p className="text-gray-300 text-sm">
+            <p className="text-gray-600 dark:text-gray-300 text-sm">
               Sign in to continue your learning journey
             </p>
           </div>
@@ -143,13 +121,13 @@ const Login = () => {
                 required
                 value={selectedRole} // bind to state
                 onChange={(e) => setSelectedRole(e.target.value)} // update state on change
-                className="w-full appearance-none bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-12 py-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300"
+                className="w-full appearance-none bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-12 py-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
               >
                 <option value="">Select Role</option>
-                <option value="student">👨‍🎓 Student</option>
-                <option value="teacher">👩‍🏫 Teacher</option>
+                <option value="student"> Student</option>
+                <option value="teacher"> Teacher</option>
               </select>
-              <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+              <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-5 h-5"
@@ -162,29 +140,29 @@ const Login = () => {
             </div>
 
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 w-5 h-5" />
               <input
                 type="email"
                 placeholder="Email Address"
-                className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-12 py-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300"
+                className="w-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-12 py-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 w-5 h-5" />
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
-                className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-12 py-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300"
+                className="w-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-12 py-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
               >
                 {showPassword ? (
                   <EyeOff className="w-5 h-5" />
@@ -195,10 +173,10 @@ const Login = () => {
             </div>
 
             <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center text-gray-400 cursor-pointer">
+              <label className="flex items-center text-gray-700 dark:text-gray-300 cursor-pointer">
                 <input
                   type="checkbox"
-                  className="mr-2 rounded border-gray-600 bg-white/10 text-blue-400 focus:ring-blue-400"
+                  className="mr-2 rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 focus:ring-blue-500"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
                 />
@@ -206,7 +184,7 @@ const Login = () => {
               </label>
               <Link
                 to="/forgot-password"
-                className="text-blue-400 hover:text-blue-300 transition-colors"
+                className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
               >
                 Forgot password?
               </Link>
@@ -222,11 +200,11 @@ const Login = () => {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-700 dark:text-gray-300 text-sm">
               Don't have an account?{" "}
               <Link
                 to="/register"
-                className="text-blue-400 hover:text-blue-300 transition-colors font-medium"
+                className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors font-medium"
               >
                 Create Account
               </Link>
@@ -237,10 +215,10 @@ const Login = () => {
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-600"></div>
+                <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-slate-900 text-gray-400">
+                <span className="px-2 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300">
                   Or continue with
                 </span>
               </div>
@@ -248,7 +226,8 @@ const Login = () => {
             <div className="mt-4 grid grid-cols-2 gap-3">
               <button
                 onClick={() => handleSocialLogin("Google")}
-                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-3 text-white hover:bg-white/20 transition-all duration-300 flex items-center justify-center group"
+                disabled
+                className="bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl p-3 text-gray-400 dark:text-gray-500 cursor-not-allowed opacity-60 transition-all duration-300 flex items-center justify-center group"
               >
                 <svg
                   className="w-5 h-5 mr-2"
@@ -275,7 +254,8 @@ const Login = () => {
               </button>
               <button
                 onClick={() => handleSocialLogin("GitHub")}
-                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-3 text-white hover:bg-white/20 transition-all duration-300 flex items-center justify-center group"
+                disabled
+                className="bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl p-3 text-gray-400 dark:text-gray-500 cursor-not-allowed opacity-60 transition-all duration-300 flex items-center justify-center group"
               >
                 <Github className="w-5 h-5 mr-2" />
                 <span className="text-sm">GitHub</span>
@@ -287,7 +267,7 @@ const Login = () => {
         {/* Back to Home */}
         <Link
           to="/"
-          className="absolute top-6 left-6 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-3 text-white hover:bg-white/20 transition-all duration-300 flex items-center"
+          className="absolute top-6 left-6 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-3 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 flex items-center"
         >
           <ArrowLeft className="w-5 h-5 mr-2" />
           Back to Home

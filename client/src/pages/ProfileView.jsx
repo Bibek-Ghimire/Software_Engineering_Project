@@ -92,6 +92,43 @@ const ProfileView = () => {
     fetchProfile();
   }, [fetchProfile]);
 
+  // Refetch profile when page becomes visible or regains focus
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        console.log("👁️ Page became visible - refetching profile data");
+        fetchProfile();
+      }
+    };
+
+    const handleFocus = () => {
+      console.log("🔍 Window gained focus - refetching profile data");
+      fetchProfile();
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("focus", handleFocus);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("focus", handleFocus);
+    };
+  }, [fetchProfile]);
+
+  // Listen for profile update event and refetch immediately
+  useEffect(() => {
+    const handleProfileUpdate = () => {
+      console.log("🔔 Profile update event received - refetching immediately");
+      fetchProfile();
+    };
+
+    window.addEventListener("profileUpdated", handleProfileUpdate);
+
+    return () => {
+      window.removeEventListener("profileUpdated", handleProfileUpdate);
+    };
+  }, [fetchProfile]);
+
   // Handle theme toggle
   useEffect(() => {
     if (darkMode) {

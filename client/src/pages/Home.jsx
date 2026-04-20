@@ -116,7 +116,7 @@ const testimonials = [
     content:
       "Syncademy transformed my study routine. The collaborative notes feature helped me ace my algorithms course!",
     rating: 5,
-    avatar: "👨‍💻",
+    avatar: "",
   },
   {
     name: "Samir Dawadi",
@@ -124,7 +124,7 @@ const testimonials = [
     content:
       "The peer support network is incredible. Having study partners available 24/7 made med school so much more manageable.",
     rating: 5,
-    avatar: "👨‍💻",
+    avatar: "",
   },
   {
     name: "Kushal Ranabhat",
@@ -132,7 +132,7 @@ const testimonials = [
     content:
       "The peer to peer learning aspect keeps me motivated. I've never been more engaged with my studies than I am now!",
     rating: 5,
-    avatar: "👨‍💻",
+    avatar: "",
   },
 ];
 
@@ -154,6 +154,10 @@ const Home = () => {
 
   const handleNavigation = (path) => navigate(path);
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 text-gray-800 dark:text-gray-200 overflow-x-hidden">
       {/* Enhanced Header */}
@@ -168,7 +172,8 @@ const Home = () => {
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="flex items-center gap-3"
+              onClick={scrollToTop}
+              className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
             >
               <div className="relative">
                 <img
@@ -184,7 +189,7 @@ const Home = () => {
 
             <div className="flex gap-8 items-center">
               <button
-                onClick={() => handleNavigation("/")}
+                onClick={scrollToTop}
                 className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
               >
                 Home

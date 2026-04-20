@@ -36,7 +36,7 @@ const Navbar = () => {
             <Users2 className="w-4 h-4 mr-1" /> My Batch
           </Link>
           <Link
-            to="/profile/view"
+            to="/profile"
             className="flex items-center text-sm font-medium text-blue-700 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-100 transition"
           >
             <User className="w-4 h-4 mr-1" /> Profile

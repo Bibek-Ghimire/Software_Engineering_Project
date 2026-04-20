@@ -7,8 +7,6 @@ import TeacherDashboard from "./pages/Teacher/TeacherDashboard";
 import Home from "./pages/Home";
 import Resources from "./pages/Resources";
 // import AddResource from "./pages/AddResource";
-import ProfileView from "./pages/ProfileView";
-import ProfileEdit from "./pages/ProfileEdit";
 import NotFound from "./pages/NotFound"; // we'll create this
 import NotificationPage from "./pages/NotificationPage";
 import LeaderBoard from "./pages/LeaderBoard";
@@ -22,7 +20,6 @@ import AddResource from "./pages/Teacher/AddResource";
 import CoursesView from "./pages/Teacher/CoursesPage";
 import CourseEdit from "./pages/Teacher/CoursesPage";
 import StudyGroupsPage from "./pages/Teacher/StudyGroupsPage";
-import TeacherProfile from "./pages/Teacher/TeacherProfile";
 import Leaderboard from "./pages/Teacher/Leaderboard";
 import EnrollmentRequests from "./pages/Teacher/EnrollmentRequests";
 import ApprovedStudentsGroups from "./pages/Teacher/ApprovedStudentsGroups";
@@ -30,8 +27,9 @@ import TeacherChatList from "./pages/Teacher/TeacherChatList";
 import TeacherCourseChat from "./pages/Teacher/TeacherCourseChat";
 import StudentChatList from "./pages/Student/StudentChatList";
 import StudentCourseChat from "./pages/Student/StudentCourseChat";
-
-import TeacherProfileView from "./pages/Teacher/TeacherProfileView";
+import StudentProfileUpgraded from "./pages/Student/StudentProfile";
+import TeacherProfileUpgraded from "./pages/Teacher/TeacherProfileUpgraded";
+import ProfileView from "./pages/ProfileView";
 
 function App() {
   return (
@@ -77,11 +75,7 @@ function App() {
         {/* <Route path="/add-resource" element={<AddResource />} /> */}
         <Route
           path="/profile"
-          element={<ProfileView />}
-        />
-        <Route
-          path="/profile/edit"
-          element={<ProfileEdit />}
+          element={<StudentProfileUpgraded />}
         />
         <Route
           path="/profile/:id"
@@ -113,7 +107,7 @@ function App() {
         />
         <Route
           path="/teacher/profile"
-          element={<TeacherProfile />}
+          element={<TeacherProfileUpgraded />}
         />
         <Route
           path="/teacher/course"
@@ -121,7 +115,7 @@ function App() {
         />
         <Route
           path="/teacher/:id"
-          element={<TeacherProfile />}
+          element={<TeacherProfileUpgraded />}
         />
         <Route
           path="/discussions"

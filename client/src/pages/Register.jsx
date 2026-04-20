@@ -112,7 +112,7 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 text-gray-800 dark:text-gray-200 overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-indigo-50 to-blue-50 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 text-gray-800 dark:text-gray-200 overflow-x-hidden">
       {/* Theme Toggle Button */}
       <div className="absolute top-6 right-6 z-20">
         <ThemeToggle />
@@ -120,11 +120,7 @@ const Register = () => {
 
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
-        <div
-          className="absolute -bottom-40 -left-40 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"
-          style={{ animationDelay: "1000ms" }}
-        ></div>
+       
         <div
           className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"
           style={{ animationDelay: "500ms" }}
@@ -132,13 +128,13 @@ const Register = () => {
       </div>
 
       <div className="relative z-10 min-h-screen flex items-center justify-center p-6">
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-2xl rounded-2xl p-8 w-full max-w-md">
+        <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-xl rounded-2xl p-8 w-full max-w-md">
           {/* Header */}
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent mb-2">
               Join the Community
             </h2>
-            <p className="text-gray-300 text-sm">
+            <p className="text-gray-600 dark:text-gray-300 text-sm">
               Create your account to start learning with peers
             </p>
           </div>
@@ -149,56 +145,56 @@ const Register = () => {
             className="space-y-4"
           >
             <div className="relative">
-              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 w-5 h-5" />
               <div className="relative">
-                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 w-5 h-5" />
                 <select
-                  className="w-full appearance-none bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-12 py-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-300"
+                  className="w-full appearance-none bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-12 py-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                   value={role} // bind to state
                   onChange={(e) => setRole(e.target.value)} // update state on change
                   required
                 >
                   <option value="">Select Role</option>
-                  <option value="student">👨‍🎓 Student</option>
-                  <option value="teacher">👩‍🏫 Teacher</option>
+                  <option value="student"> Student</option>
+                  <option value="teacher"> Teacher</option>
                 </select>
               </div>
             </div>
             <div className="relative">
-              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 w-5 h-5" />
               <input
                 type="text"
                 placeholder="Full Name"
-                className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-12 py-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-300"
+                className="w-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-12 py-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
 
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 w-5 h-5" />
               <input
                 type="email"
                 placeholder="Email Address"
-                className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-12 py-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-300"
+                className="w-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-12 py-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 w-5 h-5" />
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password (min 6 characters)"
-                className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-12 py-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-300"
+                className="w-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-12 py-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
               >
                 {showPassword ? (
                   <EyeOff className="w-5 h-5" />
@@ -209,8 +205,8 @@ const Register = () => {
             </div>
 
             {/* Interests Section */}
-            <div className="mt-6 pt-4 border-t border-white/20">
-              <label className="text-sm font-semibold text-white block mb-3">
+            <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-600">
+              <label className="text-sm font-semibold text-gray-800 dark:text-white block mb-3">
                 Select Your Interests (Min. 1)
               </label>
 
@@ -219,7 +215,7 @@ const Register = () => {
                 <input
                   type="text"
                   placeholder="Type a topic and press Enter..."
-                  className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 text-sm"
+                  className="w-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   value={interestInput}
                   onChange={(e) => setInterestInput(e.target.value)}
                   onKeyPress={handleKeyPress}
@@ -231,7 +227,7 @@ const Register = () => {
                 {interests.map((interest) => (
                   <div
                     key={interest}
-                    className="bg-purple-500/30 border border-purple-400 text-white rounded-full px-3 py-1 text-sm flex items-center gap-2 group"
+                    className="bg-blue-100 dark:bg-blue-900/30 border border-blue-300 dark:border-blue-600 text-gray-800 dark:text-white rounded-full px-3 py-1 text-sm flex items-center gap-2 group"
                   >
                     {interest}
                     <button
@@ -246,7 +242,9 @@ const Register = () => {
               </div>
 
               {/* Suggested Topics */}
-              <div className="text-xs text-gray-300 mb-2">Quick select:</div>
+              <div className="text-xs text-gray-600 dark:text-gray-300 mb-2">
+                Quick select:
+              </div>
               <div className="flex flex-wrap gap-2 mb-4">
                 {suggestedTopics.map((topic) => (
                   <button
@@ -258,10 +256,10 @@ const Register = () => {
                     }
                     className={`px-3 py-1 text-xs rounded-full transition-all ${
                       interests.includes(topic)
-                        ? "bg-purple-500/50 text-gray-400 opacity-50"
+                        ? "bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-400 opacity-50"
                         : interests.length >= 5
-                          ? "bg-gray-500/20 text-gray-400 opacity-50"
-                          : "bg-white/10 text-white hover:bg-white/20 cursor-pointer border border-white/20"
+                          ? "bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-400 opacity-50"
+                          : "bg-blue-100 dark:bg-blue-900/30 text-gray-800 dark:text-white hover:bg-blue-200 dark:hover:bg-blue-800/50 cursor-pointer border border-blue-200 dark:border-blue-600"
                     }`}
                   >
                     {topic}
@@ -271,10 +269,10 @@ const Register = () => {
             </div>
 
             {/* Terms and Conditions */}
-            <div className="flex items-start space-x-2 text-xs text-gray-400">
+            <div className="flex items-start space-x-2 text-xs text-gray-700 dark:text-gray-300">
               <input
                 type="checkbox"
-                className="mt-1 rounded border-gray-600 bg-white/10 text-purple-400 focus:ring-purple-400"
+                className="mt-1 rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-blue-600 focus:ring-blue-500"
                 required
               />
               <span>
@@ -305,11 +303,11 @@ const Register = () => {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-700 dark:text-gray-300 text-sm">
               Already have an account?{" "}
               <Link
                 to="/login"
-                className="text-blue-600 hover:text-indigo-600 transition-colors font-medium"
+                className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors font-medium"
               >
                 Sign In
               </Link>
@@ -320,7 +318,7 @@ const Register = () => {
         {/* Back to Home */}
         <Link
           to="/"
-          className="absolute top-6 left-6 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-3 text-white hover:bg-white/20 transition-all duration-300 flex items-center"
+          className="absolute top-6 left-6 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-3 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 flex items-center"
         >
           <ArrowLeft className="w-5 h-5 mr-2" />
           Back to Home
