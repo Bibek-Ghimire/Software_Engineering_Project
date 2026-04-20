@@ -18,11 +18,16 @@ const TeacherChatList = () => {
   const fetchCourses = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:5000/api/courses", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        "http://localhost:5000/api/teachers/courses",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
 
-      const teacherCourses = response.data.courses || [];
+      // Handle both response formats for backward compatibility
+      const teacherCourses = response.data.courses || response.data || [];
+      console.log("Fetched courses:", teacherCourses);
       setCourses(teacherCourses);
 
       // Get student count for each course

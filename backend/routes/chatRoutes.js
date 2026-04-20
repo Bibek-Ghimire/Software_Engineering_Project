@@ -14,22 +14,22 @@ const router = express.Router();
 router.use(protect);
 
 /**
- * Get chat messages for a specific course
- * GET /api/chat/course/:courseId
+ * Get enrolled courses for a student (MUST come before generic /course/:courseId route)
+ * GET /api/chat/student/enrolled-courses
  */
-router.get("/course/:courseId", getCourseChat);
+router.get("/student/enrolled-courses", getStudentEnrolledCourses);
 
 /**
- * Get approved students for a course (teacher only)
+ * Get approved students for a course (teacher only) (MUST come before generic /course/:courseId route)
  * GET /api/chat/course/:courseId/approved-students
  */
 router.get("/course/:courseId/approved-students", getCourseApprovedStudents);
 
 /**
- * Get enrolled courses for a student
- * GET /api/chat/student/enrolled-courses
+ * Get chat messages for a specific course
+ * GET /api/chat/course/:courseId
  */
-router.get("/student/enrolled-courses", getStudentEnrolledCourses);
+router.get("/course/:courseId", getCourseChat);
 
 /**
  * Send a message to a course chat

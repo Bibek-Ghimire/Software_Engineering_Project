@@ -7,7 +7,11 @@
  * - Student joins a course chat room: socket.emit('join_course_chat', { courseId, role: 'student' })
  * - User sends message: socket.emit('send_message', { courseId, message: 'text' })
  * - Listen for messages: socket.on('receive_message', (data) => { ... })
+ * - Listen for notifications: socket.on('new_notification', (data) => { ... })
  */
+
+import Course from "../models/Course.js";
+import EnrollmentRequest from "../models/EnrollmentRequest.js";
 
 export const initCourseChat = (io) => {
   const courseNamespace = io.of("/course-chat");
@@ -36,10 +40,11 @@ export const initCourseChat = (io) => {
 
     /**
      * User sends a message
+     * Also triggers notification emission to relevant parties
      */
     socket.on(
       "send_message",
-      ({ courseId, message, userId, userName, role }) => {
+      async ({ courseId, message, userId, userName, role }) => {
         const roomId = `course_${courseId}`;
 
         if (!message || message.trim() === "") {
@@ -69,6 +74,92 @@ export const initCourseChat = (io) => {
           message: message.trim(),
           timestamp: new Date(),
         });
+
+        // ========================================
+        // EMIT NOTIFICATIONS TO RELEVANT USERS
+        // ========================================
+        try {
+          const course = await Course.findById(courseId);
+          if (!course) {
+            console.error(`[Course Chat] Course not found: ${courseId}`);
+            return;
+          }
+
+          const messageSummary = message.trim().substring(0, 50);
+          const truncatedMessage =
+            messageSummary.length < message.trim().length
+              ? messageSummary + "..."
+              : messageSummary;
+
+          if (role === "teacher") {
+            // Teacher sent a message - notify all approved students
+            const approvedStudents = await EnrollmentRequest.find({
+              course: courseId,
+              status: "approved",
+            }).select("student");
+
+            approvedStudents.forEach((enrollment) => {
+              const studentId = enrollment.student._id.toString();
+              // Send notification to each student via socket if they're connected
+              courseNamespace.to(studentId).emit("new_notification", {
+                type: "message",
+                title: `New message from ${course.title}`,
+                message: `${userName}: ${truncatedMessage}`,
+                courseId,
+                senderId: userId,
+                senderName: userName,
+                senderRole: role,
+                actionUrl: `/course/${courseId}/chat`,
+                timestamp: new Date(),
+              });
+            });
+          } else if (role === "student") {
+            // Student sent a message - notify teacher and other students
+            const teacherId = course.teacher._id.toString();
+
+            // Notify teacher
+            courseNamespace.to(teacherId).emit("new_notification", {
+              type: "message",
+              title: `New message from ${userName} in ${course.title}`,
+              message: `${userName}: ${truncatedMessage}`,
+              courseId,
+              senderId: userId,
+              senderName: userName,
+              senderRole: role,
+              actionUrl: `/course/${courseId}/chat`,
+              timestamp: new Date(),
+            });
+
+            // Notify other enrolled students
+            const approvedStudents = await EnrollmentRequest.find({
+              course: courseId,
+              status: "approved",
+            }).select("student");
+
+            approvedStudents.forEach((enrollment) => {
+              const studentId = enrollment.student._id.toString();
+              if (studentId !== userId) {
+                courseNamespace.to(studentId).emit("new_notification", {
+                  type: "message",
+                  title: `New message from ${userName} in ${course.title}`,
+                  message: `${userName}: ${truncatedMessage}`,
+                  courseId,
+                  senderId: userId,
+                  senderName: userName,
+                  senderRole: role,
+                  actionUrl: `/course/${courseId}/chat`,
+                  timestamp: new Date(),
+                });
+              }
+            });
+          }
+        } catch (notificationError) {
+          // Log the error but don't stop message flow
+          console.error(
+            "[Course Chat] Error emitting notifications:",
+            notificationError,
+          );
+        }
 
         console.log(
           `[Course Chat] Message in ${roomId} from ${userName}: ${message}`,

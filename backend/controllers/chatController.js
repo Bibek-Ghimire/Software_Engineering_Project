@@ -1,6 +1,7 @@
 import ChatMessage from "../models/ChatMessage.js";
 import Course from "../models/Course.js";
 import EnrollmentRequest from "../models/EnrollmentRequest.js";
+import Notification from "../models/Notification.js";
 
 /**
  * Get chat messages for a specific course
@@ -63,18 +64,21 @@ export const getCourseApprovedStudents = async (req, res) => {
     const approvedRequests = await EnrollmentRequest.find({
       course: courseId,
       status: "approved",
-    })
-      .populate("student", "name email college")
-      .select("-__v");
+    }).populate("student", "name email college _id");
 
-    res.json({
-      success: true,
-      students: approvedRequests.map((req) => ({
+    // Filter out any requests where student didn't populate
+    const students = approvedRequests
+      .filter((req) => req.student)
+      .map((req) => ({
         _id: req.student._id,
         name: req.student.name,
         email: req.student.email,
         college: req.student.college,
-      })),
+      }));
+
+    res.json({
+      success: true,
+      students,
     });
   } catch (error) {
     console.error("Error fetching approved students:", error);
@@ -94,24 +98,37 @@ export const getStudentEnrolledCourses = async (req, res) => {
     const studentId = req.user._id;
 
     // Get all approved enrollment requests for this student
+    // Populate course and teacher details
     const enrolledRequests = await EnrollmentRequest.find({
       student: studentId,
       status: "approved",
     })
-      .populate("course", "title description")
-      .populate("teacher", "name email")
-      .select("-__v");
+      .populate({
+        path: "course",
+        select: "title description teacher _id",
+        populate: {
+          path: "teacher",
+          select: "name email _id",
+        },
+      })
+      .populate({
+        path: "teacher",
+        select: "name email _id",
+      });
 
-    const courses = enrolledRequests.map((req) => ({
-      _id: req.course._id,
-      title: req.course.title,
-      description: req.course.description,
-      teacher: {
-        _id: req.teacher._id,
-        name: req.teacher.name,
-        email: req.teacher.email,
-      },
-    }));
+    // Filter out any requests where course or teacher didn't populate
+    const courses = enrolledRequests
+      .filter((req) => req.course && req.course.teacher)
+      .map((req) => ({
+        _id: req.course._id,
+        title: req.course.title,
+        description: req.course.description,
+        teacher: {
+          _id: req.course.teacher._id,
+          name: req.course.teacher.name,
+          email: req.course.teacher.email,
+        },
+      }));
 
     res.json({
       success: true,
@@ -128,7 +145,7 @@ export const getStudentEnrolledCourses = async (req, res) => {
 };
 
 /**
- * Save a chat message
+ * Save a chat message and create notifications for other participants
  */
 export const saveMessage = async (req, res) => {
   try {
@@ -136,6 +153,7 @@ export const saveMessage = async (req, res) => {
     const { message } = req.body;
     const userId = req.user._id;
     const userRole = req.user.role;
+    const userName = req.user.name;
 
     if (!message || message.trim() === "") {
       return res.status(400).json({
@@ -180,7 +198,7 @@ export const saveMessage = async (req, res) => {
     const chatMessage = new ChatMessage({
       course: courseId,
       sender: userId,
-      senderName: req.user.name,
+      senderName: userName,
       senderRole: userRole,
       message: message.trim(),
     });
@@ -189,6 +207,81 @@ export const saveMessage = async (req, res) => {
 
     // Populate sender info
     await chatMessage.populate("sender", "name email role");
+
+    // ========================================
+    // CREATE NOTIFICATIONS FOR OTHER PARTICIPANTS
+    // ========================================
+    try {
+      if (userRole === "teacher") {
+        // Teacher sent a message - notify all approved students in this course
+        const approvedStudents = await EnrollmentRequest.find({
+          course: courseId,
+          status: "approved",
+        }).select("student");
+
+        const studentIds = approvedStudents.map((req) => req.student._id);
+
+        // Create notifications for all approved students except sender (if they're a student)
+        if (studentIds.length > 0) {
+          await Notification.insertMany(
+            studentIds.map((studentId) => ({
+              recipient: studentId,
+              title: `New message from ${course.title}`,
+              message: `${userName}: ${message.trim().substring(0, 50)}${
+                message.trim().length > 50 ? "..." : ""
+              }`,
+              type: "message",
+              relatedCourse: courseId,
+              isRead: false,
+              actionUrl: `/course/${courseId}/chat`,
+            })),
+          );
+        }
+      } else if (userRole === "student") {
+        // Student sent a message - notify the teacher and other approved students
+        const approvedEnrollments = await EnrollmentRequest.find({
+          course: courseId,
+          status: "approved",
+        }).select("student");
+
+        const otherStudentIds = approvedEnrollments
+          .map((req) => req.student._id)
+          .filter((id) => id.toString() !== userId.toString());
+
+        // Notify the teacher
+        await Notification.create({
+          recipient: course.teacher,
+          title: `New message from ${userName} in ${course.title}`,
+          message: `${userName}: ${message.trim().substring(0, 50)}${
+            message.trim().length > 50 ? "..." : ""
+          }`,
+          type: "message",
+          relatedCourse: courseId,
+          isRead: false,
+          actionUrl: `/course/${courseId}/chat`,
+        });
+
+        // Notify other enrolled students
+        if (otherStudentIds.length > 0) {
+          await Notification.insertMany(
+            otherStudentIds.map((studentId) => ({
+              recipient: studentId,
+              title: `New message from ${userName} in ${course.title}`,
+              message: `${userName}: ${message.trim().substring(0, 50)}${
+                message.trim().length > 50 ? "..." : ""
+              }`,
+              type: "message",
+              relatedCourse: courseId,
+              isRead: false,
+              actionUrl: `/course/${courseId}/chat`,
+            })),
+          );
+        }
+      }
+    } catch (notificationError) {
+      // Log the error but don't fail the message send if notification creation fails
+      console.error("Error creating notifications:", notificationError);
+    }
 
     res.json({
       success: true,
