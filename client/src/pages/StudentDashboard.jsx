@@ -102,7 +102,11 @@ const StudentDashboard = () => {
         const res = await axios.get("http://localhost:5000/api/groups", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setGroupsCount(res.data.length);
+        // Handle both array and nested data formats
+        const groupsData = Array.isArray(res.data)
+          ? res.data
+          : res.data.data || [];
+        setGroupsCount(groupsData.length);
       } catch (err) {
         console.error(err);
       }
@@ -113,7 +117,11 @@ const StudentDashboard = () => {
         const res = await axios.get("http://localhost:5000/api/badges", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setBadgesCount(res.data.length);
+        // Handle both array and nested data formats
+        const badgesData = Array.isArray(res.data)
+          ? res.data
+          : res.data.data || [];
+        setBadgesCount(badgesData.length);
       } catch (err) {
         console.error(err);
       }
@@ -124,7 +132,11 @@ const StudentDashboard = () => {
         const res = await axios.get("http://localhost:5000/api/teachers", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setTeachers(res.data);
+        // Handle both array and nested data formats
+        const teachersData = Array.isArray(res.data)
+          ? res.data
+          : res.data.data || [];
+        setTeachers(teachersData);
       } catch (err) {
         console.error(err);
       }
@@ -150,7 +162,9 @@ const StudentDashboard = () => {
               headers: { Authorization: `Bearer ${token}` },
             },
           );
-          setBatchMembers(membersRes.data || []);
+          // Extract members array from response
+          const membersData = membersRes.data.data || membersRes.data || [];
+          setBatchMembers(membersData);
 
           const similarRes = await axios.get(
             "http://localhost:5000/api/batches/protected/my-batch/similar-users",
@@ -158,7 +172,9 @@ const StudentDashboard = () => {
               headers: { Authorization: `Bearer ${token}` },
             },
           );
-          setSimilarUsers(similarRes.data || []);
+          // Extract similar users from response
+          const similarData = similarRes.data.data || similarRes.data || [];
+          setSimilarUsers(similarData);
         }
       } catch (err) {
         console.error("Error fetching batch data:", err);
@@ -629,75 +645,6 @@ const StudentDashboard = () => {
                         whileTap={{ scale: 0.98 }}
                       >
                         Connect
-                      </motion.button>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Similar Users Section */}
-            {similarUsers.length > 0 && (
-              <div className="bg-white dark:bg-slate-800 rounded-3xl border border-purple-100 dark:border-slate-700 shadow-xl p-8">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className="p-3 bg-gradient-to-br from-purple-400 to-pink-500 rounded-2xl shadow-lg">
-                      <Sparkles className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-bold text-slate-800 dark:text-white">
-                        Most Similar to You
-                      </h3>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                        Students with the highest learning compatibility
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                  {similarUsers.slice(0, 5).map((user, idx) => (
-                    <motion.div
-                      key={user._id || idx}
-                      className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl p-4 border border-purple-100 dark:border-purple-700/30 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 flex flex-col items-center text-center"
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: idx * 0.1, duration: 0.5 }}
-                      whileHover={{ y: -5 }}
-                    >
-                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center text-white font-bold text-xl shadow-lg mb-3">
-                        {(user.name || "U")[0].toUpperCase()}
-                      </div>
-                      <h4 className="font-bold text-slate-800 dark:text-white text-sm mb-1">
-                        {user.name || "Student"}
-                      </h4>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 mb-3 line-clamp-2">
-                        {user.email}
-                      </p>
-
-                      {/* Similarity Score */}
-                      {user.similarity && (
-                        <div className="mb-3 w-full">
-                          <div className="text-xs font-semibold text-purple-600 dark:text-purple-400 mb-1">
-                            {Math.round(user.similarity * 100)}% Match
-                          </div>
-                          <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                            <motion.div
-                              className="h-full bg-gradient-to-r from-purple-400 to-pink-500"
-                              initial={{ width: 0 }}
-                              animate={{ width: `${user.similarity * 100}%` }}
-                              transition={{ delay: 0.3, duration: 1 }}
-                            />
-                          </div>
-                        </div>
-                      )}
-
-                      <motion.button
-                        className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-3 py-2 rounded-lg font-semibold text-xs transition-all duration-300 shadow-md hover:shadow-lg"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        Collaborate
                       </motion.button>
                     </motion.div>
                   ))}
