@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Heart,
   Zap,
@@ -13,6 +14,7 @@ import {
 import recommendationService from "../services/recommendationService";
 
 const RecommendedCourses = ({ limit = 6 }) => {
+  const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [interestedCourses, setInterestedCourses] = useState(new Set());
@@ -174,7 +176,7 @@ const RecommendedCourses = ({ limit = 6 }) => {
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
-                  onClick={() => alert(`Exploring: ${course.title}`)}
+                  onClick={() => navigate(`/course/${course._id}`)}
                   className="flex-1 group/btn relative overflow-hidden bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-4 rounded-2xl flex items-center justify-center gap-3 transition-all duration-300 font-semibold shadow-lg hover:shadow-2xl transform hover:scale-105"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>

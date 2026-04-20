@@ -26,7 +26,7 @@ const AddResource = () => {
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState(null);
 
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
 
   if (!token) toast.error("User not logged in");

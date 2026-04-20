@@ -6,9 +6,4 @@ const router = express.Router();
 
 router.get("/", protect, getLeaderboard);
 
-
-router.get("/", (req, res) => {
-  res.json({ message: "Leaderboard route works!" });
-});
-
 export default router;

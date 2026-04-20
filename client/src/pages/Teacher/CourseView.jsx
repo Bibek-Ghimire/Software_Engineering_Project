@@ -5,7 +5,7 @@ import axios from "axios";
 const CourseView = () => {
   const { id } = useParams();
   const [course, setCourse] = useState(null);
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
 
   const fetchCourse = useCallback(async () => {

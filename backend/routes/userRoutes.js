@@ -1,19 +1,21 @@
 import express from "express";
-import { getUsers, createUser } from "../controllers/userController.js";
-import User from '../models/User.js';
+import {
+  getUsers,
+  getUserById,
+  createUser,
+  getAllTeachers,
+} from "../controllers/userController.js";
+import User from "../models/User.js";
 
 const router = express.Router();
 
 router.get("/", getUsers);
 router.post("/", createUser);
 
-// GET teacher by ID (readonly)
+// GET all teachers
+router.get("/teachers", getAllTeachers);
 
-
-
-router.get("/teachers", getAllTeachers); // Fetch all teachers
-
-
-
+// GET specific user by ID (readonly) - must be last to avoid conflicts
+router.get("/:id", getUserById);
 
 export default router;

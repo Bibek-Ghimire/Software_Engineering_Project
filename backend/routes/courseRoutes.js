@@ -1,7 +1,11 @@
 // backend/routes/courseRoutes.js
 import express from "express";
 import Course from "../models/Course.js";
+import User from "../models/User.js";
+import Notification from "../models/Notification.js";
+import EnrollmentRequest from "../models/EnrollmentRequest.js";
 import { protect } from "../middleware/authMiddleware.js";
+import { sendEnrollmentNotificationEmail } from "../services/emailService.js";
 
 const router = express.Router();
 
@@ -24,9 +28,39 @@ router.get("/", protect, async (req, res) => {
 // @access  Private
 router.get("/:id", protect, async (req, res) => {
   try {
-    const course = await Course.findById(req.params.id).populate("teacher", "name email role");
+    const course = await Course.findById(req.params.id).populate(
+      "teacher",
+      "name email role",
+    );
     if (!course) return res.status(404).json({ message: "Course not found" });
-    res.status(200).json(course);
+
+    const userId = req.user.id || req.user._id;
+
+    // Strictly check if current authenticated user is enrolled
+    // Use req.user.id (from JWT token) for authoritative user identification
+    const isCurrentUserEnrolled = course.students.some(
+      (studentId) => studentId.toString() === userId,
+    );
+
+    // Check if there's a pending enrollment request
+    const pendingRequest = await EnrollmentRequest.findOne({
+      student: userId,
+      course: req.params.id,
+      status: "pending",
+    });
+
+    console.log(
+      `🔍 Course Check - User: ${req.user.name} (${userId}), Course: ${course.title}, Enrolled: ${isCurrentUserEnrolled}, Pending Request: ${!!pendingRequest}`,
+    );
+
+    // Return course with enrollment and request status for current user
+    const courseResponse = {
+      ...course.toObject(),
+      isCurrentUserEnrolled,
+      enrollmentRequestStatus: pendingRequest ? "pending" : null,
+    };
+
+    res.status(200).json(courseResponse);
   } catch (err) {
     console.error("Error fetching course:", err);
     res.status(500).json({ message: "Server error" });
@@ -105,5 +139,129 @@ router.delete("/:id", protect, async (req, res) => {
   }
 });
 
+// @desc    Request enrollment in a course
+// @route   POST /api/courses/:id/enroll
+// @access  Private (student)
+router.post("/:id/enroll", protect, async (req, res) => {
+  try {
+    // 🔐 STRICT VALIDATION: Verify authenticated user ID
+    const authenticatedUserId = req.user.id || req.user._id;
+    const authenticatedUserName = req.user.name;
+
+    console.log(
+      `🔐 Enrollment Request - Authenticated User: ${authenticatedUserName} (${authenticatedUserId})`,
+    );
+
+    // Verify the authenticated user is a student
+    console.log(
+      `🔍 Role Check - User: ${authenticatedUserName}, Role: ${req.user.role}, Role Type: ${typeof req.user.role}`,
+    );
+
+    if (!req.user.role || req.user.role.toLowerCase() !== "student") {
+      console.warn(
+        `⚠️  Non-student attempted enrollment: ${authenticatedUserName} (Role: ${req.user.role || "undefined"})`,
+      );
+      return res.status(403).json({
+        message: `Only students can enroll in courses. Your role is: ${req.user.role || "undefined"}`,
+      });
+    }
+
+    const courseId = req.params.id;
+    console.log(`📚 Attempting enrollment request for course: ${courseId}`);
+
+    const course = await Course.findById(courseId).populate(
+      "teacher",
+      "name email",
+    );
+    if (!course) {
+      console.error(`❌ Course not found: ${courseId}`);
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    if (!course.teacher) {
+      console.error(`❌ Course has no teacher assigned: ${courseId}`);
+      return res
+        .status(400)
+        .json({ message: "Course has no teacher assigned" });
+    }
+
+    // 🔐 STRICT CHECK: Check if already enrolled
+    const studentIdString = authenticatedUserId.toString();
+    const isAlreadyEnrolled = course.students.some(
+      (studentId) => studentId.toString() === studentIdString,
+    );
+
+    if (isAlreadyEnrolled) {
+      console.warn(
+        `⚠️  Student ${authenticatedUserName} already enrolled in ${course.title}`,
+      );
+      return res
+        .status(400)
+        .json({ message: "Already enrolled in this course" });
+    }
+
+    // Check for existing enrollment request
+    const existingRequest = await EnrollmentRequest.findOne({
+      student: authenticatedUserId,
+      course: courseId,
+      status: "pending",
+    });
+
+    if (existingRequest) {
+      console.warn(
+        `⚠️  Student ${authenticatedUserName} already has a pending request for ${course.title}`,
+      );
+      return res.status(400).json({
+        message:
+          "You already have a pending enrollment request for this course",
+      });
+    }
+
+    // Create enrollment request
+    const enrollmentRequest = new EnrollmentRequest({
+      student: authenticatedUserId,
+      course: courseId,
+      teacher: course.teacher._id,
+      status: "pending",
+    });
+    await enrollmentRequest.save();
+
+    console.log(
+      `📝 Enrollment request created - Student: ${authenticatedUserName}, Course: ${course.title}`,
+    );
+
+    // Create notification for teacher
+    const notification = new Notification({
+      recipient: course.teacher._id,
+      title: "New Enrollment Request",
+      message: `${authenticatedUserName} has requested to enroll in your course "${course.title}"`,
+      type: "enrollment",
+      relatedCourse: course._id,
+      relatedStudent: authenticatedUserId,
+      actionUrl: `/teacher/enrollment-requests`,
+      actionData: { enrollmentRequestId: enrollmentRequest._id },
+    });
+    await notification.save();
+    console.log(`📬 Notification created for teacher ${course.teacher.name}`);
+
+    // Send email notification to teacher
+    await sendEnrollmentNotificationEmail(
+      course.teacher.email,
+      course.teacher.name,
+      authenticatedUserName,
+      course.title,
+    );
+    console.log(`✉️  Email sent to ${course.teacher.email}`);
+
+    res.status(201).json({
+      message: "Enrollment request sent to teacher",
+      enrollmentRequest,
+      status: "requested",
+    });
+  } catch (err) {
+    console.error("Error requesting enrollment:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
 
 export default router;

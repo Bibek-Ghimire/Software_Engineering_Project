@@ -61,7 +61,7 @@ const ProfileEdit = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
 
       const formData = new FormData();
       formData.append("name", profile.name);

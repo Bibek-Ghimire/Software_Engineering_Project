@@ -11,6 +11,8 @@ import {
   LogOut,
   FileText,
   Award,
+  LayoutDashboard,
+  MessageSquare,
 } from "lucide-react";
 
 const TeacherSidebar = () => {
@@ -18,12 +20,17 @@ const TeacherSidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
     navigate("/");
   };
 
   const links = [
+    {
+      to: "/dashboard/teacher",
+      label: "Dashboard",
+      icon: <LayoutDashboard className="w-5 h-5" />,
+    },
     {
       to: "/teacher/profile",
       label: "Profile",
@@ -45,9 +52,19 @@ const TeacherSidebar = () => {
       icon: <PlusCircle className="w-5 h-5" />,
     },
     {
-      to: "/teacher/course-requests",
-      label: "Course Requests",
-      icon: <BookOpen className="w-5 h-5" />,
+      to: "/teacher/chat",
+      label: "Chat",
+      icon: <MessageSquare className="w-5 h-5" />,
+    },
+    {
+      to: "/teacher/enrollment-requests",
+      label: "Enrollment Requests",
+      icon: <Users className="w-5 h-5" />,
+    },
+    {
+      to: "/teacher/approved-students",
+      label: "Manage Students",
+      icon: <Users className="w-5 h-5" />,
     },
   ];
 
@@ -60,7 +77,10 @@ const TeacherSidebar = () => {
       {/* Top: Logo & Collapse */}
       <div className="flex items-center justify-between px-4 py-6">
         {!collapsed && (
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
+          <h1
+            className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent cursor-pointer hover:opacity-80 transition-opacity"
+            onClick={() => navigate("/dashboard/teacher")}
+          >
             Syncademy
           </h1>
         )}

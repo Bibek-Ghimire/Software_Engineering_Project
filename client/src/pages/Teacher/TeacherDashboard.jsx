@@ -80,6 +80,33 @@ const StatCard = ({ title, value, color, icon, trend, subtitle }) => (
   </motion.div>
 );
 
+const ActionCard = ({ title, description, icon, onClick, color }) => (
+  <motion.div
+    whileHover={{ y: -8 }}
+    onClick={onClick}
+    className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${color} p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer`}
+  >
+    <div
+      className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity duration-300"
+      style={{
+        backgroundImage: `radial-gradient(circle at 20% 50%, rgba(255,255,255,0.3) 0%, transparent 50%)`,
+      }}
+    ></div>
+
+    <div className="relative z-10 flex items-start gap-4">
+      <div className="p-3 rounded-xl bg-white/20 backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
+        {icon}
+      </div>
+      <div className="flex-1">
+        <h3 className="text-lg font-bold">{title}</h3>
+        <p className="text-white/70 text-sm font-medium mt-1">{description}</p>
+      </div>
+    </div>
+
+    <div className="absolute bottom-0 right-0 w-20 h-20 bg-white/10 rounded-tl-full scale-150 group-hover:scale-170 transition-transform duration-500"></div>
+  </motion.div>
+);
+
 const TeacherDashboard = () => {
   const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
@@ -90,45 +117,92 @@ const TeacherDashboard = () => {
     document.documentElement.classList.contains("dark"),
   );
   const [leaderboard, setLeaderboard] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [showNotifications, setShowNotifications] = useState(false);
 
+  // Function to fetch dashboard data
+  const fetchDashboardData = async (token) => {
+    try {
+      const [
+        coursesRes,
+        groupsRes,
+        studentsRes,
+        engagementsRes,
+        leaderboardRes,
+      ] = await Promise.all([
+        axios.get("http://localhost:5000/api/teacher/courses", {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        axios.get("http://localhost:5000/api/teacher/groups", {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        axios.get("http://localhost:5000/api/teacher/students", {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        axios.get("http://localhost:5000/api/teacher/engagements", {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        axios.get("http://localhost:5000/api/teachers"),
+      ]);
+
+      setCourses(coursesRes.data);
+      setGroups(groupsRes.data);
+      setStudentsCount(studentsRes.data.count);
+      setEngagements(engagementsRes.data.count);
+      setLeaderboard(leaderboardRes.data);
+    } catch (err) {
+      console.error("Error fetching dashboard data:", err);
+    }
+  };
+
+  // Initial data fetch
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      fetchDashboardData(token);
+    }
+  }, []);
 
-    const fetchData = async () => {
-      try {
-        const [
-          coursesRes,
-          groupsRes,
-          studentsRes,
-          engagementsRes,
-          leaderboardRes,
-        ] = await Promise.all([
-          axios.get("http://localhost:5000/api/teacher/courses", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          axios.get("http://localhost:5000/api/teacher/groups", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          axios.get("http://localhost:5000/api/teacher/students", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          axios.get("http://localhost:5000/api/teacher/engagements", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          axios.get("http://localhost:5000/api/teachers"),
-        ]);
-
-        setCourses(coursesRes.data);
-        setGroups(groupsRes.data);
-        setStudentsCount(studentsRes.data.count);
-        setEngagements(engagementsRes.data.count);
-        setLeaderboard(leaderboardRes.data);
-      } catch (err) {
-        console.error("Error fetching dashboard data:", err);
+  // Listen for enrollment approval event and refresh data
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    const handleEnrollmentApproved = async () => {
+      console.log("📊 Enrollment approved - refreshing dashboard data...");
+      if (token) {
+        await fetchDashboardData(token);
       }
     };
 
-    fetchData();
+    window.addEventListener("enrollmentApproved", handleEnrollmentApproved);
+    return () => {
+      window.removeEventListener(
+        "enrollmentApproved",
+        handleEnrollmentApproved,
+      );
+    };
+  }, []);
+
+  // Fetch notifications
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    const fetchNotifications = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/notifications",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+        setNotifications(response.data);
+      } catch (err) {
+        console.error("Error fetching notifications:", err);
+      }
+    };
+
+    fetchNotifications();
+    // Refresh notifications every 30 seconds
+    const interval = setInterval(fetchNotifications, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   const toggleDarkMode = () => {
@@ -221,11 +295,14 @@ const TeacherDashboard = () => {
             </motion.button>
 
             <motion.button
+              onClick={() => setShowNotifications(!showNotifications)}
               className="relative p-3 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all duration-300"
               whileHover={{ scale: 1.05 }}
             >
               <Bell className="w-5 h-5 text-slate-600 dark:text-slate-300" />
-              <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
+              {notifications.filter((n) => !n.isRead).length > 0 && (
+                <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
+              )}
             </motion.button>
 
             <motion.button
@@ -238,6 +315,85 @@ const TeacherDashboard = () => {
             </motion.button>
           </div>
         </motion.div>
+
+        {/* Notifications Panel */}
+        {showNotifications && (
+          <motion.div
+            className="fixed top-24 right-8 w-96 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 z-50 max-h-96 overflow-y-auto"
+            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+          >
+            <div className="sticky top-0 bg-white dark:bg-slate-800 p-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+              <h3 className="font-bold text-lg text-slate-800 dark:text-white">
+                Notifications
+              </h3>
+              <button
+                onClick={() => setShowNotifications(false)}
+                className="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+              >
+                ✕
+              </button>
+            </div>
+
+            {notifications.length === 0 ? (
+              <div className="p-6 text-center text-slate-500 dark:text-slate-400">
+                <Bell className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                <p>No notifications yet</p>
+              </div>
+            ) : (
+              <div className="divide-y divide-slate-200 dark:divide-slate-700">
+                {notifications.slice(0, 10).map((notification) => (
+                  <motion.div
+                    key={notification._id}
+                    className={`p-4 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors cursor-pointer ${
+                      !notification.isRead
+                        ? "bg-blue-50 dark:bg-blue-900/20"
+                        : ""
+                    }`}
+                    whileHover={{ x: 4 }}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div
+                        className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${!notification.isRead ? "bg-blue-600" : "bg-transparent"}`}
+                      ></div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-slate-800 dark:text-white text-sm">
+                          {notification.title}
+                        </p>
+                        <p className="text-slate-600 dark:text-slate-300 text-sm mt-1">
+                          {notification.message}
+                        </p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
+                          {new Date(notification.createdAt).toLocaleDateString(
+                            "en-US",
+                            {
+                              month: "short",
+                              day: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            },
+                          )}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </motion.div>
+        )}
+
+        {/* Overlay for notifications */}
+        {showNotifications && (
+          <motion.div
+            className="fixed inset-0 z-40"
+            onClick={() => setShowNotifications(false)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          />
+        )}
 
         {/* Hero Banner */}
         <motion.div

@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import {
   Linkedin,
@@ -16,24 +16,77 @@ import Sidebar from "../components/Sidebar";
 
 const ProfileView = () => {
   const navigate = useNavigate();
-  // const { id } = useParams(); // ✅ get profile id (if exists)
+  const { id } = useParams(); // ✅ get profile id (if exists)
+  const location = useLocation(); // ✅ get state from navigation
   const [user, setUser] = useState(null);
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("theme") === "dark",
   );
 
+  console.log("🔍 ProfileView - id param:", id);
+  console.log("🔍 ProfileView - location:", location);
+
   const fetchProfile = useCallback(async () => {
+    console.log("📡 Starting fetchProfile, id:", id);
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
+      console.log("✅ Got token:", !!token);
+
+      // If viewing another user's profile (id is present), always fetch complete data
+      if (id) {
+        console.log("📊 Fetching user profile with id:", id);
+        try {
+          const res = await axios.get(`http://localhost:5000/api/users/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          console.log("✅ Fetched user data:", res.data);
+          setUser(res.data);
+          return;
+        } catch (apiErr) {
+          console.error("❌ API Error fetching user:", apiErr);
+          // Try using passed student data if API fails
+          if (location.state?.studentData) {
+            console.log(
+              "📝 Using passed student data as fallback:",
+              location.state.studentData,
+            );
+            setUser(location.state.studentData);
+            return;
+          }
+          // Only navigate back if we have no fallback data
+          throw apiErr;
+        }
+      }
+
+      // If student data was passed through navigation state and no id, use it as initial data
+      if (location.state?.studentData) {
+        console.log(
+          "📝 Using passed student data:",
+          location.state.studentData,
+        );
+        setUser(location.state.studentData);
+        return;
+      }
+
+      // Otherwise, fetch the current user's profile
+      console.log("👤 Fetching current user profile");
       const res = await axios.get("http://localhost:5000/api/profile", {
         headers: { Authorization: `Bearer ${token}` },
       });
+      console.log("✅ Fetched current user:", res.data);
       setUser(res.data);
     } catch (err) {
-      console.error(err);
-      navigate("/");
+      console.error("❌ Error fetching profile:", err);
+      // Only navigate if id is not present (viewing own profile)
+      if (!id) {
+        console.log("🏠 Error loading own profile, going to home");
+        navigate("/");
+      } else {
+        console.log("⚠️ Error loading user profile, but staying on page");
+        // Don't navigate away when viewing another user - stay on page
+      }
     }
-  }, [navigate]);
+  }, [navigate, id, location.state]);
 
   useEffect(() => {
     fetchProfile();
@@ -65,11 +118,13 @@ const ProfileView = () => {
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 text-gray-900 dark:text-white transition-all duration-500">
-      {/* Sidebar */}
-      <Sidebar />
+      {/* Sidebar - only show if viewing own profile */}
+      {!id && <Sidebar />}
 
       {/* Main Content */}
-      <div className="flex-1 p-6 lg:p-10 space-y-8 relative overflow-hidden">
+      <div
+        className={`${!id ? "flex-1" : "w-full"} p-6 lg:p-10 space-y-8 relative overflow-hidden`}
+      >
         {/* Decorative background elements */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-sky-200/20 to-blue-300/15 rounded-full blur-3xl -translate-y-32 translate-x-32 animate-pulse"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-blue-200/15 to-sky-300/20 rounded-full blur-3xl translate-y-48 -translate-x-48 animate-pulse"></div>
@@ -105,10 +160,27 @@ const ProfileView = () => {
               </div>
             )}
             <button
-              onClick={() => navigate("/profile/edit")}
+              onClick={() => (id ? navigate(-1) : navigate("/profile/edit"))}
               className="absolute bottom-2 right-2 bg-gradient-to-r from-sky-500 to-blue-600 text-white rounded-full p-3 shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 border-2 border-white dark:border-gray-700 hover:rotate-12"
+              title={id ? "Go back" : "Edit profile"}
             >
-              <Edit2 className="w-4 h-4" />
+              {id ? (
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              ) : (
+                <Edit2 className="w-4 h-4" />
+              )}
             </button>
           </div>
 

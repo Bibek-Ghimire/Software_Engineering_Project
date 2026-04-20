@@ -82,7 +82,7 @@ const StudentDashboard = () => {
   const [batchLoading, setBatchLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
 
     const fetchCourses = async () => {
       try {
@@ -668,7 +668,7 @@ const StudentDashboard = () => {
               </h3>
             </div>
             <motion.button
-              onClick={() => navigate("/teacher/leaderboard")}
+              onClick={() => navigate("/leaderboard")}
               className="group flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600 transition-all duration-300 shadow-lg text-sm font-semibold"
               whileHover={{ scale: 1.02 }}
             >

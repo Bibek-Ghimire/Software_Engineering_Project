@@ -18,7 +18,7 @@ const CourseEdit = () => {
     localStorage.getItem("theme") === "dark",
   );
 
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   const navigate = useNavigate();
 
   // Redirect if not logged in

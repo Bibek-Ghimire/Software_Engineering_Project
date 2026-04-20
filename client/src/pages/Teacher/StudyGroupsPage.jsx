@@ -8,7 +8,7 @@ const StudyGroupsPage = () => {
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
 
   const fetchGroups = useCallback(async () => {

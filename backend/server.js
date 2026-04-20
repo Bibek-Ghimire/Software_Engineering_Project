@@ -5,6 +5,8 @@ import mongoose from "mongoose";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
+import { createServer } from "http";
+import { Server } from "socket.io";
 
 // -------------------------
 // Import Routes
@@ -18,9 +20,17 @@ import profileRoutes from "./routes/profileRoutes.js";
 import teacherRoutes from "./routes/teacherRoutes.js";
 import recommendationRoutes from "./routes/recommendationRoutes.js";
 import batchRoutes from "./routes/batchRoutes.js";
+import notificationRoutes from "./routes/notificationRoutes.js";
+import enrollmentRequestRoutes from "./routes/enrollmentRequestRoutes.js";
+import chatRoutes from "./routes/chatRoutes.js";
 // Middleware
 import { protect } from "./middleware/authMiddleware.js";
 import leaderboardRoutes from "./routes/leaderboardRoutes.js";
+
+// -------------------------
+// Import Socket Handlers
+// -------------------------
+import { initCourseChat } from "./socket/courseChat.js";
 
 // -------------------------
 // Config & App Init
@@ -63,6 +73,9 @@ app.use("/api/teachers", teacherRoutes);
 app.use("/api/recommendations", recommendationRoutes);
 app.use("/api/leaderboard", leaderboardRoutes);
 app.use("/api/batches", batchRoutes);
+app.use("/api/notifications", notificationRoutes);
+app.use("/api/enrollment-requests", enrollmentRequestRoutes);
+app.use("/api/chat", chatRoutes);
 // Example protected route
 app.get("/api/protected", protect, (req, res) => {
   res.json({ message: `Hello ${req.user.name}, you are authorized!` });
@@ -91,4 +104,24 @@ mongoose
 // Start Server
 // -------------------------
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// Create HTTP server with socket.io
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "http://localhost:5175",
+    ],
+    credentials: true,
+  },
+});
+
+// Initialize socket handlers
+initCourseChat(io);
+
+httpServer.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`💬 Socket.IO enabled for real-time chat`);
+});

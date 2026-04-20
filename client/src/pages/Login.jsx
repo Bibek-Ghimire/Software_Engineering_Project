@@ -33,15 +33,27 @@ const Login = () => {
     try {
       const data = await loginUser({ email, password });
 
-      // Save user and token
-      localStorage.setItem("user", JSON.stringify(data.user));
-      localStorage.setItem("token", data.token);
+      // 🔐 STRICT AUTHENTICATION: Clear old session before setting new one
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("user");
+      console.log(`🔐 Cleared old session for security`);
+
+      // Save new user and token to sessionStorage (per-tab isolation)
+      sessionStorage.setItem("user", JSON.stringify(data.user));
+      sessionStorage.setItem("token", data.token);
+
+      console.log(
+        `✅ New session established - User: ${data.user.name} (${data.user.id})`,
+      );
 
       // Role from backend
       const backendRole = data.user.role.toLowerCase();
 
       // Check if selected role matches backend role
       if (backendRole !== selectedRole) {
+        // Clear session if role doesn't match
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("user");
         toast.error(`This user is not registered as a ${selectedRole}`);
         return;
       }

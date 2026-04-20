@@ -7,17 +7,20 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // Check if valid token exists in localStorage on mount
-    const token = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
+    // Check if valid token exists in sessionStorage on mount
+    const token = sessionStorage.getItem("token");
+    const user = sessionStorage.getItem("user");
     setIsAuthenticated(!!token && !!user);
   }, []);
 
   const login = () => setIsAuthenticated(true);
+
   const logout = () => {
     setIsAuthenticated(false);
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    // 🔐 STRICT CLEANUP: Clear all authentication and session data
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
+    console.log("🔐 All session data cleared on logout");
   };
 
   return (

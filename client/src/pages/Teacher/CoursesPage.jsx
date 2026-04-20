@@ -30,6 +30,7 @@ const CoursesPage = () => {
     level: "Beginner",
     duration: "",
     price: "",
+    keywords: "",
   });
   const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(
@@ -43,10 +44,11 @@ const CoursesPage = () => {
     level: "Beginner",
     duration: "",
     price: "",
+    keywords: "",
   });
 
-  const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user"));
+  const token = sessionStorage.getItem("token");
+  const user = JSON.parse(sessionStorage.getItem("user"));
   const navigate = useNavigate();
 
   // Redirect to login if no token
@@ -80,8 +82,8 @@ const CoursesPage = () => {
       setCourses([]);
       if (err.response?.status === 401) {
         alert("Session expired. Please login again.");
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("user");
         navigate("/login");
       }
     } finally {
@@ -101,9 +103,12 @@ const CoursesPage = () => {
     if (!title || !description || !duration || !price)
       return alert("All fields are required!");
     try {
+      const keywordsArray = formData.keywords
+        ? formData.keywords.split(",").map((k) => k.trim())
+        : [];
       await axios.post(
         "http://localhost:5000/api/courses",
-        { ...formData, teacher: user.id },
+        { ...formData, teacher: user.id, keywords: keywordsArray },
         { headers: { Authorization: `Bearer ${token}` } },
       );
       alert("Course created successfully!");
@@ -113,6 +118,7 @@ const CoursesPage = () => {
         level: "Beginner",
         duration: "",
         price: "",
+        keywords: "",
       });
       fetchCourses();
     } catch (err) {
@@ -143,6 +149,7 @@ const CoursesPage = () => {
       level: course.level,
       duration: course.duration,
       price: course.price,
+      keywords: course.keywords ? course.keywords.join(", ") : "",
     });
   };
 
@@ -155,9 +162,12 @@ const CoursesPage = () => {
     if (!title || !description || !duration || !price)
       return alert("All fields are required!");
     try {
+      const keywordsArray = editFormData.keywords
+        ? editFormData.keywords.split(",").map((k) => k.trim())
+        : [];
       await axios.put(
         `http://localhost:5000/api/courses/${editingCourseId}`,
-        editFormData,
+        { ...editFormData, keywords: keywordsArray },
         { headers: { Authorization: `Bearer ${token}` } },
       );
       alert("Course updated successfully!");
@@ -260,70 +270,93 @@ const CoursesPage = () => {
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+            <div className="space-y-6 mb-6">
               <div>
                 <label className="block text-sm font-semibold text-sky-600 dark:text-sky-400 mb-2 uppercase tracking-wide">
-                  Title
+                  Course Title *
                 </label>
                 <input
                   name="title"
-                  placeholder="Course title"
+                  placeholder="e.g., Advanced React Development"
                   value={formData.title}
                   onChange={handleChange}
                   className="w-full p-3 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
                 />
               </div>
+
               <div>
                 <label className="block text-sm font-semibold text-sky-600 dark:text-sky-400 mb-2 uppercase tracking-wide">
-                  Description
+                  Full Course Description *
                 </label>
-                <input
+                <textarea
                   name="description"
-                  placeholder="Brief description"
+                  placeholder="Write a detailed description of your course. Include what students will learn, prerequisites, and key takeaways..."
                   value={formData.description}
                   onChange={handleChange}
-                  className="w-full p-3 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
+                  rows="6"
+                  className="w-full p-3 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm resize-none"
                 />
               </div>
-              <div>
-                <label className="block text-sm font-semibold text-sky-600 dark:text-sky-400 mb-2 uppercase tracking-wide">
-                  Level
-                </label>
-                <select
-                  name="level"
-                  value={formData.level}
-                  onChange={handleChange}
-                  className="w-full p-3 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
-                >
-                  <option>Beginner</option>
-                  <option>Intermediate</option>
-                  <option>Expert</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-sky-600 dark:text-sky-400 mb-2 uppercase tracking-wide">
-                  Duration
-                </label>
-                <input
-                  name="duration"
-                  placeholder="e.g. 8 weeks"
-                  value={formData.duration}
-                  onChange={handleChange}
-                  className="w-full p-3 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-sky-600 dark:text-sky-400 mb-2 uppercase tracking-wide">
-                  Price
-                </label>
-                <input
-                  name="price"
-                  type="number"
-                  placeholder="0"
-                  value={formData.price}
-                  onChange={handleChange}
-                  className="w-full p-3 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
-                />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-sky-600 dark:text-sky-400 mb-2 uppercase tracking-wide">
+                    Level *
+                  </label>
+                  <select
+                    name="level"
+                    value={formData.level}
+                    onChange={handleChange}
+                    className="w-full p-3 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
+                  >
+                    <option>Beginner</option>
+                    <option>Intermediate</option>
+                    <option>Expert</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-sky-600 dark:text-sky-400 mb-2 uppercase tracking-wide">
+                    Duration *
+                  </label>
+                  <input
+                    name="duration"
+                    placeholder="e.g. 8 weeks"
+                    value={formData.duration}
+                    onChange={handleChange}
+                    className="w-full p-3 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-sky-600 dark:text-sky-400 mb-2 uppercase tracking-wide">
+                    Price (USD) *
+                  </label>
+                  <input
+                    name="price"
+                    type="number"
+                    placeholder="0"
+                    value={formData.price}
+                    onChange={handleChange}
+                    className="w-full p-3 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-sky-600 dark:text-sky-400 mb-2 uppercase tracking-wide">
+                    Keywords/Topics
+                  </label>
+                  <input
+                    name="keywords"
+                    placeholder="React, JavaScript, Web Dev"
+                    value={formData.keywords}
+                    onChange={handleChange}
+                    className="w-full p-3 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
+                  />
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                    Separate with commas (e.g., React, JavaScript, Web Dev)
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -441,6 +474,21 @@ const CoursesPage = () => {
                           className="w-full p-3 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300"
                         />
                       </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-sky-600 dark:text-sky-400 mb-2 uppercase tracking-wide">
+                        Keywords/Topics
+                      </label>
+                      <input
+                        name="keywords"
+                        value={editFormData.keywords}
+                        onChange={handleEditChange}
+                        placeholder="React, JavaScript, Web Dev"
+                        className="w-full p-3 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300"
+                      />
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                        Separate with commas (e.g., React, JavaScript, Web Dev)
+                      </p>
                     </div>
                   </div>
 

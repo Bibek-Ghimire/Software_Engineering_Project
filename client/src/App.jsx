@@ -14,8 +14,8 @@ import NotificationPage from "./pages/NotificationPage";
 import LeaderBoard from "./pages/LeaderBoard";
 import StudentDashboard from "./pages/StudentDashboard";
 import AllCourses from "./pages/AllCourses";
+import CourseDetail from "./pages/CourseDetail";
 import Groups from "./pages/Groups";
-import CreateGroup from "./pages/CreateGroup";
 import Discussion from "./pages/Discussion";
 import CoursesPage from "./pages/Teacher/CoursesPage";
 import AddResource from "./pages/Teacher/AddResource";
@@ -24,6 +24,12 @@ import CourseEdit from "./pages/Teacher/CoursesPage";
 import StudyGroupsPage from "./pages/Teacher/StudyGroupsPage";
 import TeacherProfile from "./pages/Teacher/TeacherProfile";
 import Leaderboard from "./pages/Teacher/Leaderboard";
+import EnrollmentRequests from "./pages/Teacher/EnrollmentRequests";
+import ApprovedStudentsGroups from "./pages/Teacher/ApprovedStudentsGroups";
+import TeacherChatList from "./pages/Teacher/TeacherChatList";
+import TeacherCourseChat from "./pages/Teacher/TeacherCourseChat";
+import StudentChatList from "./pages/Student/StudentChatList";
+import StudentCourseChat from "./pages/Student/StudentCourseChat";
 
 import TeacherProfileView from "./pages/Teacher/TeacherProfileView";
 
@@ -57,6 +63,10 @@ function App() {
           element={<AllCourses />}
         />
         <Route
+          path="/course/:id"
+          element={<CourseDetail />}
+        />
+        <Route
           path="/notifications"
           element={<NotificationPage />}
         />
@@ -70,12 +80,12 @@ function App() {
           element={<ProfileView />}
         />
         <Route
-          path="/profile/:id"
-          element={<ProfileView />}
-        />
-        <Route
           path="/profile/edit"
           element={<ProfileEdit />}
+        />
+        <Route
+          path="/profile/:id"
+          element={<ProfileView />}
         />
         <Route
           path="/leaderboard"
@@ -86,16 +96,28 @@ function App() {
           element={<Groups />}
         />
         <Route
-          path="/creategroup"
-          element={<CreateGroup />}
-        />
-        <Route
           path="/teacher/resources"
           element={<AddResource />}
         />
         <Route
           path="/teacher/leaderboard"
           element={<Leaderboard />}
+        />
+        <Route
+          path="/teacher/enrollment-requests"
+          element={<EnrollmentRequests />}
+        />
+        <Route
+          path="/teacher/approved-students"
+          element={<ApprovedStudentsGroups />}
+        />
+        <Route
+          path="/teacher/profile"
+          element={<TeacherProfile />}
+        />
+        <Route
+          path="/teacher/course"
+          element={<CoursesPage />}
         />
         <Route
           path="/teacher/:id"
@@ -106,14 +128,6 @@ function App() {
           element={<Discussion />}
         />
         <Route
-          path="/teacher/course"
-          element={<CoursesPage />}
-        />
-        <Route
-          path="/teacher/profile"
-          element={<TeacherProfile />}
-        />
-        <Route
           path="/courses/view/:id"
           element={<CoursesView />}
         />
@@ -122,10 +136,21 @@ function App() {
           element={<CourseEdit />}
         />
         <Route
-          path="/creategroup"
-          element={<StudyGroupsPage />}
-        />{" "}
-        {/* ✅ new route */}
+          path="/teacher/chat"
+          element={<TeacherChatList />}
+        />
+        <Route
+          path="/teacher/chat/:courseId"
+          element={<TeacherCourseChat />}
+        />
+        <Route
+          path="/student/chat"
+          element={<StudentChatList />}
+        />
+        <Route
+          path="/student/chat/:courseId"
+          element={<StudentCourseChat />}
+        />
         <Route
           path="*"
           element={<NotFound />}

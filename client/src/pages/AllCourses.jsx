@@ -29,7 +29,7 @@ const AllCourses = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         if (!token) throw new Error("User not authenticated");
 
         const response = await fetch("http://localhost:5000/api/courses", {
@@ -346,10 +346,6 @@ const AllCourses = () => {
 
                     {/* Course Content */}
                     <div className="p-6 flex-grow flex flex-col">
-                      <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-6 flex-grow">
-                        {course.description}
-                      </p>
-
                       {/* Course Details */}
                       <div className="space-y-4 mb-6">
                         <div className="flex items-center gap-4 p-3 bg-blue-50/50 dark:bg-blue-900/20 rounded-xl border border-blue-100/50 dark:border-blue-800/30">

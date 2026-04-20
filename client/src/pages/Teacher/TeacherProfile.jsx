@@ -24,25 +24,28 @@ import TeacherSidebar from "../../components/TeacherSidebar";
 import { useLocation } from "react-router-dom";
 
 const TeacherProfile = () => {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   const location = useLocation();
   const viewOnly = location.state?.viewOnly || false; // <-- viewOnly flag
 
-  const initialProfile = useMemo(() => ({
-    name: localStorage.getItem("name") || "",
-    email: localStorage.getItem("email") || "",
-    qualification: "",
-    subject: "",
-    bio: "",
-    achievements: [],
-    skills: [],
-    interests: [],
-    profilePicture: "",
-    github: "",
-    linkedin: "",
-    resume: "",
-    college: "",
-  }), []);
+  const initialProfile = useMemo(
+    () => ({
+      name: localStorage.getItem("name") || "",
+      email: localStorage.getItem("email") || "",
+      qualification: "",
+      subject: "",
+      bio: "",
+      achievements: [],
+      skills: [],
+      interests: [],
+      profilePicture: "",
+      github: "",
+      linkedin: "",
+      resume: "",
+      college: "",
+    }),
+    [],
+  );
 
   const [profile, setProfile] = useState(initialProfile);
   const [formData, setFormData] = useState(initialProfile);

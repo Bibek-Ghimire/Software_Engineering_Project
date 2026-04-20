@@ -25,7 +25,7 @@ const Resource = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
 
   // Fetch resources
   useEffect(() => {

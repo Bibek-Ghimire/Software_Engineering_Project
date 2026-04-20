@@ -1,5 +1,6 @@
 // src/pages/Leaderboard.jsx
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import {
   ChevronDown,
   ChevronUp,
@@ -21,7 +22,7 @@ const Leaderboard = () => {
   const navigate = useNavigate();
   const [teachers, setTeachers] = useState([]);
   const [expanded, setExpanded] = useState({});
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
 
   // Fetch leaderboard from backend
   useEffect(() => {
@@ -236,45 +237,68 @@ const Leaderboard = () => {
               return (
                 <motion.div
                   key={teacher._id}
-                  className={`group relative overflow-hidden rounded-2xl shadow-2xl ${config.shadow} hover:${config.glow} transition-all duration-300 hover:scale-[1.02]`}
+                  className={`group relative overflow-hidden rounded-3xl transition-all duration-300 hover:scale-[1.01] cursor-pointer`}
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                  {/* Background gradient */}
+                  {/* Enhanced background with layered effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r ${config.gradient} opacity-95"></div>
+                  <div className="absolute inset-0 backdrop-blur-0 group-hover:backdrop-blur-[1px] transition-all duration-300"></div>
+
+                  {/* Premium border effect */}
                   <div
-                    className={`absolute inset-0 bg-gradient-to-r ${config.gradient} opacity-90`}
+                    className={`absolute inset-0 rounded-3xl border-2 border-white/30 pointer-events-none group-hover:border-white/50 transition-all duration-300`}
                   ></div>
 
+                  {/* Enhanced shadow */}
+                  <div
+                    className={`absolute -inset-1 bg-gradient-to-r ${config.gradient} opacity-0 group-hover:opacity-30 blur-2xl transition-all duration-300 -z-10`}
+                  ></div>
+
+                  {/* Inner glow effect */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none rounded-3xl"></div>
+
                   {/* Content */}
-                  <div className="relative z-10 p-8">
+                  <div className="relative z-10 p-6 sm:p-7">
                     <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
                       {/* Left side - Teacher info */}
                       <div
-                        className="flex items-center gap-6 cursor-pointer group-hover:scale-105 transition-transform duration-200"
+                        className="flex items-center gap-5 cursor-pointer group-hover:scale-105 transition-transform duration-300"
                         onClick={() => navigateToTeacher(teacher._id)}
                       >
                         <div
                           className="flex items-center gap-4 cursor-pointer"
                           onClick={() => navigate(`/teacher/${teacher._id}`)}
                         >
-                          {getRankIcon(index)}
-                          <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-lg">
+                          <motion.div
+                            whileHover={{ scale: 1.1, rotate: 5 }}
+                            transition={{ type: "spring", stiffness: 400 }}
+                          >
+                            {getRankIcon(index)}
+                          </motion.div>
+                          <div className="w-16 h-16 rounded-full bg-white/30 backdrop-blur-md flex items-center justify-center shadow-2xl border-2 border-white/40 group-hover:border-white/60 transition-all duration-300">
                             <User className="w-8 h-8 text-white" />
                           </div>
                         </div>
 
                         <div>
-                          <div className="flex items-center gap-3 mb-2">
-                            <h3 className="text-2xl lg:text-3xl font-bold text-white">
+                          <div className="flex items-center gap-2 mb-2">
+                            <h3 className="text-xl lg:text-2xl font-bold text-blue-600 leading-tight">
                               {teacher.name}
                             </h3>
-                            <span className="text-2xl">{config.icon}</span>
+                            <motion.span
+                              className="text-2xl"
+                              animate={{ scale: [1, 1.1, 1] }}
+                              transition={{ duration: 2, repeat: Infinity }}
+                            >
+                              {config.icon}
+                            </motion.span>
                           </div>
                           <div
-                            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r ${config.badge} shadow-lg`}
+                            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r ${config.badge} shadow-lg border border-white/50 backdrop-blur-sm group-hover:shadow-xl transition-all duration-300`}
                           >
-                            <span className="text-sm font-semibold text-gray-700">
+                            <span className="text-xs font-semibold text-gray-700">
                               {teacher.batch} Tier
                             </span>
                           </div>
@@ -282,40 +306,49 @@ const Leaderboard = () => {
                       </div>
 
                       {/* Right side - Stats */}
-                      <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-                        <div className="text-center">
-                          <div className="w-12 h-12 mx-auto mb-2 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5 w-full lg:w-auto">
+                        <motion.div
+                          className="text-center p-3 rounded-xl bg-white/15 backdrop-blur-md border border-white/25 hover:border-white/40 group-hover:bg-white/20 transition-all duration-300"
+                          whileHover={{ y: -3 }}
+                        >
+                          <div className="w-11 h-11 mx-auto mb-2 rounded-lg bg-white/25 backdrop-blur-sm flex items-center justify-center shadow-lg border border-white/30">
                             <BookOpen className="w-6 h-6 text-white" />
                           </div>
-                          <p className="text-3xl font-bold text-white">
+                          <p className="text-2xl font-bold text-blue-600 leading-none">
                             {teacher.coursesCreated}
                           </p>
-                          <p className="text-sm text-white/80 font-medium">
+                          <p className="text-xs text-blue-700 font-semibold mt-1 uppercase tracking-wide">
                             Courses
                           </p>
-                        </div>
-                        <div className="text-center">
-                          <div className="w-12 h-12 mx-auto mb-2 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                        </motion.div>
+                        <motion.div
+                          className="text-center p-3 rounded-xl bg-white/15 backdrop-blur-md border border-white/25 hover:border-white/40 group-hover:bg-white/20 transition-all duration-300"
+                          whileHover={{ y: -3 }}
+                        >
+                          <div className="w-11 h-11 mx-auto mb-2 rounded-lg bg-white/25 backdrop-blur-sm flex items-center justify-center shadow-lg border border-white/30">
                             <TrendingUp className="w-6 h-6 text-white" />
                           </div>
-                          <p className="text-3xl font-bold text-white">
+                          <p className="text-2xl font-bold text-blue-600 leading-none">
                             {teacher.engagementScore}
                           </p>
-                          <p className="text-sm text-white/80 font-medium">
+                          <p className="text-xs text-blue-700 font-semibold mt-1 uppercase tracking-wide">
                             Engagement
                           </p>
-                        </div>
-                        <div className="text-center col-span-2 lg:col-span-1">
-                          <div className="w-12 h-12 mx-auto mb-2 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                        </motion.div>
+                        <motion.div
+                          className="text-center p-3 rounded-xl bg-white/15 backdrop-blur-md border border-white/25 hover:border-white/40 group-hover:bg-white/20 transition-all duration-300 col-span-2 lg:col-span-1"
+                          whileHover={{ y: -3 }}
+                        >
+                          <div className="w-11 h-11 mx-auto mb-2 rounded-lg bg-white/25 backdrop-blur-sm flex items-center justify-center shadow-lg border border-white/30">
                             <Star className="w-6 h-6 text-white" />
                           </div>
-                          <p className="text-3xl font-bold text-white">
+                          <p className="text-2xl font-bold text-blue-600 leading-none">
                             {teacher.totalScore}
                           </p>
-                          <p className="text-sm text-white/80 font-medium">
+                          <p className="text-xs text-blue-700 font-semibold mt-1 uppercase tracking-wide">
                             Total Score
                           </p>
-                        </div>
+                        </motion.div>
                       </div>
                     </div>
 
@@ -324,7 +357,7 @@ const Leaderboard = () => {
                       <div className="mt-8">
                         <motion.button
                           onClick={() => toggleExpand(teacher._id)}
-                          className="flex items-center gap-3 text-white/90 hover:text-white transition-colors duration-200 font-medium"
+                          className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors duration-200 font-medium"
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                         >
@@ -357,37 +390,50 @@ const Leaderboard = () => {
                               return (
                                 <motion.div
                                   key={course._id}
-                                  className="group/card bg-white/95 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-white/20"
+                                  className="group/card relative bg-white/98 backdrop-blur-md rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 border border-white/40 hover:border-white/60 overflow-hidden"
                                   initial={{ opacity: 0, y: 20 }}
                                   animate={{ opacity: 1, y: 0 }}
                                   transition={{ duration: 0.3 }}
-                                  whileHover={{ y: -2 }}
+                                  whileHover={{ y: -4 }}
                                 >
-                                  <div className="flex justify-between items-start mb-3">
-                                    <h4 className="font-bold text-gray-800 text-lg group-hover/card:text-blue-600 transition-colors">
-                                      {course.title}
-                                    </h4>
-                                    <span className="text-lg">
-                                      {levelConfig.icon}
-                                    </span>
-                                  </div>
-                                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                                    {course.description}
-                                  </p>
+                                  {/* Card background effect */}
+                                  <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 to-purple-50/30 pointer-events-none rounded-2xl"></div>
+                                  <div className="absolute top-0 right-0 w-32 h-32 bg-blue-400/10 rounded-full blur-3xl pointer-events-none"></div>
 
-                                  <div className="flex flex-wrap items-center gap-3">
-                                    <span
-                                      className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${levelConfig.bg} ${levelConfig.text} border ${levelConfig.border}`}
-                                    >
-                                      {course.level}
-                                    </span>
-                                    <div className="flex items-center gap-1 text-xs text-gray-500">
-                                      <Clock className="w-3 h-3" />
-                                      {course.duration}
+                                  <div className="relative z-10">
+                                    <div className="flex justify-between items-start mb-4">
+                                      <h4 className="font-bold text-gray-800 text-lg group-hover/card:text-blue-600 transition-colors pr-2">
+                                        {course.title}
+                                      </h4>
+                                      <motion.span
+                                        className="text-2xl flex-shrink-0"
+                                        whileHover={{ scale: 1.2, rotate: 10 }}
+                                        transition={{
+                                          type: "spring",
+                                          stiffness: 400,
+                                        }}
+                                      >
+                                        {levelConfig.icon}
+                                      </motion.span>
                                     </div>
-                                    <div className="flex items-center gap-1 text-xs font-semibold text-green-600">
-                                      <DollarSign className="w-3 h-3" />
-                                      {course.price}
+                                    <p className="text-gray-600 text-sm mb-5 line-clamp-2 leading-relaxed">
+                                      {course.description}
+                                    </p>
+
+                                    <div className="flex flex-wrap items-center gap-2.5">
+                                      <span
+                                        className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold ${levelConfig.bg} ${levelConfig.text} border ${levelConfig.border} shadow-sm`}
+                                      >
+                                        {course.level}
+                                      </span>
+                                      <div className="flex items-center gap-1.5 text-xs text-gray-500 bg-gray-100/50 px-3 py-1.5 rounded-full">
+                                        <Clock className="w-3.5 h-3.5" />
+                                        {course.duration}
+                                      </div>
+                                      <div className="flex items-center gap-1.5 text-xs font-semibold text-green-700 bg-green-100/50 px-3 py-1.5 rounded-full">
+                                        <DollarSign className="w-3.5 h-3.5" />
+                                        {course.price}
+                                      </div>
                                     </div>
                                   </div>
                                 </motion.div>

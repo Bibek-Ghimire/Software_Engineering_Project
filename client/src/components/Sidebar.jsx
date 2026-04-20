@@ -17,8 +17,8 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     // Clear auth info
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
     // Redirect to homepage
     navigate("/");
   };
@@ -27,7 +27,10 @@ const Sidebar = () => {
     <div className="w-64 min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-blue-950 dark:to-gray-900 shadow-lg px-4 py-6 flex flex-col justify-between sticky top-0 border-r border-blue-200/60 dark:border-blue-900/40">
       {/* Logo */}
       <div>
-        <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-8 px-2">
+        <h1
+          className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-8 px-2 cursor-pointer hover:opacity-80 transition-opacity"
+          onClick={() => navigate("/dashboard/student")}
+        >
           Syncademy
         </h1>
 
@@ -49,11 +52,6 @@ const Sidebar = () => {
             icon={<Users />}
           />
           <SidebarLink
-            to="/creategroup"
-            label="Create Group"
-            icon={<PlusCircle />}
-          />
-          <SidebarLink
             to="/resources"
             label="Resources"
             icon={<GraduationCap />}
@@ -62,6 +60,11 @@ const Sidebar = () => {
             to="/leaderboard"
             label="Leaderboard"
             icon={<Award />}
+          />
+          <SidebarLink
+            to="/student/chat"
+            label="Chat"
+            icon={<MessageSquare />}
           />
           <SidebarLink
             to="/discussions"

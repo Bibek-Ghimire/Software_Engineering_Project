@@ -13,7 +13,9 @@ const protect = async (req, res, next) => {
       token = req.headers.authorization.split(" ")[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      console.log(`🔐 Auth: Decoded ID: ${decoded.id}`);
+      console.log(
+        `🔐 Auth: Decoded ID: ${decoded.id}, Decoded Role: ${decoded.role}`,
+      );
       const user = await User.findById(decoded.id).select("-password");
 
       if (!user) {
@@ -23,7 +25,16 @@ const protect = async (req, res, next) => {
           .json({ message: "Auth middleware: User not found" });
       }
 
-      console.log(`✅ Auth: User found: ${user.name}`);
+      console.log(`✅ Auth: User found: ${user.name}, Role: ${user.role}`);
+
+      // Verify role exists and is valid
+      if (!user.role) {
+        console.error(`❌ Auth: User ${user.name} has no role assigned`);
+        return res
+          .status(401)
+          .json({ message: "Auth middleware: User role not defined" });
+      }
+
       req.user = user;
       next();
     } catch (error) {
