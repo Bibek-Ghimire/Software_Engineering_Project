@@ -23,6 +23,15 @@ const TeacherCourseChat = () => {
   const token = sessionStorage.getItem("token");
   const user = JSON.parse(sessionStorage.getItem("user") || "{}");
 
+  // Debug: Log user info when component loads
+  useEffect(() => {
+    console.log("=== TEACHER CHAT COMPONENT LOADED ===");
+    console.log("User from sessionStorage:", user);
+    console.log("User ID (_id):", user._id);
+    console.log("User ID (id):", user.id);
+    console.log("User name:", user.name);
+  }, []);
+
   // Scroll to bottom when messages update
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -91,17 +100,25 @@ const TeacherCourseChat = () => {
       newSocket.emit("join_course_chat", {
         courseId,
         role: "teacher",
-        userId: user._id,
+        userId: user._id || user.id,
         userName: user.name,
       });
     });
 
     newSocket.on("receive_message", (data) => {
-      setMessages((prev) => [...prev, data]);
+      // Skip if message is from current user (already added via message_sent)
+      const currentUserId = user._id || user.id;
+      if (String(data.sender._id) !== String(currentUserId)) {
+        setMessages((prev) => [...prev, data]);
+      }
+      // Scroll to bottom after receiving message
+      setTimeout(() => scrollToBottom(), 100);
     });
 
     newSocket.on("message_sent", (data) => {
       setMessages((prev) => [...prev, data]);
+      // Scroll to bottom after sending message
+      setTimeout(() => scrollToBottom(), 100);
     });
 
     newSocket.on("user_joined", (data) => {
@@ -133,7 +150,7 @@ const TeacherCourseChat = () => {
       if (newSocket) {
         newSocket.emit("leave_course_chat", {
           courseId,
-          userId: user._id,
+          userId: user._id || user.id,
           userName: user.name,
           role: "teacher",
         });
@@ -149,7 +166,7 @@ const TeacherCourseChat = () => {
     if (socket) {
       socket.emit("typing", {
         courseId,
-        userId: user._id,
+        userId: user._id || user.id,
         userName: user.name,
         role: "teacher",
       });
@@ -165,7 +182,7 @@ const TeacherCourseChat = () => {
       if (socket) {
         socket.emit("stop_typing", {
           courseId,
-          userId: user._id,
+          userId: user._id || user.id,
         });
       }
     }, 3000);
@@ -196,7 +213,7 @@ const TeacherCourseChat = () => {
         socket.emit("send_message", {
           courseId,
           message: messageText,
-          userId: user._id,
+          userId: user._id || user.id,
           userName: user.name,
           role: "teacher",
         });
@@ -207,7 +224,7 @@ const TeacherCourseChat = () => {
       if (socket) {
         socket.emit("stop_typing", {
           courseId,
-          userId: user._id,
+          userId: user._id || user.id,
         });
       }
     } catch (error) {
@@ -276,37 +293,50 @@ const TeacherCourseChat = () => {
                   <p>No messages yet. Start the conversation!</p>
                 </div>
               ) : (
-                messages.map((msg, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className={`flex ${
-                      msg.sender._id === user._id
-                        ? "justify-end"
-                        : "justify-start"
-                    }`}
-                  >
-                    <div
-                      className={`max-w-xs lg:max-w-md rounded-lg px-4 py-2 ${
-                        msg.sender._id === user._id
-                          ? "bg-blue-500 text-white"
-                          : "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100"
-                      }`}
+                messages.map((msg, index) => {
+                  // Get current user ID (handle both _id and id properties)
+                  const currentUserId = user._id || user.id;
+                  const msgSenderId = msg.sender._id || msg.sender;
+
+                  // Convert both IDs to strings for proper comparison
+                  const isSentByMe =
+                    String(msgSenderId) === String(currentUserId);
+
+                  return (
+                    <motion.div
+                      key={msg._id || `msg-${index}`}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      style={{
+                        display: "flex",
+                        justifyContent: isSentByMe ? "flex-end" : "flex-start",
+                      }}
                     >
-                      <p className="text-sm font-semibold mb-1">
-                        {msg.sender.name}{" "}
-                        {msg.senderRole === "student" && (
-                          <span className="text-xs opacity-75">(Student)</span>
-                        )}
-                      </p>
-                      <p>{msg.message}</p>
-                      <p className="text-xs opacity-75 mt-1">
-                        {new Date(msg.timestamp).toLocaleTimeString()}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))
+                      <div
+                        style={{
+                          maxWidth: "300px",
+                          borderRadius: "8px",
+                          padding: "8px 16px",
+                          backgroundColor: isSentByMe ? "#3b82f6" : "#e5e7eb",
+                          color: isSentByMe ? "white" : "#1f2937",
+                        }}
+                      >
+                        <p className="text-sm font-semibold mb-1">
+                          {msg.sender.name}{" "}
+                          {msg.senderRole === "student" && (
+                            <span className="text-xs opacity-75">
+                              (Student)
+                            </span>
+                          )}
+                        </p>
+                        <p>{msg.message}</p>
+                        <p className="text-xs opacity-75 mt-1">
+                          {new Date(msg.timestamp).toLocaleTimeString()}
+                        </p>
+                      </div>
+                    </motion.div>
+                  );
+                })
               )}
               {Object.keys(typingUsers).length > 0 && (
                 <div className="flex gap-2 text-sm text-gray-500 dark:text-gray-400">

@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { BookOpen, Users, User, LogOut, Users2 } from "lucide-react";
+import ThemeToggle from "./ThemeToggle";
 
 const Navbar = () => {
   return (
@@ -46,6 +47,7 @@ const Navbar = () => {
           >
             <LogOut className="w-4 h-4 mr-1" /> Logout
           </Link>
+          <ThemeToggle />
         </div>
       </div>
     </nav>

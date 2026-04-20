@@ -1,5 +1,5 @@
 // Home.jsx
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Users,
@@ -43,6 +43,7 @@ import email from "../assets/images/gmail.png";
 import team1 from "../assets/images/team1.jpg";
 import team2 from "../assets/images/team2.jpg";
 import team3 from "../assets/images/team3.jpg";
+import { ThemeContext } from "../context/ThemeContext";
 
 const features = [
   {
@@ -137,22 +138,12 @@ const testimonials = [
 
 const Home = () => {
   const navigate = useNavigate();
-  const [theme, setTheme] = useState(
-    localStorage.getItem("theme") ||
-      (window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light"),
-  );
+  const { isDark, toggleTheme } = useContext(ThemeContext);
   const [showMore, setShowMore] = useState(false);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
   const aboutRef = useRef(null);
   const contactRef = useRef(null);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", theme === "dark");
-    localStorage.setItem("theme", theme);
-  }, [theme]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -161,7 +152,6 @@ const Home = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
   const handleNavigation = (path) => navigate(path);
 
   return (
@@ -231,10 +221,10 @@ const Home = () => {
                 onClick={toggleTheme}
                 className="p-3 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200"
               >
-                {theme === "light" ? (
-                  <Moon className="w-5 h-5 text-gray-600" />
-                ) : (
+                {isDark ? (
                   <Sun className="w-5 h-5 text-yellow-500" />
+                ) : (
+                  <Moon className="w-5 h-5 text-gray-600" />
                 )}
               </button>
             </div>

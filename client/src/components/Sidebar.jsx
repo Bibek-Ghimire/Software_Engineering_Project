@@ -11,6 +11,7 @@ import {
   UserCircle,
   PlusCircle,
 } from "lucide-react";
+import ThemeToggle from "./ThemeToggle";
 
 const Sidebar = () => {
   const navigate = useNavigate(); // added navigate
@@ -79,8 +80,9 @@ const Sidebar = () => {
         </nav>
       </div>
 
-      {/* Logout */}
-      <div className="border-t border-blue-200/60 dark:border-blue-900/40 pt-4">
+      {/* Logout & Theme Toggle */}
+      <div className="border-t border-blue-200/60 dark:border-blue-900/40 pt-4 space-y-2">
+        <ThemeToggle />
         <button
           onClick={handleLogout}
           className="flex items-center px-3 py-2 rounded-lg transition-all duration-300 text-sm font-medium text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/60 w-full text-left group"
