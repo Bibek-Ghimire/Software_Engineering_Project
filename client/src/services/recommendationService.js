@@ -3,7 +3,7 @@ import axios from "axios";
 const API_BASE_URL = "http://localhost:5000/api/recommendations";
 
 const getAuthHeaders = () => {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   return { Authorization: `Bearer ${token}` };
 };
 

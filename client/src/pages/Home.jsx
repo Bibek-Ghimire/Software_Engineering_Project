@@ -34,7 +34,7 @@ import {
   Rocket,
   Coffee,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion"; // eslint-disable-line no-unused-vars
+import { motion, AnimatePresence } from "framer-motion";
 import Logo from "../assets/images/Logo.png";
 import team from "../assets/images/team.jpg";
 import linkedin from "../assets/images/linkedin.png";

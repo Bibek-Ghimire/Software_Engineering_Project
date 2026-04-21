@@ -30,12 +30,12 @@ import Sidebar from "../components/Sidebar";
 import axios from "axios";
 import student from "../assets/images/student.jpg";
 import { motion } from "framer-motion";
-import { recommendationService } from "../services/recommendationService";
+import recommendationService from "../services/recommendationService";
 import RecommendedTeachers from "../components/RecommendedTeachers";
 import RecommendedGroups from "../components/RecommendedGroups";
 import RecommendedResources from "../components/RecommendedResources";
 
-const user = JSON.parse(localStorage.getItem("user")) || { name: "Student" };
+const user = JSON.parse(sessionStorage.getItem("user")) || { name: "Student" };
 
 const EnhancedStatCard = ({ title, value, color, icon, subtitle }) => (
   <motion.div
