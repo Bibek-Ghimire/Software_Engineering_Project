@@ -27,6 +27,7 @@ const CourseDetail = () => {
   const [error, setError] = useState(null);
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [enrollmentRequestStatus, setEnrollmentRequestStatus] = useState(null);
+  const [paymentStatus, setPaymentStatus] = useState(null);
 
   useEffect(() => {
     const fetchCourseDetail = async () => {
@@ -72,6 +73,12 @@ const CourseDetail = () => {
             `Enrollment request status: ${data.enrollmentRequestStatus}`,
           );
           setEnrollmentRequestStatus(data.enrollmentRequestStatus);
+        }
+
+        // Check for pending/completed payment
+        if (data.paymentStatus !== undefined) {
+          console.log(`Payment status: ${data.paymentStatus}`);
+          setPaymentStatus(data.paymentStatus);
         }
       } catch (err) {
         console.error("Error fetching course:", err);
@@ -329,7 +336,13 @@ const CourseDetail = () => {
                     </p>
                   </div>
                   <button
-                    onClick={handleEnroll}
+                    onClick={() => {
+                      if (paymentStatus === "pending") {
+                        navigate("/payments");
+                      } else {
+                        handleEnroll();
+                      }
+                    }}
                     disabled={
                       isEnrolled ||
                       enrollmentRequestStatus === "pending" ||
@@ -340,9 +353,11 @@ const CourseDetail = () => {
                         ? "bg-green-400 cursor-not-allowed"
                         : enrollmentRequestStatus === "pending"
                           ? "bg-yellow-400 cursor-not-allowed"
-                          : enrolling
-                            ? "bg-gradient-to-r from-blue-500 to-blue-600 cursor-wait"
-                            : "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 hover:shadow-lg"
+                          : paymentStatus === "pending"
+                            ? "bg-orange-500 hover:bg-orange-600"
+                            : enrolling
+                              ? "bg-gradient-to-r from-blue-500 to-blue-600 cursor-wait"
+                              : "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 hover:shadow-lg"
                     }`}
                   >
                     {isEnrolled ? (
@@ -354,6 +369,11 @@ const CourseDetail = () => {
                       <>
                         <AlertCircle className="w-5 h-5" />
                         Request Pending
+                      </>
+                    ) : paymentStatus === "pending" ? (
+                      <>
+                        <DollarSign className="w-5 h-5" />
+                        Complete Payment
                       </>
                     ) : enrolling ? (
                       <>

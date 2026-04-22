@@ -30,6 +30,7 @@ import StudentCourseChat from "./pages/Student/StudentCourseChat";
 import StudentProfileUpgraded from "./pages/Student/StudentProfile";
 import TeacherProfileUpgraded from "./pages/Teacher/TeacherProfileUpgraded";
 import ProfileView from "./pages/ProfileView";
+import Payments from "./pages/Payments";
 
 function App() {
   return (
@@ -67,6 +68,10 @@ function App() {
         <Route
           path="/notifications"
           element={<NotificationPage />}
+        />
+        <Route
+          path="/payments"
+          element={<Payments />}
         />
         <Route
           path="/resources"

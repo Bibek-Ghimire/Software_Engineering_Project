@@ -11,64 +11,105 @@ import {
   ChevronDown,
   ChevronUp,
   Eye,
+  Clock,
+  CheckCircle,
+  AlertCircle,
 } from "lucide-react";
 import TeacherSidebar from "../../components/TeacherSidebar";
 
 const ApprovedStudentsGroups = () => {
   const navigate = useNavigate();
-  const [groupedStudents, setGroupedStudents] = useState({});
+  const [courses, setCourses] = useState([]);
+  const [studentsByPayment, setStudentsByPayment] = useState({});
   const [loading, setLoading] = useState(true);
   const [expandedGroups, setExpandedGroups] = useState({});
 
   const token = sessionStorage.getItem("token");
 
-  const fetchApprovedStudents = useCallback(async () => {
+  const fetchCoursesAndStudents = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await axios.get(
-        "http://localhost:5000/api/enrollment-requests",
+
+      // Fetch all teacher courses
+      const coursesResponse = await axios.get(
+        "http://localhost:5000/api/teachers/courses",
         {
           headers: { Authorization: `Bearer ${token}` },
         },
       );
 
-      const approvedRequests = response.data.requests.filter(
-        (req) => req.status === "approved",
-      );
+      const teacherCourses =
+        coursesResponse.data.courses || coursesResponse.data || [];
+      console.log("📚 Teacher courses:", teacherCourses);
+      setCourses(teacherCourses);
 
-      console.log("📋 Approved requests:", approvedRequests);
+      // Fetch students by payment status for each course
+      const paymentData = {};
 
-      // Group students by course
-      const grouped = {};
-      approvedRequests.forEach((request) => {
-        const courseTitle = request.course?.title || "Unknown Course";
-        if (!grouped[courseTitle]) {
-          grouped[courseTitle] = [];
+      for (const course of teacherCourses) {
+        try {
+          const paymentResponse = await axios.get(
+            `http://localhost:5000/api/payments/teacher/course/${course._id}`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            },
+          );
+
+          const { enrolled, pending, failed } = paymentResponse.data;
+
+          // Group enrolled students into batches
+          const groupedEnrolled = [];
+          for (let i = 0; i < enrolled.length; i += 10) {
+            groupedEnrolled.push({
+              id: `${course._id}-enrolled-${Math.floor(i / 10) + 1}`,
+              groupNumber: Math.floor(i / 10) + 1,
+              courseName: course.title,
+              courseId: course._id,
+              status: "enrolled",
+              students: enrolled.slice(i, i + 10),
+              capacity: enrolled.slice(i, i + 10).length,
+            });
+          }
+
+          // Group pending payment students
+          const groupedPending = [];
+          for (let i = 0; i < pending.length; i += 10) {
+            groupedPending.push({
+              id: `${course._id}-pending-${Math.floor(i / 10) + 1}`,
+              groupNumber: Math.floor(i / 10) + 1,
+              courseName: course.title,
+              courseId: course._id,
+              status: "pending",
+              students: pending.slice(i, i + 10),
+              capacity: pending.slice(i, i + 10).length,
+            });
+          }
+
+          paymentData[course._id] = {
+            courseName: course.title,
+            enrolled: groupedEnrolled,
+            pending: groupedPending,
+            failed: failed,
+          };
+        } catch (err) {
+          console.error(
+            `Error fetching students for course ${course._id}:`,
+            err,
+          );
+          paymentData[course._id] = {
+            courseName: course.title,
+            enrolled: [],
+            pending: [],
+            failed: [],
+          };
         }
-        grouped[courseTitle].push(request.student);
-      });
+      }
 
-      // Split each course into subgroups of max 10 students
-      const groupedWithCapacity = {};
-      Object.entries(grouped).forEach(([courseTitle, students]) => {
-        const subgroups = [];
-        for (let i = 0; i < students.length; i += 10) {
-          subgroups.push({
-            id: `${courseTitle}-group-${Math.floor(i / 10) + 1}`,
-            groupNumber: Math.floor(i / 10) + 1,
-            courseName: courseTitle,
-            students: students.slice(i, i + 10),
-            capacity: students.slice(i, i + 10).length,
-          });
-        }
-        groupedWithCapacity[courseTitle] = subgroups;
-      });
-
-      console.log("👥 Grouped students:", groupedWithCapacity);
-      setGroupedStudents(groupedWithCapacity);
+      console.log("💳 Students by payment:", paymentData);
+      setStudentsByPayment(paymentData);
     } catch (err) {
-      console.error("Error fetching approved students:", err);
-      toast.error("Failed to fetch approved students");
+      console.error("Error fetching courses and students:", err);
+      toast.error("Failed to fetch student data");
     } finally {
       setLoading(false);
     }
@@ -76,9 +117,9 @@ const ApprovedStudentsGroups = () => {
 
   useEffect(() => {
     if (token) {
-      fetchApprovedStudents();
+      fetchCoursesAndStudents();
     }
-  }, [token, fetchApprovedStudents]);
+  }, [token, fetchCoursesAndStudents]);
 
   const toggleGroupExpanded = (groupId) => {
     setExpandedGroups((prev) => ({
@@ -105,15 +146,23 @@ const ApprovedStudentsGroups = () => {
     );
   }
 
-  const totalCourses = Object.keys(groupedStudents).length;
-  const totalGroups = Object.values(groupedStudents).reduce(
-    (sum, groups) => sum + groups.length,
+  const totalCourses = courses.length;
+  const totalEnrolledStudents = Object.values(studentsByPayment).reduce(
+    (sum, courseData) =>
+      sum +
+      courseData.enrolled.reduce(
+        (groupSum, group) => groupSum + group.students.length,
+        0,
+      ),
     0,
   );
-  const totalStudents = Object.values(groupedStudents).reduce(
-    (sum, groups) =>
+  const totalPendingStudents = Object.values(studentsByPayment).reduce(
+    (sum, courseData) =>
       sum +
-      groups.reduce((groupSum, group) => groupSum + group.students.length, 0),
+      courseData.pending.reduce(
+        (groupSum, group) => groupSum + group.students.length,
+        0,
+      ),
     0,
   );
 
@@ -137,8 +186,8 @@ const ApprovedStudentsGroups = () => {
               Manage Students
             </h1>
             <p className="text-gray-600 dark:text-gray-400">
-              View and manage approved students organized by course with a
-              maximum capacity of 10 students per group
+              View enrolled students and those awaiting payment. Groups are
+              organized with a maximum capacity of 10 students per group.
             </p>
           </motion.div>
 
@@ -172,13 +221,13 @@ const ApprovedStudentsGroups = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-600 dark:text-gray-400 text-sm font-semibold mb-1">
-                    Total Groups
+                    Enrolled Students
                   </p>
                   <h3 className="text-3xl font-bold text-green-600 dark:text-green-400">
-                    {totalGroups}
+                    {totalEnrolledStudents}
                   </h3>
                 </div>
-                <Users className="w-12 h-12 text-green-200 dark:text-green-900" />
+                <CheckCircle className="w-12 h-12 text-green-200 dark:text-green-900" />
               </div>
             </motion.div>
 
@@ -186,24 +235,24 @@ const ApprovedStudentsGroups = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-l-4 border-purple-500"
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-l-4 border-orange-500"
             >
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-600 dark:text-gray-400 text-sm font-semibold mb-1">
-                    Total Students
+                    Pending Payment
                   </p>
-                  <h3 className="text-3xl font-bold text-purple-600 dark:text-purple-400">
-                    {totalStudents}
+                  <h3 className="text-3xl font-bold text-orange-600 dark:text-orange-400">
+                    {totalPendingStudents}
                   </h3>
                 </div>
-                <Users className="w-12 h-12 text-purple-200 dark:text-purple-900" />
+                <Clock className="w-12 h-12 text-orange-200 dark:text-orange-900" />
               </div>
             </motion.div>
           </div>
 
           {/* Courses and Groups */}
-          {totalStudents === 0 ? (
+          {totalCourses === 0 ? (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -211,15 +260,28 @@ const ApprovedStudentsGroups = () => {
             >
               <BookOpen className="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" />
               <p className="text-gray-600 dark:text-gray-400 text-lg">
-                No approved students yet
+                No courses created yet
               </p>
             </motion.div>
           ) : (
-            <div className="space-y-6">
-              {Object.entries(groupedStudents).map(
-                ([courseTitle, groups], courseIndex) => (
+            <div className="space-y-8">
+              {courses.map((course, courseIndex) => {
+                const coursePaymentData = studentsByPayment[course._id];
+                if (!coursePaymentData) return null;
+
+                const { enrolled, pending, failed } = coursePaymentData;
+                const totalEnrolledInCourse = enrolled.reduce(
+                  (sum, group) => sum + group.students.length,
+                  0,
+                );
+                const totalPendingInCourse = pending.reduce(
+                  (sum, group) => sum + group.students.length,
+                  0,
+                );
+
+                return (
                   <motion.div
-                    key={courseTitle}
+                    key={course._id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: courseIndex * 0.1 }}
@@ -233,156 +295,273 @@ const ApprovedStudentsGroups = () => {
                           </div>
                           <div>
                             <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
-                              {courseTitle}
+                              {course.title}
                             </h2>
                             <p className="text-gray-600 dark:text-gray-400 text-sm">
-                              {groups.length} group
-                              {groups.length !== 1 ? "s" : ""} •{" "}
-                              {groups.reduce(
-                                (sum, g) => sum + g.students.length,
-                                0,
-                              )}{" "}
-                              students
+                              {totalEnrolledInCourse} enrolled •{" "}
+                              {totalPendingInCourse} pending payment
                             </p>
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    {/* Groups */}
-                    <div className="space-y-4 ml-0">
-                      {groups.map((group, groupIndex) => (
-                        <motion.div
-                          key={group.id}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{
-                            delay:
-                              (courseIndex * groups.length + groupIndex) * 0.05,
-                          }}
-                        >
-                          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
-                            {/* Group Header */}
-                            <button
-                              onClick={() => toggleGroupExpanded(group.id)}
-                              className="w-full p-6 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
+                    {/* Enrolled Students Section */}
+                    {enrolled.length > 0 && (
+                      <div className="space-y-4 mb-8">
+                        <h3 className="text-xl font-bold text-green-600 dark:text-green-400 flex items-center gap-2">
+                          <CheckCircle className="w-5 h-5" />
+                          Enrolled Students ({totalEnrolledInCourse})
+                        </h3>
+                        <div className="space-y-4 ml-0">
+                          {enrolled.map((group, groupIndex) => (
+                            <motion.div
+                              key={group.id}
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: groupIndex * 0.05 }}
                             >
-                              <div className="flex items-center gap-4 flex-1">
-                                <div className="p-3 bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 rounded-lg">
-                                  <Users className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                                </div>
-                                <div className="text-left">
-                                  <h3 className="text-lg font-bold text-gray-800 dark:text-white">
-                                    Group {group.groupNumber}
-                                  </h3>
-                                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                                    {group.capacity} / 10 students
-                                  </p>
-                                </div>
-                              </div>
+                              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+                                {/* Group Header */}
+                                <button
+                                  onClick={() => toggleGroupExpanded(group.id)}
+                                  className="w-full p-6 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
+                                >
+                                  <div className="flex items-center gap-4 flex-1">
+                                    <div className="p-3 bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 rounded-lg">
+                                      <Users className="w-5 h-5 text-green-600 dark:text-green-400" />
+                                    </div>
+                                    <div className="text-left">
+                                      <h3 className="text-lg font-bold text-gray-800 dark:text-white">
+                                        Group {group.groupNumber}
+                                      </h3>
+                                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                                        {group.capacity} / 10 students
+                                      </p>
+                                    </div>
+                                  </div>
 
-                              {/* Capacity Bar */}
-                              <div className="hidden md:flex items-center gap-4 flex-1 justify-center">
-                                <div className="w-40 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                                  <div
-                                    className="h-full bg-gradient-to-r from-green-400 to-green-600 transition-all"
-                                    style={{
-                                      width: `${(group.capacity / 10) * 100}%`,
-                                    }}
-                                  ></div>
-                                </div>
-                                <span className="text-sm font-semibold text-gray-600 dark:text-gray-400 w-12 text-right">
-                                  {Math.round((group.capacity / 10) * 100)}%
-                                </span>
-                              </div>
+                                  {/* Capacity Bar */}
+                                  <div className="hidden md:flex items-center gap-4 flex-1 justify-center">
+                                    <div className="w-40 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                      <div
+                                        className="h-full bg-gradient-to-r from-green-400 to-green-600 transition-all"
+                                        style={{
+                                          width: `${
+                                            (group.capacity / 10) * 100
+                                          }%`,
+                                        }}
+                                      ></div>
+                                    </div>
+                                    <span className="text-sm font-semibold text-gray-600 dark:text-gray-400 w-12 text-right">
+                                      {Math.round((group.capacity / 10) * 100)}%
+                                    </span>
+                                  </div>
 
-                              <div className="flex-shrink-0">
-                                {expandedGroups[group.id] ? (
-                                  <ChevronUp className="w-6 h-6 text-gray-600 dark:text-gray-400" />
-                                ) : (
-                                  <ChevronDown className="w-6 h-6 text-gray-600 dark:text-gray-400" />
+                                  <div className="flex-shrink-0">
+                                    {expandedGroups[group.id] ? (
+                                      <ChevronUp className="w-6 h-6 text-gray-600 dark:text-gray-400" />
+                                    ) : (
+                                      <ChevronDown className="w-6 h-6 text-gray-600 dark:text-gray-400" />
+                                    )}
+                                  </div>
+                                </button>
+
+                                {/* Group Content */}
+                                {expandedGroups[group.id] && (
+                                  <div className="border-t border-gray-200 dark:border-gray-700">
+                                    <div className="p-6 space-y-3">
+                                      {group.students.map((student, index) => (
+                                        <motion.div
+                                          key={student._id}
+                                          initial={{ opacity: 0, x: -10 }}
+                                          animate={{ opacity: 1, x: 0 }}
+                                          transition={{
+                                            delay: index * 0.05,
+                                          }}
+                                          className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-green-50 dark:from-gray-700/50 dark:to-green-900/20 rounded-lg border border-gray-200 dark:border-gray-600 hover:shadow-md transition-all"
+                                        >
+                                          <div className="flex items-center gap-4 flex-1">
+                                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-semibold text-sm">
+                                              {student.name?.[0]?.toUpperCase() ||
+                                                "?"}
+                                            </div>
+                                            <div>
+                                              <h4 className="font-semibold text-gray-800 dark:text-white">
+                                                {student.name}
+                                              </h4>
+                                              <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1">
+                                                <Mail className="w-3 h-3" />
+                                                {student.email}
+                                              </p>
+                                            </div>
+                                          </div>
+
+                                          {student.college && (
+                                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                              <MapPin className="w-4 h-4" />
+                                              <span className="hidden sm:inline">
+                                                {student.college}
+                                              </span>
+                                            </div>
+                                          )}
+
+                                          <div className="flex items-center gap-2">
+                                            <button
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                navigate(
+                                                  `/profile/${student?._id}`,
+                                                  {
+                                                    state: {
+                                                      studentData: student,
+                                                    },
+                                                  },
+                                                );
+                                              }}
+                                              className="flex items-center gap-2 px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-all text-sm"
+                                              title="View student profile"
+                                            >
+                                              <Eye className="w-3 h-3" />
+                                              Profile
+                                            </button>
+                                            <span className="ml-2 px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-semibold rounded-full">
+                                              Enrolled
+                                            </span>
+                                          </div>
+                                        </motion.div>
+                                      ))}
+                                    </div>
+                                  </div>
                                 )}
                               </div>
-                            </button>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
 
-                            {/* Group Content */}
-                            {expandedGroups[group.id] && (
-                              <div className="border-t border-gray-200 dark:border-gray-700">
-                                <div className="p-6 space-y-3">
-                                  {group.students.map((student, index) => (
-                                    <motion.div
-                                      key={student._id}
-                                      initial={{ opacity: 0, x: -10 }}
-                                      animate={{ opacity: 1, x: 0 }}
-                                      transition={{ delay: index * 0.05 }}
-                                      className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-700/50 dark:to-blue-900/20 rounded-lg border border-gray-200 dark:border-gray-600 hover:shadow-md transition-all"
-                                    >
-                                      <div className="flex items-center gap-4 flex-1">
-                                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-semibold text-sm">
-                                          {student.name?.[0]?.toUpperCase() ||
-                                            "?"}
-                                        </div>
-                                        <div>
-                                          <h4 className="font-semibold text-gray-800 dark:text-white">
-                                            {student.name}
-                                          </h4>
-                                          <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1">
-                                            <Mail className="w-3 h-3" />
-                                            {student.email}
-                                          </p>
-                                        </div>
-                                      </div>
+                    {/* Pending Payment Section */}
+                    {pending.length > 0 && (
+                      <div className="space-y-4 mb-8">
+                        <h3 className="text-xl font-bold text-orange-600 dark:text-orange-400 flex items-center gap-2">
+                          <Clock className="w-5 h-5" />
+                          Pending Payment ({totalPendingInCourse})
+                        </h3>
+                        <div className="space-y-4 ml-0">
+                          {pending.map((group, groupIndex) => (
+                            <motion.div
+                              key={group.id}
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: groupIndex * 0.05 }}
+                            >
+                              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+                                {/* Group Header */}
+                                <button
+                                  onClick={() => toggleGroupExpanded(group.id)}
+                                  className="w-full p-6 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
+                                >
+                                  <div className="flex items-center gap-4 flex-1">
+                                    <div className="p-3 bg-gradient-to-br from-orange-100 to-yellow-100 dark:from-orange-900/30 dark:to-yellow-900/30 rounded-lg">
+                                      <Users className="w-5 h-5 text-orange-600 dark:text-orange-400" />
+                                    </div>
+                                    <div className="text-left">
+                                      <h3 className="text-lg font-bold text-gray-800 dark:text-white">
+                                        Group {group.groupNumber}
+                                      </h3>
+                                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                                        {group.capacity} students awaiting
+                                        payment
+                                      </p>
+                                    </div>
+                                  </div>
 
-                                      {student.college && (
-                                        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                                          <MapPin className="w-4 h-4" />
-                                          <span className="hidden sm:inline">
-                                            {student.college}
-                                          </span>
-                                        </div>
-                                      )}
+                                  <div className="flex-shrink-0">
+                                    {expandedGroups[group.id] ? (
+                                      <ChevronUp className="w-6 h-6 text-gray-600 dark:text-gray-400" />
+                                    ) : (
+                                      <ChevronDown className="w-6 h-6 text-gray-600 dark:text-gray-400" />
+                                    )}
+                                  </div>
+                                </button>
 
-                                      <div className="flex items-center gap-2">
-                                        <button
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            console.log(
-                                              "👤 View Profile clicked for student:",
-                                              student,
-                                            );
-                                            console.log(
-                                              "📍 Navigating to /profile/" +
-                                                student?._id,
-                                            );
-                                            navigate(
-                                              `/profile/${student?._id}`,
-                                              {
-                                                state: { studentData: student },
-                                              },
-                                            );
+                                {/* Group Content */}
+                                {expandedGroups[group.id] && (
+                                  <div className="border-t border-gray-200 dark:border-gray-700">
+                                    <div className="p-6 space-y-3">
+                                      {group.students.map((student, index) => (
+                                        <motion.div
+                                          key={student._id}
+                                          initial={{ opacity: 0, x: -10 }}
+                                          animate={{ opacity: 1, x: 0 }}
+                                          transition={{
+                                            delay: index * 0.05,
                                           }}
-                                          className="flex items-center gap-2 px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition-all text-sm"
-                                          title="View student profile"
+                                          className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-orange-50 dark:from-gray-700/50 dark:to-orange-900/20 rounded-lg border border-gray-200 dark:border-gray-600 hover:shadow-md transition-all"
                                         >
-                                          <Eye className="w-3 h-3" />
-                                          Profile
-                                        </button>
-                                        <span className="ml-2 px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-semibold rounded-full">
-                                          Approved
-                                        </span>
-                                      </div>
-                                    </motion.div>
-                                  ))}
-                                </div>
+                                          <div className="flex items-center gap-4 flex-1">
+                                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-semibold text-sm">
+                                              {student.name?.[0]?.toUpperCase() ||
+                                                "?"}
+                                            </div>
+                                            <div>
+                                              <h4 className="font-semibold text-gray-800 dark:text-white">
+                                                {student.name}
+                                              </h4>
+                                              <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1">
+                                                <Mail className="w-3 h-3" />
+                                                {student.email}
+                                              </p>
+                                            </div>
+                                          </div>
+
+                                          {student.college && (
+                                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                              <MapPin className="w-4 h-4" />
+                                              <span className="hidden sm:inline">
+                                                {student.college}
+                                              </span>
+                                            </div>
+                                          )}
+
+                                          <div className="flex items-center gap-2">
+                                            <button
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                navigate(
+                                                  `/profile/${student?._id}`,
+                                                  {
+                                                    state: {
+                                                      studentData: student,
+                                                    },
+                                                  },
+                                                );
+                                              }}
+                                              className="flex items-center gap-2 px-3 py-1 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-semibold transition-all text-sm"
+                                              title="View student profile"
+                                            >
+                                              <Eye className="w-3 h-3" />
+                                              Profile
+                                            </button>
+                                            <span className="ml-2 px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 text-xs font-semibold rounded-full">
+                                              Pending
+                                            </span>
+                                          </div>
+                                        </motion.div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
                               </div>
-                            )}
-                          </div>
-                        </motion.div>
-                      ))}
-                    </div>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </motion.div>
-                ),
-              )}
+                );
+              })}
             </div>
           )}
         </div>

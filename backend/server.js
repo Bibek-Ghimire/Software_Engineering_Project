@@ -22,6 +22,7 @@ import recommendationRoutes from "./routes/recommendationRoutes.js";
 import batchRoutes from "./routes/batchRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
 import enrollmentRequestRoutes from "./routes/enrollmentRequestRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 // Middleware
 import { protect } from "./middleware/authMiddleware.js";
@@ -75,6 +76,7 @@ app.use("/api/leaderboard", leaderboardRoutes);
 app.use("/api/batches", batchRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/enrollment-requests", enrollmentRequestRoutes);
+app.use("/api/payments", paymentRoutes);
 app.use("/api/chat", chatRoutes);
 // Example protected route
 app.get("/api/protected", protect, (req, res) => {

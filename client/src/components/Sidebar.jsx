@@ -10,6 +10,7 @@ import {
   GraduationCap,
   UserCircle,
   PlusCircle,
+  CreditCard,
 } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 
@@ -61,6 +62,11 @@ const Sidebar = () => {
             to="/leaderboard"
             label="Leaderboard"
             icon={<Award />}
+          />
+          <SidebarLink
+            to="/payments"
+            label="Payments"
+            icon={<CreditCard />}
           />
           <SidebarLink
             to="/student/chat"

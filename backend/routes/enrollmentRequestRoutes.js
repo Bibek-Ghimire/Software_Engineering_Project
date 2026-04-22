@@ -2,6 +2,7 @@ import express from "express";
 import EnrollmentRequest from "../models/EnrollmentRequest.js";
 import Notification from "../models/Notification.js";
 import Course from "../models/Course.js";
+import Payment from "../models/Payment.js";
 import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
@@ -108,38 +109,42 @@ router.put("/:id/approve", protect, async (req, res) => {
     enrollmentRequest.status = "approved";
     await enrollmentRequest.save();
 
-    // Enroll the student in the course
-    const course = await Course.findById(enrollmentRequest.course);
-    if (course) {
-      const studentIdString = enrollmentRequest.student._id.toString();
-      const isAlreadyEnrolled = course.students.some(
-        (id) => id.toString() === studentIdString,
-      );
-
-      if (!isAlreadyEnrolled) {
-        course.students.push(enrollmentRequest.student._id);
-        course.enrollmentCount = course.students.length;
-        await course.save();
-
-        console.log(
-          `✅ Student ${enrollmentRequest.student.name} enrolled in course ${course.title}`,
-        );
-      }
+    // Get course to retrieve price
+    const course = await Course.findById(enrollmentRequest.course).populate(
+      "teacher",
+      "name",
+    );
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
     }
 
-    // Send notification to student
+    // Create payment record instead of directly enrolling
+    const payment = new Payment({
+      student: enrollmentRequest.student._id,
+      course: enrollmentRequest.course._id,
+      enrollmentRequest: enrollmentRequest._id,
+      amount: course.price,
+      status: "pending",
+    });
+    await payment.save();
+
+    console.log(
+      `💳 Payment record created for student ${enrollmentRequest.student.name}, Amount: ${course.price}`,
+    );
+
+    // Send notification to student with link to payment page
     const studentNotification = new Notification({
       recipient: enrollmentRequest.student._id,
-      title: "Enrollment Approved",
-      message: `Your enrollment request for "${enrollmentRequest.course.title}" has been approved!`,
+      title: "Enrollment Approved - Payment Required",
+      message: `Your enrollment request for "${course.title}" has been approved! Please complete the payment of ₹${course.price} to finalize your enrollment.`,
       type: "enrollment",
-      relatedCourse: enrollmentRequest.course._id,
-      actionUrl: `/course/${enrollmentRequest.course._id}`,
+      relatedCourse: course._id,
+      actionUrl: `/payments`,
     });
     await studentNotification.save();
 
     console.log(
-      `📬 Approval notification sent to student ${enrollmentRequest.student.name}`,
+      `📬 Payment notification sent to student ${enrollmentRequest.student.name}`,
     );
 
     res.status(200).json({

@@ -4,6 +4,7 @@ import Course from "../models/Course.js";
 import User from "../models/User.js";
 import Notification from "../models/Notification.js";
 import EnrollmentRequest from "../models/EnrollmentRequest.js";
+import Payment from "../models/Payment.js";
 import { protect } from "../middleware/authMiddleware.js";
 import { sendEnrollmentNotificationEmail } from "../services/emailService.js";
 
@@ -49,8 +50,15 @@ router.get("/:id", protect, async (req, res) => {
       status: "pending",
     });
 
+    // Check if there's a pending or completed payment
+    const payment = await Payment.findOne({
+      student: userId,
+      course: req.params.id,
+      status: { $in: ["pending", "completed"] },
+    });
+
     console.log(
-      `🔍 Course Check - User: ${req.user.name} (${userId}), Course: ${course.title}, Enrolled: ${isCurrentUserEnrolled}, Pending Request: ${!!pendingRequest}`,
+      `🔍 Course Check - User: ${req.user.name} (${userId}), Course: ${course.title}, Enrolled: ${isCurrentUserEnrolled}, Pending Request: ${!!pendingRequest}, Payment Status: ${payment?.status || null}`,
     );
 
     // Return course with enrollment and request status for current user
@@ -58,6 +66,7 @@ router.get("/:id", protect, async (req, res) => {
       ...course.toObject(),
       isCurrentUserEnrolled,
       enrollmentRequestStatus: pendingRequest ? "pending" : null,
+      paymentStatus: payment ? payment.status : null,
     };
 
     res.status(200).json(courseResponse);
