@@ -1,4 +1,5 @@
 import { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
@@ -31,11 +32,28 @@ import StudentProfileUpgraded from "./pages/Student/StudentProfile";
 import TeacherProfileUpgraded from "./pages/Teacher/TeacherProfileUpgraded";
 import ProfileView from "./pages/ProfileView";
 import Payments from "./pages/Payments";
+import NotificationPopup from "./components/NotificationPopup";
+import { useNotification } from "./hooks/useNotification";
 
-function App() {
+function AppContent() {
+  const navigate = useNavigate();
+  const { notification, isPopupOpen, closePopup, handleNotificationAction } =
+    useNotification();
+
+  const handlePaymentAction = () => {
+    handleNotificationAction();
+    navigate("/payments");
+  };
+
   return (
-    <Router>
+    <>
       <Toaster position="top-right" />
+      <NotificationPopup
+        isOpen={isPopupOpen}
+        notification={notification}
+        onClose={closePopup}
+        onActionClick={handlePaymentAction}
+      />
       <Routes>
         <Route
           path="/"
@@ -155,6 +173,14 @@ function App() {
           element={<NotFound />}
         />
       </Routes>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }

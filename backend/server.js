@@ -32,6 +32,7 @@ import leaderboardRoutes from "./routes/leaderboardRoutes.js";
 // Import Socket Handlers
 // -------------------------
 import { initCourseChat } from "./socket/courseChat.js";
+import { initNotificationSocket } from "./socket/notificationSocket.js";
 
 // -------------------------
 // Config & App Init
@@ -122,8 +123,13 @@ const io = new Server(httpServer, {
 
 // Initialize socket handlers
 initCourseChat(io);
+const notificationIO = initNotificationSocket(io);
+
+// Export io for use in other modules
+global.io = io;
+global.notificationIO = notificationIO;
 
 httpServer.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`💬 Socket.IO enabled for real-time chat`);
+  console.log(`💬 Socket.IO enabled for real-time chat and notifications`);
 });

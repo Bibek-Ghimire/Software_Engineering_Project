@@ -9,8 +9,10 @@ import {
   Clock,
   AlertCircle,
   ArrowRight,
+  Zap,
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
+import { useNotification } from "../hooks/useNotification";
 
 const Payments = () => {
   const navigate = useNavigate();
@@ -18,8 +20,10 @@ const Payments = () => {
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState(null);
   const [showPaymentForm, setShowPaymentForm] = useState(null);
+  const [lastEnrollmentPaymentId, setLastEnrollmentPaymentId] = useState(null);
 
   const token = sessionStorage.getItem("token");
+  const { notification } = useNotification();
 
   const fetchPayments = useCallback(async () => {
     try {
@@ -44,6 +48,21 @@ const Payments = () => {
       fetchPayments();
     }
   }, [token, fetchPayments]);
+
+  // Update last enrollment payment when notification comes in
+  useEffect(() => {
+    if (notification && notification.payment?.id) {
+      setLastEnrollmentPaymentId(notification.payment.id);
+      // Auto-highlight the payment for 10 seconds
+      setTimeout(() => {
+        setLastEnrollmentPaymentId(null);
+      }, 10000);
+      // Refresh payments to show the new enrollment payment
+      setTimeout(() => {
+        fetchPayments();
+      }, 500);
+    }
+  }, [notification, fetchPayments]);
 
   const handleCompletePayment = async (paymentId) => {
     try {
@@ -146,6 +165,49 @@ const Payments = () => {
             </div>
           ) : (
             <div className="space-y-8">
+              {/* New Enrollment Approval Banner */}
+              {notification && notification.payment?.id && (
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-xl p-6 border-l-4 border-green-500 shadow-lg"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0">
+                      <Zap className="w-6 h-6 text-green-600 dark:text-green-400" />
+                    </div>
+                    <div className="flex-grow">
+                      <h3 className="text-lg font-bold text-green-900 dark:text-green-100 mb-1">
+                        Enrollment Approved!
+                      </h3>
+                      <p className="text-green-800 dark:text-green-200 mb-3">
+                        Your enrollment request for{" "}
+                        <span className="font-semibold">
+                          {notification.course?.title}
+                        </span>{" "}
+                        has been approved. Complete the payment of{" "}
+                        <span className="font-bold text-lg">
+                          ₹{notification.course?.price}
+                        </span>{" "}
+                        to finalize your enrollment.
+                      </p>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() =>
+                            setShowPaymentForm(lastEnrollmentPaymentId)
+                          }
+                          className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition-all flex items-center gap-2"
+                        >
+                          <CreditCard className="w-4 h-4" />
+                          Pay Now
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
               {/* Pending Payments Section */}
               {pendingPayments.length > 0 && (
                 <div>
@@ -159,8 +221,17 @@ const Payments = () => {
                         key={payment._id}
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-l-4 border-yellow-500 hover:shadow-xl transition-all"
+                        className={`bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-l-4 hover:shadow-xl transition-all ${
+                          lastEnrollmentPaymentId === payment._id
+                            ? "border-l-green-500 ring-2 ring-green-400 dark:ring-green-600 ring-offset-2 dark:ring-offset-gray-900"
+                            : "border-l-yellow-500"
+                        }`}
                       >
+                        {lastEnrollmentPaymentId === payment._id && (
+                          <div className="mb-3 px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs font-semibold inline-block">
+                            Just Approved ✓
+                          </div>
+                        )}
                         <div className="flex justify-between items-start mb-4">
                           <div>
                             <h3 className="text-lg font-bold text-gray-800 dark:text-white">

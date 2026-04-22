@@ -34,6 +34,7 @@ import recommendationService from "../services/recommendationService";
 import RecommendedTeachers from "../components/RecommendedTeachers";
 import RecommendedGroups from "../components/RecommendedGroups";
 import RecommendedResources from "../components/RecommendedResources";
+import { useNotification } from "../hooks/useNotification";
 
 const user = JSON.parse(sessionStorage.getItem("user")) || { name: "Student" };
 
@@ -80,6 +81,8 @@ const StudentDashboard = () => {
   const [batchMembers, setBatchMembers] = useState([]);
   const [similarUsers, setSimilarUsers] = useState([]);
   const [batchLoading, setBatchLoading] = useState(true);
+  const [notifications, setNotifications] = useState([]);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
@@ -183,12 +186,72 @@ const StudentDashboard = () => {
       }
     };
 
+    const fetchNotifications = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/notifications",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+        console.log("📬 Student notifications:", response.data);
+        setNotifications(response.data);
+      } catch (err) {
+        console.error("Error fetching notifications:", err);
+      }
+    };
+
     fetchCourses();
     fetchGroups();
     fetchBadges();
     fetchTeachers();
     fetchBatchData();
+    fetchNotifications();
+
+    // Refresh notifications every 30 seconds
+    const notificationInterval = setInterval(fetchNotifications, 30000);
+    return () => clearInterval(notificationInterval);
   }, []);
+
+  // Listen for socket notifications and refresh
+  const { fetchNotifications: fetchNotificationsFromContext } =
+    useNotification();
+  useEffect(() => {
+    if (fetchNotificationsFromContext) {
+      const refreshNotifications = async () => {
+        await fetchNotificationsFromContext();
+        const token = sessionStorage.getItem("token");
+        try {
+          const response = await axios.get(
+            "http://localhost:5000/api/notifications",
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            },
+          );
+          setNotifications(response.data);
+        } catch (err) {
+          console.error("Error refreshing notifications:", err);
+        }
+      };
+
+      // Listen for enrollment approved events
+      const handleEnrollmentApproved = () => {
+        console.log(
+          "📬 Enrollment approved - refreshing student notifications...",
+        );
+        refreshNotifications();
+      };
+
+      // Subscribe to enrollment approved events
+      window.addEventListener("enrollmentApproved", handleEnrollmentApproved);
+      return () => {
+        window.removeEventListener(
+          "enrollmentApproved",
+          handleEnrollmentApproved,
+        );
+      };
+    }
+  }, [fetchNotificationsFromContext]);
 
   const toggleDarkMode = () => {
     if (darkMode) {
@@ -264,10 +327,14 @@ const StudentDashboard = () => {
             </motion.button>
 
             <motion.button
+              onClick={() => setShowNotifications(!showNotifications)}
               className="relative p-3 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all duration-300"
               whileHover={{ scale: 1.05 }}
             >
               <Bell className="w-5 h-5 text-slate-600 dark:text-slate-300" />
+              {notifications.filter((n) => !n.isRead).length > 0 && (
+                <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
+              )}
             </motion.button>
 
             <motion.button
@@ -280,6 +347,73 @@ const StudentDashboard = () => {
             </motion.button>
           </div>
         </motion.div>
+
+        {/* Notifications Panel */}
+        {showNotifications && (
+          <motion.div
+            className="fixed top-24 right-8 w-96 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 z-50 max-h-96 overflow-y-auto"
+            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+          >
+            <div className="sticky top-0 bg-white dark:bg-slate-800 p-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+              <h3 className="font-bold text-lg text-slate-800 dark:text-white">
+                Notifications
+              </h3>
+              <button
+                onClick={() => setShowNotifications(false)}
+                className="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+              >
+                ✕
+              </button>
+            </div>
+
+            {notifications.length === 0 ? (
+              <div className="p-6 text-center text-slate-500 dark:text-slate-400">
+                <Bell className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                <p>No notifications yet</p>
+              </div>
+            ) : (
+              <div className="divide-y divide-slate-200 dark:divide-slate-700">
+                {notifications.slice(0, 10).map((notification) => (
+                  <motion.div
+                    key={notification._id}
+                    className={`p-4 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors cursor-pointer ${
+                      !notification.isRead
+                        ? "bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500"
+                        : ""
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-slate-800 dark:text-white text-sm mb-1">
+                          {notification.title}
+                        </h4>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2">
+                          {notification.message}
+                        </p>
+                        <p className="text-xs text-slate-500 dark:text-slate-500 mt-2">
+                          {new Date(notification.createdAt).toLocaleDateString(
+                            "en-US",
+                            {
+                              month: "short",
+                              day: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            },
+                          )}
+                        </p>
+                      </div>
+                      {!notification.isRead && (
+                        <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-2"></div>
+                      )}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </motion.div>
+        )}
 
         {/* Enhanced Hero Section */}
         <motion.div

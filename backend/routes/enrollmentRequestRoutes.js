@@ -147,6 +147,35 @@ router.put("/:id/approve", protect, async (req, res) => {
       `📬 Payment notification sent to student ${enrollmentRequest.student.name}`,
     );
 
+    // Emit real-time notification via socket.io
+    if (global.notificationIO) {
+      global.notificationIO.emitToUser(
+        enrollmentRequest.student._id.toString(),
+        "enrollment_approved",
+        {
+          notificationId: studentNotification._id,
+          title: studentNotification.title,
+          message: studentNotification.message,
+          course: {
+            id: course._id,
+            title: course.title,
+            price: course.price,
+          },
+          payment: {
+            id: payment._id,
+            amount: payment.amount,
+          },
+          studentName: enrollmentRequest.student.name,
+          courseName: course.title,
+          actionUrl: `/payments`,
+          timestamp: new Date(),
+        },
+      );
+      console.log(
+        `🔔 Real-time socket notification sent to student ${enrollmentRequest.student._id}`,
+      );
+    }
+
     res.status(200).json({
       message: "Enrollment request approved",
       enrollmentRequest,
