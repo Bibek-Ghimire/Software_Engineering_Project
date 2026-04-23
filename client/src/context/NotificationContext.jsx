@@ -122,6 +122,37 @@ export const NotificationProvider = ({ children }) => {
     // The action URL is available in notification.actionUrl
   }, []);
 
+  // Calculate unread notification count
+  const getUnreadCount = useCallback(() => {
+    return allNotifications.filter((notif) => !notif.isRead).length;
+  }, [allNotifications]);
+
+  // Mark a notification as read
+  const markNotificationAsRead = useCallback(async (notificationId) => {
+    try {
+      const token = sessionStorage.getItem("token");
+      if (token) {
+        await axios.put(
+          `http://localhost:5000/api/notifications/${notificationId}/read`,
+          {},
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+        console.log("✅ Notification marked as read:", notificationId);
+
+        // Update local state
+        setAllNotifications((prevNotifications) =>
+          prevNotifications.map((notif) =>
+            notif._id === notificationId ? { ...notif, isRead: true } : notif,
+          ),
+        );
+      }
+    } catch (error) {
+      console.error("🔔 Error marking notification as read:", error);
+    }
+  }, []);
+
   return (
     <NotificationContext.Provider
       value={{
@@ -132,6 +163,8 @@ export const NotificationProvider = ({ children }) => {
         handleNotificationAction,
         allNotifications,
         fetchNotifications,
+        getUnreadCount,
+        markNotificationAsRead,
       }}
     >
       {children}

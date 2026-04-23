@@ -10,6 +10,9 @@ import {
   AlertCircle,
   ArrowRight,
   Zap,
+  Wallet,
+  DollarSign,
+  X,
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import { useNotification } from "../hooks/useNotification";
@@ -19,11 +22,55 @@ const Payments = () => {
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState(null);
-  const [showPaymentForm, setShowPaymentForm] = useState(null);
+  const [showPaymentModal, setShowPaymentModal] = useState(null);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [lastEnrollmentPaymentId, setLastEnrollmentPaymentId] = useState(null);
+  const [cardDetails, setCardDetails] = useState({
+    cardholderName: "",
+    cardNumber: "",
+    expiryDate: "",
+    cvv: "",
+  });
+  const [esewaPhoneEmail, setEsewaPhoneEmail] = useState("");
+  const [khaltiPhoneEmail, setKhaltiPhoneEmail] = useState("");
 
   const token = sessionStorage.getItem("token");
   const { notification } = useNotification();
+
+  const PAYMENT_METHODS = [
+    {
+      id: "card_credit",
+      name: "Credit Card",
+      image: "/images/payment-methods/creditcard.jpg",
+      description: "Pay securely with your credit card",
+      color: "from-blue-500 to-blue-600",
+      textColor: "text-blue-600",
+    },
+    {
+      id: "card_debit",
+      name: "Debit Card",
+      image: "/images/payment-methods/debitcard.jpg",
+      description: "Pay directly from your bank account",
+      color: "from-purple-500 to-purple-600",
+      textColor: "text-purple-600",
+    },
+    {
+      id: "esewa",
+      name: "eSewa",
+      image: "/images/payment-methods/esewa.png",
+      description: "Quick payment via eSewa digital wallet",
+      color: "from-green-500 to-green-600",
+      textColor: "text-green-600",
+    },
+    {
+      id: "khalti",
+      name: "Khalti",
+      image: "/images/payment-methods/khalti.png",
+      description: "Instant payment through Khalti wallet",
+      color: "from-purple-600 to-purple-700",
+      textColor: "text-purple-700",
+    },
+  ];
 
   const fetchPayments = useCallback(async () => {
     try {
@@ -32,7 +79,7 @@ const Payments = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      console.log("📋 Payments:", response.data);
+      console.log("Payments:", response.data);
       setPayments(response.data.payments || []);
     } catch (err) {
       console.error("Error fetching payments:", err);
@@ -66,16 +113,75 @@ const Payments = () => {
 
   const handleCompletePayment = async (paymentId) => {
     try {
+      if (!selectedPaymentMethod) {
+        toast.error("Please select a payment method");
+        return;
+      }
+
       setProcessingId(paymentId);
 
-      // For demo purposes, we'll just submit to the backend
-      // In a real application, this would integrate with a payment gateway like Stripe
+      // Validation based on payment method
+      if (
+        selectedPaymentMethod === "card_credit" ||
+        selectedPaymentMethod === "card_debit"
+      ) {
+        if (
+          !cardDetails.cardholderName ||
+          !cardDetails.cardNumber ||
+          !cardDetails.expiryDate ||
+          !cardDetails.cvv
+        ) {
+          toast.error("Please fill in all card details");
+          setProcessingId(null);
+          return;
+        }
+        if (cardDetails.cardNumber.length !== 16) {
+          toast.error("Card number must be 16 digits");
+          setProcessingId(null);
+          return;
+        }
+        if (cardDetails.cvv.length !== 3) {
+          toast.error("CVV must be 3 digits");
+          setProcessingId(null);
+          return;
+        }
+      } else if (selectedPaymentMethod === "esewa") {
+        if (!esewaPhoneEmail) {
+          toast.error("Please enter your eSewa phone number or email");
+          setProcessingId(null);
+          return;
+        }
+      } else if (selectedPaymentMethod === "khalti") {
+        if (!khaltiPhoneEmail) {
+          toast.error("Please enter your Khalti phone number or email");
+          setProcessingId(null);
+          return;
+        }
+      }
+
+      const paymentData = {
+        paymentMethod: selectedPaymentMethod,
+        transactionId: `TXN-${Date.now()}`,
+      };
+
+      if (
+        selectedPaymentMethod === "card_credit" ||
+        selectedPaymentMethod === "card_debit"
+      ) {
+        paymentData.cardDetails = {
+          last4Digits: cardDetails.cardNumber.slice(-4),
+          cardholderName: cardDetails.cardholderName,
+        };
+      } else if (selectedPaymentMethod === "esewa") {
+        paymentData.esewaDetails = { phoneEmail: esewaPhoneEmail };
+      } else if (selectedPaymentMethod === "khalti") {
+        paymentData.khaltiDetails = { phoneEmail: khaltiPhoneEmail };
+      }
+
+      // Submit payment
       await axios.put(
         `http://localhost:5000/api/payments/${paymentId}/complete`,
-        {
-          paymentMethod: "credit_card",
-          transactionId: `TXN-${Date.now()}`,
-        },
+        paymentData,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -86,8 +192,19 @@ const Payments = () => {
         position: "top-center",
       });
 
+      // Reset form
+      setCardDetails({
+        cardholderName: "",
+        cardNumber: "",
+        expiryDate: "",
+        cvv: "",
+      });
+      setEsewaPhoneEmail("");
+      setKhaltiPhoneEmail("");
+      setSelectedPaymentMethod(null);
+
       await fetchPayments();
-      setShowPaymentForm(null);
+      setShowPaymentModal(null);
 
       // Dispatch event to update dashboard
       window.dispatchEvent(
@@ -115,7 +232,16 @@ const Payments = () => {
       );
       toast.error("Payment cancelled");
       await fetchPayments();
-      setShowPaymentForm(null);
+      setShowPaymentModal(null);
+      setSelectedPaymentMethod(null);
+      setCardDetails({
+        cardholderName: "",
+        cardNumber: "",
+        expiryDate: "",
+        cvv: "",
+      });
+      setEsewaPhoneEmail("");
+      setKhaltiPhoneEmail("");
     } catch (err) {
       console.error("Error cancelling payment:", err);
       toast.error("Failed to cancel payment");
@@ -194,9 +320,10 @@ const Payments = () => {
                       </p>
                       <div className="flex gap-2">
                         <button
-                          onClick={() =>
-                            setShowPaymentForm(lastEnrollmentPaymentId)
-                          }
+                          onClick={() => {
+                            setShowPaymentModal(lastEnrollmentPaymentId);
+                            setSelectedPaymentMethod(null);
+                          }}
                           className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition-all flex items-center gap-2"
                         >
                           <CreditCard className="w-4 h-4" />
@@ -257,60 +384,236 @@ const Payments = () => {
                         </div>
 
                         <div className="space-y-2">
-                          {showPaymentForm === payment._id ? (
-                            <div className="space-y-3 mb-4 p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
-                              <input
-                                type="text"
-                                placeholder="Cardholder Name"
-                                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                              />
-                              <input
-                                type="text"
-                                placeholder="Card Number"
-                                maxLength="16"
-                                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                              />
-                              <div className="grid grid-cols-2 gap-2">
-                                <input
-                                  type="text"
-                                  placeholder="MM/YY"
-                                  maxLength="5"
-                                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
-                                <input
-                                  type="text"
-                                  placeholder="CVV"
-                                  maxLength="3"
-                                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
-                              </div>
+                          {showPaymentModal === payment._id ? (
+                            <div className="space-y-4 mb-4 p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg border border-blue-200 dark:border-blue-800">
+                              {/* Payment Method Selection */}
+                              {!selectedPaymentMethod ? (
+                                <div>
+                                  <h4 className="font-semibold text-gray-800 dark:text-white mb-3">
+                                    Select Payment Method
+                                  </h4>
+                                  <div className="grid grid-cols-2 gap-3">
+                                    {PAYMENT_METHODS.map((method) => (
+                                      <motion.button
+                                        key={method.id}
+                                        whileHover={{ scale: 1.05 }}
+                                        onClick={() => {
+                                          setSelectedPaymentMethod(method.id);
+                                        }}
+                                        className={`p-3 rounded-lg border-2 transition-all text-center ${
+                                          selectedPaymentMethod === method.id
+                                            ? `border-${method.id.includes("card") ? "blue" : "green"}-500 bg-blue-50 dark:bg-blue-900/50`
+                                            : "border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
+                                        }`}
+                                      >
+                                        <div className="flex justify-center mb-2">
+                                          <img
+                                            src={method.image}
+                                            alt={method.name}
+                                            className="w-16 h-16 object-contain"
+                                            onError={(e) => {
+                                              e.target.src =
+                                                "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Crect x='1' y='5' width='22' height='14' rx='2'%3E%3C/rect%3E%3Cpath d='M1 10h22'%3E%3C/path%3E%3C/svg%3E";
+                                            }}
+                                          />
+                                        </div>
+                                        <div className="text-xs font-semibold text-gray-800 dark:text-white">
+                                          {method.name}
+                                        </div>
+                                      </motion.button>
+                                    ))}
+                                  </div>
+                                </div>
+                              ) : (
+                                <div>
+                                  {/* Credit/Debit Card Form */}
+                                  {(selectedPaymentMethod === "card_credit" ||
+                                    selectedPaymentMethod === "card_debit") && (
+                                    <div className="space-y-3">
+                                      <h4 className="font-semibold text-gray-800 dark:text-white flex items-center gap-2">
+                                        <button
+                                          onClick={() =>
+                                            setSelectedPaymentMethod(null)
+                                          }
+                                          className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                                        >
+                                          ←
+                                        </button>
+                                        {selectedPaymentMethod === "card_credit"
+                                          ? "Credit Card Details"
+                                          : "Debit Card Details"}
+                                      </h4>
+                                      <input
+                                        type="text"
+                                        placeholder="Cardholder Name"
+                                        value={cardDetails.cardholderName}
+                                        onChange={(e) =>
+                                          setCardDetails({
+                                            ...cardDetails,
+                                            cardholderName: e.target.value,
+                                          })
+                                        }
+                                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                      />
+                                      <input
+                                        type="text"
+                                        placeholder="Card Number (16 digits)"
+                                        maxLength="16"
+                                        value={cardDetails.cardNumber}
+                                        onChange={(e) => {
+                                          const val = e.target.value.replace(
+                                            /\D/g,
+                                            "",
+                                          );
+                                          setCardDetails({
+                                            ...cardDetails,
+                                            cardNumber: val,
+                                          });
+                                        }}
+                                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                      />
+                                      <div className="grid grid-cols-2 gap-2">
+                                        <input
+                                          type="text"
+                                          placeholder="MM/YY"
+                                          maxLength="5"
+                                          value={cardDetails.expiryDate}
+                                          onChange={(e) => {
+                                            let val = e.target.value
+                                              .replace(/\D/g, "")
+                                              .slice(0, 4);
+                                            if (val.length >= 2) {
+                                              val =
+                                                val.slice(0, 2) +
+                                                "/" +
+                                                val.slice(2);
+                                            }
+                                            setCardDetails({
+                                              ...cardDetails,
+                                              expiryDate: val,
+                                            });
+                                          }}
+                                          className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                        />
+                                        <input
+                                          type="text"
+                                          placeholder="CVV (3 digits)"
+                                          maxLength="3"
+                                          value={cardDetails.cvv}
+                                          onChange={(e) => {
+                                            const val = e.target.value.replace(
+                                              /\D/g,
+                                              "",
+                                            );
+                                            setCardDetails({
+                                              ...cardDetails,
+                                              cvv: val,
+                                            });
+                                          }}
+                                          className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                        />
+                                      </div>
+                                    </div>
+                                  )}
+
+                                  {/* eSewa Form */}
+                                  {selectedPaymentMethod === "esewa" && (
+                                    <div className="space-y-3">
+                                      <h4 className="font-semibold text-gray-800 dark:text-white flex items-center gap-2">
+                                        <button
+                                          onClick={() =>
+                                            setSelectedPaymentMethod(null)
+                                          }
+                                          className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                                        >
+                                          ←
+                                        </button>
+                                        eSewa Wallet Details
+                                      </h4>
+                                      <input
+                                        type="text"
+                                        placeholder="Phone Number or Email"
+                                        value={esewaPhoneEmail}
+                                        onChange={(e) =>
+                                          setEsewaPhoneEmail(e.target.value)
+                                        }
+                                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+                                      />
+                                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                                        You'll be redirected to eSewa to
+                                        complete the payment
+                                      </p>
+                                    </div>
+                                  )}
+
+                                  {/* Khalti Form */}
+                                  {selectedPaymentMethod === "khalti" && (
+                                    <div className="space-y-3">
+                                      <h4 className="font-semibold text-gray-800 dark:text-white flex items-center gap-2">
+                                        <button
+                                          onClick={() =>
+                                            setSelectedPaymentMethod(null)
+                                          }
+                                          className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                                        >
+                                          ←
+                                        </button>
+                                        Khalti Wallet Details
+                                      </h4>
+                                      <input
+                                        type="text"
+                                        placeholder="Phone Number or Email"
+                                        value={khaltiPhoneEmail}
+                                        onChange={(e) =>
+                                          setKhaltiPhoneEmail(e.target.value)
+                                        }
+                                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+                                      />
+                                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                                        You'll be redirected to Khalti to
+                                        complete the payment
+                                      </p>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
                             </div>
                           ) : null}
 
                           <div className="flex gap-2">
-                            {showPaymentForm === payment._id ? (
+                            {showPaymentModal === payment._id ? (
                               <>
                                 <button
                                   onClick={() =>
                                     handleCompletePayment(payment._id)
                                   }
-                                  disabled={processingId === payment._id}
-                                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-all disabled:opacity-50"
+                                  disabled={
+                                    processingId === payment._id ||
+                                    !selectedPaymentMethod
+                                  }
+                                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                   <CreditCard className="w-4 h-4" />
-                                  Pay Now
+                                  {processingId === payment._id
+                                    ? "Processing..."
+                                    : "Complete Payment"}
                                 </button>
                                 <button
-                                  onClick={() => handleFailPayment(payment._id)}
+                                  onClick={() => {
+                                    handleFailPayment(payment._id);
+                                  }}
                                   disabled={processingId === payment._id}
-                                  className="flex-1 px-4 py-3 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 text-gray-800 dark:text-white rounded-lg font-semibold transition-all"
+                                  className="flex-1 px-4 py-3 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 text-gray-800 dark:text-white rounded-lg font-semibold transition-all disabled:opacity-50"
                                 >
                                   Cancel
                                 </button>
                               </>
                             ) : (
                               <button
-                                onClick={() => setShowPaymentForm(payment._id)}
+                                onClick={() => {
+                                  setShowPaymentModal(payment._id);
+                                  setSelectedPaymentMethod(null);
+                                }}
                                 className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-all"
                               >
                                 <CreditCard className="w-4 h-4" />
@@ -420,7 +723,10 @@ const Payments = () => {
                         </div>
 
                         <button
-                          onClick={() => setShowPaymentForm(payment._id)}
+                          onClick={() => {
+                            setShowPaymentModal(payment._id);
+                            setSelectedPaymentMethod(null);
+                          }}
                           className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-all"
                         >
                           Retry Payment

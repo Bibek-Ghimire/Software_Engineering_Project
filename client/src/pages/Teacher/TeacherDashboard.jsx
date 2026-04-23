@@ -29,6 +29,7 @@ import {
 import TeacherSidebar from "../../components/TeacherSidebar";
 import axios from "axios";
 import { motion } from "framer-motion";
+import { useNotification } from "../../hooks/useNotification";
 import {
   LineChart,
   Line,
@@ -109,6 +110,7 @@ const ActionCard = ({ title, description, icon, onClick, color }) => (
 
 const TeacherDashboard = () => {
   const navigate = useNavigate();
+  const { markNotificationAsRead } = useNotification();
   const [courses, setCourses] = useState([]);
   const [groups, setGroups] = useState([]);
   const [studentsCount, setStudentsCount] = useState(120);
@@ -301,7 +303,9 @@ const TeacherDashboard = () => {
             >
               <Bell className="w-5 h-5 text-slate-600 dark:text-slate-300" />
               {notifications.filter((n) => !n.isRead).length > 0 && (
-                <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
+                <span className="absolute -top-2 -right-3 inline-flex items-center justify-center px-2.5 py-0.5 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 dark:bg-red-500 rounded-full min-w-6 h-6 flex items-center justify-center">
+                  +{notifications.filter((n) => !n.isRead).length}
+                </span>
               )}
             </motion.button>
 
@@ -352,6 +356,10 @@ const TeacherDashboard = () => {
                         : ""
                     }`}
                     whileHover={{ x: 4 }}
+                    onClick={() =>
+                      !notification.isRead &&
+                      markNotificationAsRead(notification._id)
+                    }
                   >
                     <div className="flex items-start gap-3">
                       <div
