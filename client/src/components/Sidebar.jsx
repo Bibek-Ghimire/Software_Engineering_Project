@@ -12,7 +12,6 @@ import {
   PlusCircle,
   CreditCard,
 } from "lucide-react";
-import ThemeToggle from "./ThemeToggle";
 
 const Sidebar = () => {
   const navigate = useNavigate(); // added navigate
@@ -26,7 +25,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-64 min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-blue-950 dark:to-gray-900 shadow-lg px-4 py-6 flex flex-col justify-between sticky top-0 border-r border-blue-200/60 dark:border-blue-900/40">
+    <div className="w-64 h-screen bg-gradient-to-b from-blue-50 to-white dark:from-blue-950 dark:to-gray-900 shadow-lg px-4 py-6 flex flex-col sticky top-0 border-r border-blue-200/60 dark:border-blue-900/40">
       {/* Logo */}
       <div>
         <h1
@@ -37,7 +36,7 @@ const Sidebar = () => {
         </h1>
 
         {/* Navigation Links */}
-        <nav className="space-y-1">
+        <nav className="space-y-1 overflow-y-auto max-h-[calc(100vh-200px)]">
           <SidebarLink
             to="/dashboard/student"
             label="Dashboard"
@@ -86,9 +85,8 @@ const Sidebar = () => {
         </nav>
       </div>
 
-      {/* Logout & Theme Toggle */}
-      <div className="border-t border-blue-200/60 dark:border-blue-900/40 pt-4 space-y-2">
-        <ThemeToggle />
+      {/* Logout Button */}
+      <div className="border-t border-blue-200/60 dark:border-blue-900/40 pt-4">
         <button
           onClick={handleLogout}
           className="flex items-center px-3 py-2 rounded-lg transition-all duration-300 text-sm font-medium text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/60 w-full text-left group"

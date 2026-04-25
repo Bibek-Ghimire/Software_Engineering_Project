@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { MessageSquare, BookOpen, Users } from "lucide-react";
+import { MessageSquare, BookOpen, Users, Sun, Moon } from "lucide-react";
 import { motion } from "framer-motion";
 import TeacherSidebar from "../../components/TeacherSidebar";
 
@@ -11,6 +11,9 @@ const TeacherChatList = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [studentCounts, setStudentCounts] = useState({});
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("theme") === "dark",
+  );
 
   const token = sessionStorage.getItem("token");
 
@@ -60,6 +63,16 @@ const TeacherChatList = () => {
     }
   }, [token, fetchCourses]);
 
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
+
   if (loading) {
     return (
       <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950">
@@ -86,7 +99,17 @@ const TeacherChatList = () => {
       </div>
 
       {/* Main Content */}
-      <div className="ml-64 w-full">
+      <div className="ml-64 w-full relative">
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="absolute top-8 right-8 p-4 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-xl hover:shadow-2xl hover:scale-110 border-2 border-blue-200/50 dark:border-gray-600/50 transition-all duration-300 z-10 group"
+        >
+          {darkMode ? (
+            <Sun className="w-6 h-6 group-hover:rotate-180 transition-transform duration-500" />
+          ) : (
+            <Moon className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+          )}
+        </button>
         <div className="p-8">
           {/* Header */}
           <motion.div

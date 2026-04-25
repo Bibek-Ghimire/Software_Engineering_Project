@@ -14,6 +14,8 @@ import {
   Plus,
   CheckCircle,
   AlertCircle,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
@@ -25,6 +27,9 @@ const StudentProfileUpgraded = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("theme") === "dark",
+  );
 
   const [profile, setProfile] = useState({
     name: "",
@@ -66,6 +71,16 @@ const StudentProfileUpgraded = () => {
     };
     fetchProfile();
   }, [token, navigate]);
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
 
   // Handle profile picture change
   const handleProfilePictureChange = (e) => {
@@ -184,7 +199,17 @@ const StudentProfileUpgraded = () => {
     <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950">
       <Sidebar />
 
-      <div className="flex-1 p-8 lg:p-12">
+      <div className="flex-1 p-8 lg:p-12 relative">
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="absolute top-8 right-8 p-4 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-xl hover:shadow-2xl hover:scale-110 border-2 border-blue-200/50 dark:border-gray-600/50 transition-all duration-300 z-10 group"
+        >
+          {darkMode ? (
+            <Sun className="w-6 h-6 group-hover:rotate-180 transition-transform duration-500" />
+          ) : (
+            <Moon className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+          )}
+        </button>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

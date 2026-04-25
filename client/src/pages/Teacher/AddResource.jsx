@@ -11,6 +11,8 @@ import {
   Upload,
   BookOpen,
   User,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -25,9 +27,13 @@ const AddResource = () => {
   });
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState(null);
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("theme") === "dark",
+  );
 
   const token = sessionStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
+  const currentUserId = user?._id || user?.id;
 
   if (!token) toast.error("User not logged in");
 
@@ -50,6 +56,16 @@ const AddResource = () => {
   useEffect(() => {
     fetchResources();
   }, [fetchResources]);
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
 
   // Input change
   const handleChange = (e) =>
@@ -179,7 +195,17 @@ const AddResource = () => {
       <div className="w-64 fixed top-0 left-0 h-full z-30">
         <TeacherSidebar />
       </div>
-      <div className="ml-72 min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 w-full">
+      <div className="ml-72 min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 w-full relative">
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="absolute top-8 right-8 p-4 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-xl hover:shadow-2xl hover:scale-110 border-2 border-blue-200/50 dark:border-gray-600/50 transition-all duration-300 z-10 group"
+        >
+          {darkMode ? (
+            <Sun className="w-6 h-6 group-hover:rotate-180 transition-transform duration-500" />
+          ) : (
+            <Moon className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+          )}
+        </button>
         <ToastContainer
           position="top-right"
           autoClose={3000}
@@ -374,7 +400,9 @@ const AddResource = () => {
 
                       {/* Show Edit/Delete only if logged-in teacher is the creator */}
                       {user?.role === "teacher" &&
-                        res.teacher?._id === user?._id && (
+                        (res.teacher?._id?.toString() ||
+                          res.teacher?.id?.toString()) ===
+                          currentUserId?.toString() && (
                           <>
                             <button
                               onClick={() => handleEdit(res)}

@@ -10,8 +10,17 @@ const __dirname = path.dirname(__filename);
 // ✅ GET all resources
 export const getAllResources = async (req, res) => {
   try {
-    const resources = await Resource.find().populate("teacher", "name email");
-    res.status(200).json(resources);
+    const resources = await Resource.find().populate(
+      "teacher",
+      "name email role",
+    );
+
+    // Safety guard for legacy data: only expose resources created by valid teachers.
+    const teacherOwnedResources = resources.filter(
+      (resource) => resource.teacher && resource.teacher.role === "teacher",
+    );
+
+    res.status(200).json(teacherOwnedResources);
   } catch (err) {
     console.error("GetAllResources Error:", err);
     res.status(500).json({ message: "Server error", error: err.message });
@@ -23,6 +32,12 @@ export const createResource = async (req, res) => {
   try {
     if (!req.user) {
       return res.status(401).json({ message: "User not authenticated" });
+    }
+
+    if (req.user.role !== "teacher") {
+      return res.status(403).json({
+        message: "Only teachers can create resources",
+      });
     }
 
     const { title, description, keywords } = req.body;
@@ -62,6 +77,12 @@ export const updateResource = async (req, res) => {
   try {
     if (!req.user) {
       return res.status(401).json({ message: "User not authenticated" });
+    }
+
+    if (req.user.role !== "teacher") {
+      return res.status(403).json({
+        message: "Only teachers can update resources",
+      });
     }
 
     const userId = req.user._id?.toString() || req.user.id?.toString();
@@ -117,6 +138,12 @@ export const deleteResource = async (req, res) => {
   try {
     if (!req.user) {
       return res.status(401).json({ message: "User not authenticated" });
+    }
+
+    if (req.user.role !== "teacher") {
+      return res.status(403).json({
+        message: "Only teachers can delete resources",
+      });
     }
 
     const userId = req.user._id?.toString() || req.user.id?.toString();

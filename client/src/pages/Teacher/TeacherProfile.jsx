@@ -18,6 +18,8 @@ import {
   MapPin,
   Calendar,
   CheckCircle,
+  Sun,
+  Moon,
 } from "lucide-react";
 import axios from "axios";
 import TeacherSidebar from "../../components/TeacherSidebar";
@@ -53,6 +55,9 @@ const TeacherProfile = () => {
   const [loading, setLoading] = useState(true);
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [uploadingResume, setUploadingResume] = useState(false);
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("theme") === "dark",
+  );
 
   // ---------------- Fetch Profile ----------------
   useEffect(() => {
@@ -76,6 +81,16 @@ const TeacherProfile = () => {
     };
     fetchProfile();
   }, [token, initialProfile]);
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
 
   // ---------------- Handlers ----------------
   const handleChange = (e) =>
@@ -214,7 +229,17 @@ const TeacherProfile = () => {
       <div className="w-64 fixed top-0 left-0 h-full z-30">
         <TeacherSidebar />
       </div>
-      <div className="ml-72 min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 w-full">
+      <div className="ml-72 min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 w-full relative">
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="absolute top-8 right-8 p-4 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-xl hover:shadow-2xl hover:scale-110 border-2 border-blue-200/50 dark:border-gray-600/50 transition-all duration-300 z-10 group"
+        >
+          {darkMode ? (
+            <Sun className="w-6 h-6 group-hover:rotate-180 transition-transform duration-500" />
+          ) : (
+            <Moon className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+          )}
+        </button>
         {/* Decorative background elements */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-sky-200/20 to-blue-300/15 rounded-full blur-3xl -translate-y-48 translate-x-48 animate-pulse"></div>
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-blue-200/15 to-sky-300/20 rounded-full blur-3xl translate-y-32 -translate-x-32 animate-pulse"></div>

@@ -169,7 +169,7 @@ const TeacherDashboard = () => {
   useEffect(() => {
     const token = sessionStorage.getItem("token");
     const handleEnrollmentApproved = async () => {
-      console.log("📊 Enrollment approved - refreshing dashboard data...");
+      console.log(" Enrollment approved - refreshing dashboard data...");
       if (token) {
         await fetchDashboardData(token);
       }
@@ -217,11 +217,29 @@ const TeacherDashboard = () => {
     }
   };
 
+  const getTeacherHours = (teacher) =>
+    teacher?.hours ?? teacher?.teachingHours ?? teacher?.totalHours ?? 0;
+
+  const getTeacherEngagements = (teacher) =>
+    teacher?.engagements ??
+    teacher?.engagementScore ??
+    teacher?.totalEngagements ??
+    0;
+
+  const getTeacherScore = (teacher) =>
+    teacher?.totalScore ?? teacher?.score ?? teacher?.engagementScore ?? 0;
+
+  const getTeacherName = (teacher) =>
+    teacher?.name ?? teacher?.fullName ?? "Unknown Teacher";
+
   const getTier = (teacher) => {
-    if (teacher.hours >= 500 && teacher.engagements >= 2000) return "Platinum";
-    if (teacher.hours >= 300 && teacher.engagements >= 1000) return "Diamond";
-    if (teacher.hours >= 200 && teacher.engagements >= 500) return "Gold";
-    if (teacher.hours >= 100 && teacher.engagements >= 200) return "Silver";
+    const hours = getTeacherHours(teacher);
+    const engagements = getTeacherEngagements(teacher);
+
+    if (hours >= 500 && engagements >= 2000) return "Platinum";
+    if (hours >= 300 && engagements >= 1000) return "Diamond";
+    if (hours >= 200 && engagements >= 500) return "Gold";
+    if (hours >= 100 && engagements >= 200) return "Silver";
     return "Basic";
   };
 
@@ -722,7 +740,7 @@ const TeacherDashboard = () => {
               title="Manage Students"
               description="View and organize students"
               icon={<Users className="w-8 h-8" />}
-              onClick={() => navigate("/students")}
+              onClick={() => navigate("/teacher/approved-students")}
               color="from-emerald-500 to-teal-500"
             />
             <ActionCard
@@ -778,7 +796,7 @@ const TeacherDashboard = () => {
               </motion.div>
             ) : (
               <div className="flex gap-6 overflow-x-auto pb-4">
-                {leaderboard.slice(0, 5).map((teacher, idx) => (
+                {leaderboard.slice(0, 3).map((teacher, idx) => (
                   <motion.div
                     key={teacher._id || idx}
                     className="flex-none w-80 group"
@@ -804,7 +822,7 @@ const TeacherDashboard = () => {
 
                       <div className="mt-4">
                         <h4 className="font-bold text-lg text-slate-800 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                          {teacher.name}
+                          {getTeacherName(teacher)}
                         </h4>
 
                         <div className="space-y-3">
@@ -816,7 +834,7 @@ const TeacherDashboard = () => {
                               </span>
                             </div>
                             <span className="font-bold text-slate-800 dark:text-white">
-                              {teacher.hours}
+                              {getTeacherHours(teacher)}
                             </span>
                           </div>
 
@@ -828,7 +846,19 @@ const TeacherDashboard = () => {
                               </span>
                             </div>
                             <span className="font-bold text-slate-800 dark:text-white">
-                              {teacher.engagements}
+                              {getTeacherEngagements(teacher)}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+                              <Star className="w-4 h-4 text-amber-500" />
+                              <span className="text-sm font-medium">
+                                Ranking Score
+                              </span>
+                            </div>
+                            <span className="font-bold text-slate-800 dark:text-white">
+                              {getTeacherScore(teacher)}
                             </span>
                           </div>
                         </div>

@@ -13,6 +13,8 @@ import {
   Wallet,
   DollarSign,
   X,
+  Sun,
+  Moon,
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import { useNotification } from "../hooks/useNotification";
@@ -33,6 +35,9 @@ const Payments = () => {
   });
   const [esewaPhoneEmail, setEsewaPhoneEmail] = useState("");
   const [khaltiPhoneEmail, setKhaltiPhoneEmail] = useState("");
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("theme") === "dark",
+  );
 
   const token = sessionStorage.getItem("token");
   const { notification } = useNotification();
@@ -95,6 +100,17 @@ const Payments = () => {
       fetchPayments();
     }
   }, [token, fetchPayments]);
+
+  // Dark mode toggle
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
 
   // Update last enrollment payment when notification comes in
   useEffect(() => {
@@ -266,7 +282,18 @@ const Payments = () => {
       </div>
 
       {/* Main Content */}
-      <div className="ml-64 w-full">
+      <div className="ml-64 w-full relative">
+        {/* Dark Mode Toggle */}
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="absolute top-8 right-8 p-4 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-xl hover:shadow-2xl hover:scale-110 border-2 border-blue-200/50 dark:border-gray-600/50 transition-all duration-300 z-10 group"
+        >
+          {darkMode ? (
+            <Sun className="w-6 h-6 group-hover:rotate-180 transition-transform duration-500" />
+          ) : (
+            <Moon className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+          )}
+        </button>
         <div className="p-8">
           {/* Header */}
           <motion.div

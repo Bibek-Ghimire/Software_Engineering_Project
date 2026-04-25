@@ -13,6 +13,8 @@ import {
   Clock,
   DollarSign,
   Award,
+  Sun,
+  Moon,
 } from "lucide-react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +24,9 @@ const LeaderBoard = () => {
   const navigate = useNavigate();
   const [teachers, setTeachers] = useState([]);
   const [expanded, setExpanded] = useState({});
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("theme") === "dark",
+  );
   const token = sessionStorage.getItem("token");
 
   // Fetch leaderboard from backend
@@ -39,6 +44,16 @@ const LeaderBoard = () => {
     };
     fetchLeaderboard();
   }, [token]);
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
 
   const toggleExpand = (id) => {
     setExpanded({ ...expanded, [id]: !expanded[id] });
@@ -146,7 +161,17 @@ const LeaderBoard = () => {
       <div className="w-64 fixed top-0 left-0 h-full z-30">
         <Sidebar />
       </div>
-      <div className="ml-64 min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 w-full">
+      <div className="ml-64 min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 w-full relative">
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="absolute top-8 right-8 p-4 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-xl hover:shadow-2xl hover:scale-110 border-2 border-blue-200/50 dark:border-gray-600/50 transition-all duration-300 z-10 group"
+        >
+          {darkMode ? (
+            <Sun className="w-6 h-6 group-hover:rotate-180 transition-transform duration-500" />
+          ) : (
+            <Moon className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+          )}
+        </button>
         {/* Header Section */}
         <div className="relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-pink-600/10"></div>

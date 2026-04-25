@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
-import { Send, Clock, User } from "lucide-react";
+import { Send, Clock, User, Sun, Moon } from "lucide-react";
 import { motion } from "framer-motion";
 import Sidebar from "../../components/Sidebar";
 
@@ -17,6 +17,9 @@ const StudentCourseChat = () => {
   const [courseName, setCourseName] = useState("");
   const [teacher, setTeacher] = useState(null);
   const [typingUsers, setTypingUsers] = useState({});
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("theme") === "dark",
+  );
   const messagesEndRef = useRef(null);
   const typingTimeoutRef = useRef(null);
 
@@ -157,6 +160,16 @@ const StudentCourseChat = () => {
     };
   }, [courseId, user._id, user.name, fetchChatData]);
 
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
+
   // Handle typing indicator
   const handleInputChange = (e) => {
     setMessageText(e.target.value);
@@ -259,7 +272,17 @@ const StudentCourseChat = () => {
       </div>
 
       {/* Main Content */}
-      <div className="ml-64 w-full flex flex-col h-screen">
+      <div className="ml-64 w-full flex flex-col h-screen relative">
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="absolute top-4 right-4 p-3 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-xl hover:shadow-2xl hover:scale-110 border-2 border-blue-200/50 dark:border-gray-600/50 transition-all duration-300 z-20 group"
+        >
+          {darkMode ? (
+            <Sun className="w-5 h-5 group-hover:rotate-180 transition-transform duration-500" />
+          ) : (
+            <Moon className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
+          )}
+        </button>
         {/* Header */}
         <div className="bg-white dark:bg-gray-800 shadow-lg border-b border-gray-200 dark:border-gray-700 p-4">
           <div>

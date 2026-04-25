@@ -265,11 +265,29 @@ const StudentDashboard = () => {
     }
   };
 
+  const getTeacherHours = (teacher) =>
+    teacher?.hours ?? teacher?.teachingHours ?? teacher?.totalHours ?? 0;
+
+  const getTeacherEngagements = (teacher) =>
+    teacher?.engagements ??
+    teacher?.engagementScore ??
+    teacher?.totalEngagements ??
+    0;
+
+  const getTeacherScore = (teacher) =>
+    teacher?.totalScore ?? teacher?.score ?? teacher?.engagementScore ?? 0;
+
+  const getTeacherName = (teacher) =>
+    teacher?.name ?? teacher?.fullName ?? "Unknown Teacher";
+
   const getTier = (teacher) => {
-    if (teacher.hours >= 500 && teacher.engagements >= 2000) return "Platinum";
-    if (teacher.hours >= 300 && teacher.engagements >= 1000) return "Diamond";
-    if (teacher.hours >= 200 && teacher.engagements >= 500) return "Gold";
-    if (teacher.hours >= 100 && teacher.engagements >= 200) return "Silver";
+    const hours = getTeacherHours(teacher);
+    const engagements = getTeacherEngagements(teacher);
+
+    if (hours >= 500 && engagements >= 2000) return "Platinum";
+    if (hours >= 300 && engagements >= 1000) return "Diamond";
+    if (hours >= 200 && engagements >= 500) return "Gold";
+    if (hours >= 100 && engagements >= 200) return "Silver";
     return "Basic";
   };
 
@@ -830,7 +848,7 @@ const StudentDashboard = () => {
             </motion.div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {teachers.slice(0, 6).map((teacher, idx) => (
+              {teachers.slice(0, 3).map((teacher, idx) => (
                 <motion.div
                   key={teacher._id || idx}
                   className="group relative overflow-hidden"
@@ -863,7 +881,7 @@ const StudentDashboard = () => {
 
                     <div className="mt-6">
                       <h4 className="font-bold text-lg text-slate-800 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                        {teacher.name}
+                        {getTeacherName(teacher)}
                       </h4>
 
                       <div className="space-y-3">
@@ -873,7 +891,7 @@ const StudentDashboard = () => {
                             <span className="text-sm font-medium">Hours</span>
                           </div>
                           <span className="font-bold text-slate-800 dark:text-white">
-                            {teacher.hours}
+                            {getTeacherHours(teacher)}
                           </span>
                         </div>
 
@@ -885,7 +903,17 @@ const StudentDashboard = () => {
                             </span>
                           </div>
                           <span className="font-bold text-slate-800 dark:text-white">
-                            {teacher.engagements}
+                            {getTeacherEngagements(teacher)}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+                            <Trophy className="w-4 h-4 text-amber-500" />
+                            <span className="text-sm font-medium">Score</span>
+                          </div>
+                          <span className="font-bold text-slate-800 dark:text-white">
+                            {getTeacherScore(teacher)}
                           </span>
                         </div>
                       </div>

@@ -14,6 +14,8 @@ import {
   CheckCircle,
   AlertCircle,
   Loader,
+  Sun,
+  Moon,
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import { motion } from "framer-motion";
@@ -22,6 +24,9 @@ const CourseDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [course, setCourse] = useState(null);
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("theme") === "dark",
+  );
   const [loading, setLoading] = useState(true);
   const [enrolling, setEnrolling] = useState(false);
   const [error, setError] = useState(null);
@@ -92,6 +97,17 @@ const CourseDetail = () => {
       fetchCourseDetail();
     }
   }, [id]);
+
+  // Dark mode toggle
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
 
   // Listen for enrollment approval event and refresh course data
   useEffect(() => {
@@ -266,7 +282,18 @@ const CourseDetail = () => {
       </div>
 
       {/* Main Content */}
-      <div className="ml-64 w-full">
+      <div className="ml-64 w-full relative">
+        {/* Dark Mode Toggle */}
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="absolute top-8 right-8 p-4 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-xl hover:shadow-2xl hover:scale-110 border-2 border-blue-200/50 dark:border-gray-600/50 transition-all duration-300 z-10 group"
+        >
+          {darkMode ? (
+            <Sun className="w-6 h-6 group-hover:rotate-180 transition-transform duration-500" />
+          ) : (
+            <Moon className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+          )}
+        </button>
         {/* Back Button */}
         <div className="pt-8 px-6">
           <motion.button
