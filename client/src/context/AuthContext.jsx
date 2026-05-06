@@ -17,10 +17,10 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setIsAuthenticated(false);
-    // 🔐 STRICT CLEANUP: Clear all authentication and session data
+    //  STRICT CLEANUP: Clear all authentication and session data
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("user");
-    console.log("🔐 All session data cleared on logout");
+    console.log(" All session data cleared on logout");
   };
 
   return (

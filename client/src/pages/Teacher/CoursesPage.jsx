@@ -1,4 +1,4 @@
-// src/pages/CoursesPage.jsx
+﻿// src/pages/CoursesPage.jsx
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import {
@@ -188,7 +188,7 @@ const CoursesPage = () => {
       case "Expert":
         return "from-red-100 to-rose-100 text-red-800 border-red-200/50";
       default:
-        return "from-gray-100 to-slate-100 text-gray-800 border-gray-200/50";
+        return "bg-stone-100 text-stone-700 border-stone-200";
     }
   };
 
@@ -207,7 +207,7 @@ const CoursesPage = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 transition-all">
+      <div className="flex min-h-screen page-surface transition-all">
         <div className="w-64 fixed top-0 left-0 h-full z-30">
           <TeacherSidebar />
         </div>
@@ -224,10 +224,10 @@ const CoursesPage = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 transition-all duration-700 relative overflow-hidden">
+    <div className="flex min-h-screen page-surface transition-all duration-700 relative overflow-hidden">
       {/* Decorative background elements */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-sky-200/15 to-blue-300/10 rounded-full blur-3xl -translate-y-48 translate-x-48 animate-pulse"></div>
-      <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-blue-200/10 to-sky-300/15 rounded-full blur-3xl translate-y-32 -translate-x-32 animate-pulse"></div>
+      <div className="hidden"></div>
+      <div className="hidden"></div>
 
       {/* Sidebar */}
       <div className="w-64 fixed top-0 left-0 h-full z-30">
@@ -248,7 +248,7 @@ const CoursesPage = () => {
           </div>
           <button
             onClick={() => setDarkMode(!darkMode)}
-            className="p-3 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-sky-600 dark:text-sky-400 shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 border border-sky-200/50 dark:border-gray-700"
+            className="p-3 rounded-full bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 shadow-sm hover:shadow-md hover:scale-105 transition-all duration-200 border border-stone-200 dark:border-stone-700"
           >
             {darkMode ? (
               <Sun className="w-5 h-5" />
@@ -260,19 +260,19 @@ const CoursesPage = () => {
 
         {/* Teacher Create Course Form */}
         {user?.role === "teacher" && (
-          <div className="mb-10 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-sky-100/50 dark:border-gray-700/50 hover:shadow-2xl transition-all duration-300">
+          <div className="mb-10 surface-card-strong p-8">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-r from-sky-500 to-blue-600 rounded-xl flex items-center justify-center shadow-md">
-                <Plus className="w-5 h-5 text-white" />
+              <div className="w-10 h-10 rounded-2xl bg-sky-50 dark:bg-sky-950/30 flex items-center justify-center border border-sky-100 dark:border-sky-900/40 text-sky-600 dark:text-sky-300">
+                <Plus className="w-5 h-5" />
               </div>
-              <h2 className="text-2xl font-bold text-sky-700 dark:text-sky-300">
+              <h2 className="text-2xl font-semibold text-stone-900 dark:text-stone-50">
                 Create a New Course
               </h2>
             </div>
 
             <div className="space-y-6 mb-6">
               <div>
-                <label className="block text-sm font-semibold text-sky-600 dark:text-sky-400 mb-2 uppercase tracking-wide">
+                <label className="block text-sm font-medium body-copy mb-2">
                   Course Title *
                 </label>
                 <input
@@ -280,12 +280,12 @@ const CoursesPage = () => {
                   placeholder="e.g., Advanced React Development"
                   value={formData.title}
                   onChange={handleChange}
-                  className="w-full p-3 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
+                  className="w-full px-4 py-3 rounded-2xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900/50 text-stone-900 dark:text-stone-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100 dark:focus:ring-orange-900/20 transition-all duration-200 outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-sky-600 dark:text-sky-400 mb-2 uppercase tracking-wide">
+                <label className="block text-sm font-medium body-copy mb-2">
                   Full Course Description *
                 </label>
                 <textarea
@@ -294,20 +294,20 @@ const CoursesPage = () => {
                   value={formData.description}
                   onChange={handleChange}
                   rows="6"
-                  className="w-full p-3 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm resize-none"
+                  className="w-full px-4 py-3 rounded-2xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900/50 text-stone-900 dark:text-stone-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100 dark:focus:ring-orange-900/20 transition-all duration-200 outline-none resize-none"
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
-                  <label className="block text-sm font-semibold text-sky-600 dark:text-sky-400 mb-2 uppercase tracking-wide">
+                  <label className="block text-sm font-medium body-copy mb-2">
                     Level *
                   </label>
                   <select
                     name="level"
                     value={formData.level}
                     onChange={handleChange}
-                    className="w-full p-3 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
+                    className="w-full px-4 py-3 rounded-2xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900/50 text-stone-900 dark:text-stone-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100 dark:focus:ring-orange-900/20 transition-all duration-200 outline-none"
                   >
                     <option>Beginner</option>
                     <option>Intermediate</option>
@@ -316,7 +316,7 @@ const CoursesPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-sky-600 dark:text-sky-400 mb-2 uppercase tracking-wide">
+                  <label className="block text-sm font-medium body-copy mb-2">
                     Duration *
                   </label>
                   <input
@@ -324,12 +324,12 @@ const CoursesPage = () => {
                     placeholder="e.g. 8 weeks"
                     value={formData.duration}
                     onChange={handleChange}
-                    className="w-full p-3 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
+                    className="w-full px-4 py-3 rounded-2xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900/50 text-stone-900 dark:text-stone-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100 dark:focus:ring-orange-900/20 transition-all duration-200 outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-sky-600 dark:text-sky-400 mb-2 uppercase tracking-wide">
+                  <label className="block text-sm font-medium body-copy mb-2">
                     Price (USD) *
                   </label>
                   <input
@@ -338,12 +338,12 @@ const CoursesPage = () => {
                     placeholder="0"
                     value={formData.price}
                     onChange={handleChange}
-                    className="w-full p-3 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
+                    className="w-full px-4 py-3 rounded-2xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900/50 text-stone-900 dark:text-stone-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100 dark:focus:ring-orange-900/20 transition-all duration-200 outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-sky-600 dark:text-sky-400 mb-2 uppercase tracking-wide">
+                  <label className="block text-sm font-medium body-copy mb-2">
                     Keywords/Topics
                   </label>
                   <input
@@ -351,9 +351,9 @@ const CoursesPage = () => {
                     placeholder="React, JavaScript, Web Dev"
                     value={formData.keywords}
                     onChange={handleChange}
-                    className="w-full p-3 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
+                    className="w-full px-4 py-3 rounded-2xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900/50 text-stone-900 dark:text-stone-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100 dark:focus:ring-orange-900/20 transition-all duration-200 outline-none"
                   />
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                  <p className="text-xs body-copy mt-2">
                     Separate with commas (e.g., React, JavaScript, Web Dev)
                   </p>
                 </div>
@@ -362,7 +362,7 @@ const CoursesPage = () => {
 
             <button
               onClick={handleCreateCourse}
-              className="bg-gradient-to-r from-sky-500 to-blue-600 text-white px-8 py-4 rounded-xl shadow-lg hover:from-sky-600 hover:to-blue-700 hover:scale-105 transition-all duration-300 font-bold flex items-center gap-3 hover:shadow-xl"
+              className="primary-action px-6 py-3.5 rounded-2xl"
             >
               <Plus className="w-5 h-5" />
               Create Course
@@ -407,7 +407,7 @@ const CoursesPage = () => {
           {courses.map((course) => (
             <div
               key={course._id}
-              className="group bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-xl border border-sky-100/50 dark:border-gray-700/50 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden"
+              className="surface-card overflow-hidden hover:shadow-lg transition-all duration-200 hover:-translate-y-1"
             >
               {editingCourseId === course._id ? (
                 <div className="p-6">
@@ -501,7 +501,7 @@ const CoursesPage = () => {
                     </button>
                     <button
                       onClick={() => setEditingCourseId(null)}
-                      className="flex-1 bg-gradient-to-r from-gray-500 to-slate-600 text-white py-3 rounded-xl font-semibold hover:from-gray-600 hover:to-slate-700 transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 flex items-center justify-center gap-2"
+                      className="secondary-action flex-1 py-3 rounded-xl"
                     >
                       <X className="w-4 h-4" /> Cancel
                     </button>
@@ -511,7 +511,7 @@ const CoursesPage = () => {
                 <>
                   {/* Course Header */}
                   <div className="bg-gradient-to-r from-sky-500 to-blue-600 p-6 text-white relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-xl translate-x-16 -translate-y-16"></div>
+                    <div className="hidden"></div>
                     <div className="relative z-10">
                       <h3 className="text-xl font-bold mb-2 line-clamp-2">
                         {course.title}
@@ -588,3 +588,4 @@ const CoursesPage = () => {
 };
 
 export default CoursesPage;
+

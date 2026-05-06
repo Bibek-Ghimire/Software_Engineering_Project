@@ -2,48 +2,54 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { BookOpen, Users, User, LogOut, Users2 } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
+import Logo from "../assets/images/Logo.png";
 
 const Navbar = () => {
   return (
-    <nav className="bg-white/80 dark:bg-blue-950/80 backdrop-blur-md shadow-lg border-b border-blue-200/50 dark:border-blue-900/50 fixed top-0 w-full z-50">
-      <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+    <nav className="surface-card fixed top-0 z-50 w-full border-b border-slate-200/70 dark:border-slate-700/70">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
         {/* Logo */}
         <Link
           to="/dashboard/student"
-          className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 text-transparent bg-clip-text"
+          className="brand-title text-2xl font-bold flex items-center gap-2"
         >
+          <img
+            src={Logo}
+            alt="Syncademy"
+            className="h-8 w-8 rounded-lg"
+          />
           Syncademy
         </Link>
 
         {/* Links */}
-        <div className="hidden md:flex space-x-6 items-center">
+        <div className="hidden items-center space-x-3 md:flex">
           <Link
             to="/dashboard/student/courses"
-            className="flex items-center text-sm font-medium text-blue-700 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-100 transition"
+            className="nav-chip flex items-center rounded-full px-3 py-2 text-sm font-medium text-slate-700 dark:text-slate-300"
           >
             <BookOpen className="w-4 h-4 mr-1" /> Courses
           </Link>
           <Link
             to="/dashboard/student/groups"
-            className="flex items-center text-sm font-medium text-blue-700 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-100 transition"
+            className="nav-chip flex items-center rounded-full px-3 py-2 text-sm font-medium text-slate-700 dark:text-slate-300"
           >
             <Users className="w-4 h-4 mr-1" /> Study Groups
           </Link>
           <Link
             to="/study-batch"
-            className="flex items-center text-sm font-medium text-blue-700 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-100 transition"
+            className="nav-chip flex items-center rounded-full px-3 py-2 text-sm font-medium text-slate-700 dark:text-slate-300"
           >
             <Users2 className="w-4 h-4 mr-1" /> My Batch
           </Link>
           <Link
             to="/profile"
-            className="flex items-center text-sm font-medium text-blue-700 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-100 transition"
+            className="nav-chip flex items-center rounded-full px-3 py-2 text-sm font-medium text-slate-700 dark:text-slate-300"
           >
             <User className="w-4 h-4 mr-1" /> Profile
           </Link>
           <Link
             to="/logout"
-            className="flex items-center text-sm font-medium text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition"
+            className="nav-chip flex items-center rounded-full px-3 py-2 text-sm font-medium text-rose-600 dark:text-rose-400"
           >
             <LogOut className="w-4 h-4 mr-1" /> Logout
           </Link>

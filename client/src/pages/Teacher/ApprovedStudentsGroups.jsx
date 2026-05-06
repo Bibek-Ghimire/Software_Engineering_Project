@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+﻿import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
@@ -45,7 +45,7 @@ const ApprovedStudentsGroups = () => {
 
       const teacherCourses =
         coursesResponse.data.courses || coursesResponse.data || [];
-      console.log("📚 Teacher courses:", teacherCourses);
+      console.log(" Teacher courses:", teacherCourses);
       setCourses(teacherCourses);
 
       // Fetch students by payment status for each course
@@ -110,7 +110,7 @@ const ApprovedStudentsGroups = () => {
         }
       }
 
-      console.log("💳 Students by payment:", paymentData);
+      console.log(" Students by payment:", paymentData);
       setStudentsByPayment(paymentData);
     } catch (err) {
       console.error("Error fetching courses and students:", err);
@@ -145,7 +145,7 @@ const ApprovedStudentsGroups = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950">
+      <div className="flex min-h-screen page-surface">
         <div className="w-64 fixed top-0 left-0 h-full z-30">
           <TeacherSidebar />
         </div>
@@ -182,7 +182,7 @@ const ApprovedStudentsGroups = () => {
   );
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950">
+    <div className="flex min-h-screen page-surface">
       {/* Sidebar */}
       <div className="w-64 fixed top-0 left-0 h-full z-30">
         <TeacherSidebar />
@@ -323,7 +323,7 @@ const ApprovedStudentsGroups = () => {
                               {course.title}
                             </h2>
                             <p className="text-gray-600 dark:text-gray-400 text-sm">
-                              {totalEnrolledInCourse} enrolled •{" "}
+                              {totalEnrolledInCourse} enrolled {" "}
                               {totalPendingInCourse} pending payment
                             </p>
                           </div>
@@ -596,3 +596,5 @@ const ApprovedStudentsGroups = () => {
 };
 
 export default ApprovedStudentsGroups;
+
+

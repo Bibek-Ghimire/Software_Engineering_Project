@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion"; // eslint-disable-line no-unused-vars
 import {
   Mail,
@@ -65,12 +65,12 @@ const TeacherProfileView = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 transition-all duration-700">
+    <div className="flex min-h-screen page-surface transition-all duration-700">
       {/* Sidebar */}
       <div className="w-64 fixed top-0 left-0 h-full z-30">
         <TeacherSidebar />
       </div>
-      <div className="ml-64 min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 w-full relative">
+      <div className="ml-64 min-h-screen page-surface w-full relative">
         <button
           onClick={() => setDarkMode(!darkMode)}
           className="absolute top-8 right-8 p-4 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-xl hover:shadow-2xl hover:scale-110 border-2 border-blue-200/50 dark:border-gray-600/50 transition-all duration-300 z-10 group"
@@ -192,3 +192,5 @@ const TeacherProfileView = () => {
 };
 
 export default TeacherProfileView;
+
+

@@ -1,4 +1,4 @@
-// src/pages/AddResource.jsx
+﻿// src/pages/AddResource.jsx
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import {
@@ -190,15 +190,15 @@ const AddResource = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 transition-all duration-700">
+    <div className="flex min-h-screen page-surface transition-all duration-700">
       {/* Sidebar */}
       <div className="w-64 fixed top-0 left-0 h-full z-30">
         <TeacherSidebar />
       </div>
-      <div className="ml-72 min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 w-full relative">
+      <div className="ml-72 min-h-screen page-surface w-full relative">
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className="absolute top-8 right-8 p-4 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-xl hover:shadow-2xl hover:scale-110 border-2 border-blue-200/50 dark:border-gray-600/50 transition-all duration-300 z-10 group"
+          className="absolute top-8 right-8 p-4 rounded-2xl icon-action shadow-sm hover:shadow-md hover:scale-105 border border-stone-200 dark:border-stone-700 transition-all duration-200 z-10 group"
         >
           {darkMode ? (
             <Sun className="w-6 h-6 group-hover:rotate-180 transition-transform duration-500" />
@@ -217,10 +217,10 @@ const AddResource = () => {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full mb-4">
               <BookOpen className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent mb-2">
+            <h1 className="text-4xl font-semibold text-stone-900 dark:text-stone-50 mb-2">
               Learning Resources
             </h1>
-            <p className="text-gray-600 dark:text-gray-300 text-lg">
+            <p className="text-stone-600 dark:text-stone-300 text-lg">
               {user?.role === "teacher"
                 ? "Manage and share educational resources"
                 : "Explore available learning materials"}
@@ -229,16 +229,16 @@ const AddResource = () => {
 
           {/* Add / Edit Form */}
           {user?.role === "teacher" && (
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl mb-10 border border-blue-100 dark:border-blue-800">
+            <div className="bg-white dark:bg-stone-900 p-8 rounded-3xl shadow-sm mb-10 border border-stone-200 dark:border-stone-700">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
+                <div className="w-10 h-10 rounded-2xl bg-blue-50 dark:bg-blue-950/30 flex items-center justify-center border border-blue-100 dark:border-blue-900/40 text-blue-600 dark:text-blue-300">
                   {editingId ? (
-                    <Edit2 className="w-5 h-5 text-white" />
+                    <Edit2 className="w-5 h-5" />
                   ) : (
-                    <PlusCircle className="w-5 h-5 text-white" />
+                    <PlusCircle className="w-5 h-5" />
                   )}
                 </div>
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
+                <h2 className="text-2xl font-semibold text-stone-900 dark:text-stone-50">
                   {editingId ? "Edit Resource" : "Add New Resource"}
                 </h2>
               </div>
@@ -249,7 +249,7 @@ const AddResource = () => {
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium text-stone-700 dark:text-stone-300">
                       Resource Title
                     </label>
                     <input
@@ -258,12 +258,12 @@ const AddResource = () => {
                       placeholder="Enter resource title..."
                       value={formData.title}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                      className="w-full px-4 py-3 rounded-2xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950/50 text-stone-900 dark:text-stone-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100 dark:focus:ring-orange-900/20 transition-all duration-200 outline-none"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium text-stone-700 dark:text-stone-300">
                       Description
                     </label>
                     <input
@@ -272,13 +272,13 @@ const AddResource = () => {
                       placeholder="Brief description of the resource..."
                       value={formData.description}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                      className="w-full px-4 py-3 rounded-2xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-950/50 text-stone-900 dark:text-stone-50 focus:border-orange-400 focus:ring-2 focus:ring-orange-100 dark:focus:ring-orange-900/20 transition-all duration-200 outline-none"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label className="block text-sm font-medium text-stone-700 dark:text-stone-300">
                     Upload File
                   </label>
                   <div className="relative">
@@ -286,19 +286,19 @@ const AddResource = () => {
                       type="file"
                       name="file"
                       onChange={handleFileChange}
-                      className="w-full px-4 py-3 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 dark:text-white hover:border-blue-400 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                      className="w-full px-4 py-3 rounded-2xl border border-dashed border-stone-300 dark:border-stone-600 bg-stone-50 dark:bg-stone-950/50 text-stone-900 dark:text-stone-50 hover:border-sky-400 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-600 file:text-white dark:file:bg-orange-500 dark:file:text-white"
                     />
-                    <Upload className="absolute right-3 top-3 w-5 h-5 text-gray-400 pointer-events-none" />
+                    <Upload className="absolute right-3 top-3 w-5 h-5 text-stone-400 pointer-events-none" />
                   </div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-xs text-stone-500 dark:text-stone-400">
                     Supported formats: PDF, PNG, JPG, DOC (Max: 5MB)
                   </p>
                 </div>
 
                 {/* Show current file name when editing */}
                 {editingId && !formData.file && (
-                  <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-200 dark:border-blue-800">
-                    <p className="text-sm text-blue-700 dark:text-blue-300 flex items-center gap-2">
+                  <div className="bg-stone-50 dark:bg-stone-950/50 p-4 rounded-2xl border border-stone-200 dark:border-stone-700">
+                    <p className="text-sm text-stone-700 dark:text-stone-300 flex items-center gap-2">
                       <FileText className="w-4 h-4" />
                       Current file:{" "}
                       {resources
@@ -317,14 +317,14 @@ const AddResource = () => {
                         setEditingId(null);
                         setFormData({ title: "", description: "", file: null });
                       }}
-                      className="flex-1 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 py-3 rounded-xl flex items-center justify-center gap-2 font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+                      className="flex-1 px-6 py-3 rounded-2xl bg-rose-500 text-white font-semibold hover:bg-rose-600 transition-all duration-200 border border-rose-500 flex items-center justify-center gap-2"
                     >
                       <XCircle className="w-5 h-5" /> Cancel Edit
                     </button>
                   )}
                   <button
                     type="submit"
-                    className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl flex items-center justify-center gap-2 font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+                    className="primary-action flex-1 px-6 py-3 rounded-2xl"
                   >
                     <PlusCircle className="w-5 h-5" />
                     {editingId ? "Update Resource" : "Add Resource"}
@@ -361,33 +361,31 @@ const AddResource = () => {
               {resources?.map((res) => (
                 <div
                   key={res._id}
-                  className="group bg-white dark:bg-gray-800 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-600 transform hover:-translate-y-2"
+                  className="group bg-white dark:bg-stone-900 rounded-3xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-stone-200 dark:border-stone-700"
                 >
-                  {/* Card Header */}
-                  <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-6 text-white">
-                    <div className="flex items-start justify-between">
+                  <div className="h-1.5 bg-blue-500"></div>
+                  <div className="p-6">
+                    <div className="flex items-start justify-between gap-4 mb-4">
                       <div className="flex-1">
-                        <h3 className="text-xl font-bold mb-2 leading-tight">
+                        <h3 className="text-xl font-semibold mb-2 leading-tight text-stone-900 dark:text-stone-50">
                           {res.title}
                         </h3>
-                        <div className="flex items-center gap-2 text-blue-100">
+                        <div className="flex items-center gap-2 text-stone-600 dark:text-stone-300">
                           <User className="w-4 h-4" />
                           <span className="text-sm">
                             {res.teacher?.name || "Unknown"}
                           </span>
                         </div>
                       </div>
-                      <div className="ml-4">{getFileTypeIcon(res.fileUrl)}</div>
+                      <div className="ml-4 p-3 rounded-2xl bg-stone-50 dark:bg-stone-950/50 border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300">
+                        {getFileTypeIcon(res.fileUrl)}
+                      </div>
                     </div>
-                  </div>
 
-                  {/* Card Content */}
-                  <div className="p-6">
-                    <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                    <p className="text-stone-600 dark:text-stone-300 mb-6 leading-relaxed">
                       {res.description}
                     </p>
 
-                    {/* Action Buttons */}
                     <div className="flex flex-wrap gap-2">
                       {res.fileUrl && (
                         <button
@@ -448,3 +446,5 @@ const AddResource = () => {
 };
 
 export default AddResource;
+
+

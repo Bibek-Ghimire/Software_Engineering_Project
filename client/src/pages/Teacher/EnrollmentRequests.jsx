@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+﻿import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
@@ -38,7 +38,7 @@ const EnrollmentRequests = () => {
         },
       );
 
-      console.log("📋 Enrollment Requests:", response.data);
+      console.log(" Enrollment Requests:", response.data);
       setRequests(response.data.requests || []);
     } catch (err) {
       console.error("Error fetching enrollment requests:", err);
@@ -150,7 +150,7 @@ const EnrollmentRequests = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950">
+      <div className="flex min-h-screen page-surface">
         <div className="w-64 fixed top-0 left-0 h-full z-30">
           <TeacherSidebar />
         </div>
@@ -167,7 +167,7 @@ const EnrollmentRequests = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950">
+    <div className="flex min-h-screen page-surface">
       {/* Sidebar */}
       <div className="w-64 fixed top-0 left-0 h-full z-30">
         <TeacherSidebar />
@@ -284,11 +284,11 @@ const EnrollmentRequests = () => {
                           e.preventDefault();
                           e.stopPropagation();
                           console.log(
-                            "👤 View Profile clicked for student:",
+                            " View Profile clicked for student:",
                             request.student,
                           );
                           console.log(
-                            "📍 Navigating to /profile/" + request.student?._id,
+                            " Navigating to /profile/" + request.student?._id,
                           );
                           navigate(`/profile/${request.student?._id}`, {
                             state: { studentData: request.student },
@@ -334,3 +334,5 @@ const EnrollmentRequests = () => {
 };
 
 export default EnrollmentRequests;
+
+

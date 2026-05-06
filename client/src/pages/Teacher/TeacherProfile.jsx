@@ -1,4 +1,4 @@
-// src/pages/TeacherProfile.jsx
+﻿// src/pages/TeacherProfile.jsx
 import React, { useEffect, useState, useMemo } from "react";
 import {
   Edit,
@@ -224,15 +224,15 @@ const TeacherProfile = () => {
 
   // ---------------- UI ----------------
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 transition-all duration-700">
+    <div className="flex min-h-screen page-surface transition-all duration-700">
       {/* Sidebar */}
       <div className="w-64 fixed top-0 left-0 h-full z-30">
         <TeacherSidebar />
       </div>
-      <div className="ml-72 min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 w-full relative">
+      <div className="ml-72 min-h-screen page-surface w-full relative">
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className="absolute top-8 right-8 p-4 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-xl hover:shadow-2xl hover:scale-110 border-2 border-blue-200/50 dark:border-gray-600/50 transition-all duration-300 z-10 group"
+          className="absolute top-8 right-8 p-4 rounded-2xl bg-white/90 dark:bg-stone-900/90 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-xl hover:shadow-2xl hover:scale-110 border-2 border-blue-200/50 dark:border-gray-600/50 transition-all duration-300 z-10 group"
         >
           {darkMode ? (
             <Sun className="w-6 h-6 group-hover:rotate-180 transition-transform duration-500" />
@@ -241,11 +241,11 @@ const TeacherProfile = () => {
           )}
         </button>
         {/* Decorative background elements */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-sky-200/20 to-blue-300/15 rounded-full blur-3xl -translate-y-48 translate-x-48 animate-pulse"></div>
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-blue-200/15 to-sky-300/20 rounded-full blur-3xl translate-y-32 -translate-x-32 animate-pulse"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br opacity-0"></div>
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr opacity-0"></div>
 
         <motion.div
-          className="max-w-6xl mx-auto bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl p-10 border border-sky-100/50 dark:border-gray-700/50 relative z-10"
+          className="max-w-6xl mx-auto bg-white/90 dark:bg-stone-900/90 backdrop-blur-sm rounded-3xl shadow-2xl p-10 border border-sky-100/50 dark:border-stone-700/50 relative z-10"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -272,7 +272,7 @@ const TeacherProfile = () => {
                 <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-sky-400/20 to-blue-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </motion.div>
               {isEditing && !viewOnly && (
-                <label className="absolute bottom-2 right-2 bg-gradient-to-r from-sky-500 to-blue-600 p-3 rounded-full cursor-pointer hover:from-sky-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-110 border-2 border-white dark:border-gray-700">
+                <label className="absolute bottom-2 right-2 bg-gradient-to-r from-sky-500 to-blue-600 p-3 rounded-full cursor-pointer hover:from-sky-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-110 border-2 border-white dark:border-stone-700">
                   <input
                     type="file"
                     className="hidden"
@@ -302,7 +302,7 @@ const TeacherProfile = () => {
                   <GraduationCap className="w-4 h-4" />
                   {profile.qualification || "Qualification not added yet"}
                 </p>
-                <p className="text-gray-500 dark:text-gray-400 flex items-center justify-center md:justify-start gap-2">
+                <p className="text-stone-500 dark:text-stone-400 flex items-center justify-center md:justify-start gap-2">
                   <MapPin className="w-4 h-4" />
                   {profile.college || "Institution not specified"}
                 </p>
@@ -337,7 +337,7 @@ const TeacherProfile = () => {
           <div className="grid md:grid-cols-2 gap-8">
             {/* Left Section - Teaching Info */}
             <motion.div
-              className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-sky-100/50 dark:border-gray-700/50 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
+              className="surface-card p-8 hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5"
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
@@ -363,7 +363,7 @@ const TeacherProfile = () => {
                       value={formData.subject || ""}
                       onChange={handleChange}
                       placeholder="What subject do you teach?"
-                      className="w-full p-4 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
+                      className="w-full p-4 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-stone-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
                     />
                   </div>
                   <div>
@@ -376,7 +376,7 @@ const TeacherProfile = () => {
                       value={formData.qualification || ""}
                       onChange={handleChange}
                       placeholder="Your highest qualification"
-                      className="w-full p-4 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
+                      className="w-full p-4 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-stone-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
                     />
                   </div>
                   <div>
@@ -389,7 +389,7 @@ const TeacherProfile = () => {
                       value={formData.college || ""}
                       onChange={handleChange}
                       placeholder="Your institution/college"
-                      className="w-full p-4 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
+                      className="w-full p-4 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-stone-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
                     />
                   </div>
                   <div>
@@ -402,7 +402,7 @@ const TeacherProfile = () => {
                       onChange={handleChange}
                       placeholder="Tell us about yourself and your teaching philosophy..."
                       rows={4}
-                      className="w-full p-4 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm resize-none"
+                      className="w-full p-4 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-stone-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm resize-none"
                     />
                   </div>
                 </div>
@@ -427,7 +427,7 @@ const TeacherProfile = () => {
                     <p className="text-sm font-semibold text-sky-600 dark:text-sky-400 mb-2 uppercase tracking-wide">
                       About
                     </p>
-                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                    <p className="text-stone-700 dark:text-stone-300 leading-relaxed">
                       {profile.bio || "Bio not added yet"}
                     </p>
                   </div>
@@ -437,7 +437,7 @@ const TeacherProfile = () => {
 
             {/* Right Section - Achievements */}
             <motion.div
-              className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-sky-100/50 dark:border-gray-700/50 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
+              className="surface-card p-8 hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5"
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
@@ -468,7 +468,7 @@ const TeacherProfile = () => {
                             e.target.value,
                           )
                         }
-                        className="flex-1 p-3 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300"
+                        className="flex-1 p-3 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-stone-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300"
                         placeholder="Add an achievement..."
                       />
                       <button
@@ -497,7 +497,7 @@ const TeacherProfile = () => {
                         className="flex items-start gap-3 p-4 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl border border-amber-200/50 dark:border-amber-700/50 hover:shadow-md transition-all duration-300"
                       >
                         <CheckCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
-                        <p className="text-gray-700 dark:text-gray-300 font-medium">
+                        <p className="text-stone-700 dark:text-stone-300 font-medium">
                           {achievement}
                         </p>
                       </div>
@@ -507,7 +507,7 @@ const TeacherProfile = () => {
                       <div className="w-16 h-16 bg-gradient-to-br from-amber-200 to-orange-300 rounded-full mx-auto mb-4 flex items-center justify-center">
                         <Award className="w-6 h-6 text-amber-600" />
                       </div>
-                      <p className="text-gray-500 dark:text-gray-400">
+                      <p className="text-stone-500 dark:text-stone-400">
                         No achievements added yet
                       </p>
                     </div>
@@ -522,7 +522,7 @@ const TeacherProfile = () => {
             {["skills", "interests"].map((field, fieldIndex) => (
               <motion.div
                 key={field}
-                className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-sky-100/50 dark:border-gray-700/50 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
+                className="surface-card p-8 hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 + fieldIndex * 0.1 }}
@@ -551,7 +551,7 @@ const TeacherProfile = () => {
                           onChange={(e) =>
                             handleItemChange(field, index, e.target.value)
                           }
-                          className="flex-1 p-3 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300"
+                          className="flex-1 p-3 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-stone-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300"
                           placeholder={`Add a ${field.slice(0, -1)}...`}
                         />
                         <button
@@ -577,7 +577,7 @@ const TeacherProfile = () => {
                       profile[field].map((item, index) => (
                         <span
                           key={index}
-                          className={`px-4 py-2 bg-gradient-to-r ${field === "skills" ? "from-emerald-100 to-teal-100 text-emerald-800 dark:from-emerald-800/80 dark:to-teal-800/80 dark:text-emerald-100 border-emerald-200/50 dark:border-emerald-700/50" : "from-rose-100 to-pink-100 text-rose-800 dark:from-rose-800/80 dark:to-pink-800/80 dark:text-rose-100 border-rose-200/50 dark:border-rose-700/50"} rounded-xl text-sm font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 border cursor-default hover:-translate-y-0.5`}
+                          className={`px-4 py-2  ${field === "skills" ? "bg-emerald-50 text-emerald-800 dark:bg-emerald-950/20 dark:text-emerald-300 border-emerald-200 dark:border-emerald-900/40" : "bg-rose-50 text-rose-800 dark:bg-rose-950/20 dark:text-rose-300 border-rose-200 dark:border-rose-900/40"} rounded-xl text-sm font-semibold border cursor-default`}
                         >
                           {item}
                         </span>
@@ -591,7 +591,7 @@ const TeacherProfile = () => {
                             className={`w-6 h-6 ${field === "skills" ? "text-emerald-600" : "text-rose-600"}`}
                           />
                         </div>
-                        <p className="text-gray-500 dark:text-gray-400">
+                        <p className="text-stone-500 dark:text-stone-400">
                           No {field} added yet
                         </p>
                       </div>
@@ -606,7 +606,7 @@ const TeacherProfile = () => {
           <div className="grid md:grid-cols-2 gap-8">
             {/* Resume */}
             <motion.div
-              className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-sky-100/50 dark:border-gray-700/50 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
+              className="surface-card p-8 hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
@@ -670,7 +670,7 @@ const TeacherProfile = () => {
                   <div className="w-16 h-16 bg-gradient-to-br from-indigo-200 to-purple-300 rounded-full mx-auto mb-4 flex items-center justify-center">
                     <FileText className="w-6 h-6 text-indigo-600" />
                   </div>
-                  <p className="text-gray-500 dark:text-gray-400">
+                  <p className="text-stone-500 dark:text-stone-400">
                     No resume uploaded yet
                   </p>
                 </div>
@@ -679,7 +679,7 @@ const TeacherProfile = () => {
 
             {/* Social Links */}
             <motion.div
-              className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-sky-100/50 dark:border-gray-700/50 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
+              className="surface-card p-8 hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
@@ -705,7 +705,7 @@ const TeacherProfile = () => {
                       value={formData.linkedin || ""}
                       onChange={handleChange}
                       placeholder="https://linkedin.com/in/yourprofile"
-                      className="w-full p-4 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
+                      className="w-full p-4 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-stone-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
                     />
                   </div>
                   <div>
@@ -718,7 +718,7 @@ const TeacherProfile = () => {
                       value={formData.github || ""}
                       onChange={handleChange}
                       placeholder="https://github.com/yourusername"
-                      className="w-full p-4 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-gray-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
+                      className="w-full p-4 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-stone-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
                     />
                   </div>
                 </div>
@@ -744,12 +744,12 @@ const TeacherProfile = () => {
                       href={profile.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex items-center gap-3 p-4 bg-gradient-to-r from-gray-50 to-slate-50 dark:from-gray-700/30 dark:to-slate-700/30 rounded-xl border border-gray-200/50 dark:border-gray-600/50 hover:shadow-md transition-all duration-300 hover:scale-105"
+                      className="group flex items-center gap-3 p-4 surface-panel rounded-xl hover:shadow-md transition-all duration-300 hover:scale-105"
                     >
-                      <div className="w-8 h-8 bg-gradient-to-r from-gray-600 to-slate-700 rounded-lg flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
+                      <div className="w-8 h-8 bg-stone-800 dark:bg-stone-700 rounded-lg flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
                         <Github className="w-4 h-4 text-white" />
                       </div>
-                      <span className="text-gray-700 dark:text-gray-300 font-semibold group-hover:underline">
+                      <span className="text-stone-700 dark:text-stone-300 font-semibold group-hover:underline">
                         GitHub Profile
                       </span>
                     </a>
@@ -759,7 +759,7 @@ const TeacherProfile = () => {
                       <div className="w-16 h-16 bg-gradient-to-br from-sky-200 to-blue-300 rounded-full mx-auto mb-4 flex items-center justify-center">
                         <Mail className="w-6 h-6 text-sky-600" />
                       </div>
-                      <p className="text-gray-500 dark:text-gray-400">
+                      <p className="text-stone-500 dark:text-stone-400">
                         No social links added yet
                       </p>
                     </div>
@@ -802,10 +802,12 @@ const InfoCard = ({ icon, label, value }) => (
         {label}
       </p>
     </div>
-    <p className="font-bold text-lg text-gray-800 dark:text-gray-200 group-hover:text-sky-700 dark:group-hover:text-sky-300 transition-colors duration-300">
+    <p className="font-bold text-lg text-stone-800 dark:text-stone-200 group-hover:text-sky-700 dark:group-hover:text-sky-300 transition-colors duration-300">
       {value}
     </p>
   </div>
 );
 
 export default TeacherProfile;
+
+

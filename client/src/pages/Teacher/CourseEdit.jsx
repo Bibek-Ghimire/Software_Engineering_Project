@@ -78,7 +78,7 @@ const CourseEdit = () => {
         { headers: { Authorization: `Bearer ${token}` } },
       );
       alert("Course updated successfully!");
-      navigate("/courses", { state: { updated: true } }); // ✅ trigger refresh in CoursesPage
+      navigate("/courses", { state: { updated: true } }); //  trigger refresh in CoursesPage
     } catch (err) {
       console.error(err);
       alert(err.response?.data?.message || "Error updating course!");

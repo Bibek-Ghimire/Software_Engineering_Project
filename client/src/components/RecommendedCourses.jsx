@@ -2,14 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Heart,
-  Zap,
   Clock,
-  Users,
-  Star,
-  TrendingUp,
   BookOpen,
   User,
-  CalendarCheck,
+  Zap,
 } from "lucide-react";
 import recommendationService from "../services/recommendationService";
 
@@ -55,12 +51,12 @@ const RecommendedCourses = ({ limit = 6 }) => {
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5">
         {[...Array(3)].map((_, i) => (
           <div
             key={i}
-            className="bg-gradient-to-br from-blue-50 to-gray-50 dark:from-gray-800 dark:to-gray-700 rounded-3xl h-80 animate-pulse"
-          ></div>
+            className="surface-card h-72 animate-pulse"
+          />
         ))}
       </div>
     );
@@ -69,8 +65,10 @@ const RecommendedCourses = ({ limit = 6 }) => {
   if (courses.length === 0) {
     return (
       <div className="text-center py-12">
-        <Zap className="w-16 h-16 text-blue-400 mx-auto mb-4 opacity-50" />
-        <p className="text-gray-500 dark:text-gray-400">
+        <div className="w-12 h-12 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 flex items-center justify-center mx-auto mb-4">
+          <Zap className="w-6 h-6 text-stone-400" />
+        </div>
+        <p className="body-copy text-sm">
           No recommendations yet. Update your interests to see personalized
           courses!
         </p>
@@ -78,136 +76,130 @@ const RecommendedCourses = ({ limit = 6 }) => {
     );
   }
 
+  const getLevelInfo = (level) => {
+    const levelLower = level?.toLowerCase();
+    if (levelLower === "beginner")
+      return {
+        badge:
+          "border-emerald-200 dark:border-emerald-900/40 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300",
+        bar: "bg-emerald-400",
+      };
+    if (levelLower === "intermediate")
+      return {
+        badge:
+          "border-amber-200 dark:border-amber-900/40 bg-amber-50 dark:bg-amber-950/20 text-amber-700 dark:text-amber-300",
+        bar: "bg-amber-400",
+      };
+    if (levelLower === "advanced")
+      return {
+        badge:
+          "border-rose-200 dark:border-rose-900/40 bg-rose-50 dark:bg-rose-950/20 text-rose-700 dark:text-rose-300",
+        bar: "bg-rose-400",
+      };
+    return {
+      badge:
+        "border-stone-200 dark:border-stone-700 bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300",
+      bar: "bg-stone-300",
+    };
+  };
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5">
       {courses.map((course, index) => {
-        const levelLower = course.level?.toLowerCase();
-        let levelInfo = {
-          bg: "from-gray-400 to-gray-500",
-          text: "text-white",
-          icon: "📚",
-        };
-
-        if (levelLower === "beginner") {
-          levelInfo = {
-            bg: "from-emerald-400 to-green-500",
-            text: "text-white",
-            icon: "🟢",
-          };
-        } else if (levelLower === "intermediate") {
-          levelInfo = {
-            bg: "from-amber-400 to-orange-500",
-            text: "text-white",
-            icon: "🟠",
-          };
-        } else if (levelLower === "advanced") {
-          levelInfo = {
-            bg: "from-red-400 to-pink-500",
-            text: "text-white",
-            icon: "🔴",
-          };
-        }
-
+        const levelInfo = getLevelInfo(course.level);
         return (
           <div
             key={course._id}
-            className="group bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 dark:from-slate-800 dark:via-slate-900 dark:to-slate-950 rounded-3xl shadow-xl hover:shadow-2xl border border-slate-600/50 dark:border-slate-700/50 overflow-hidden transition-all duration-500 hover:scale-[1.02] flex flex-col"
+            className="surface-card overflow-hidden transition-all duration-200 hover:shadow-md flex flex-col"
             style={{ animationDelay: `${index * 100}ms` }}
           >
-            {/* Course Header Section */}
-            <div className="relative p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex-1">
-                  <h2 className="text-2xl font-bold text-white group-hover:text-blue-300 transition-colors leading-tight mb-3">
+            {/* Level bar */}
+            <div className={`h-1 ${levelInfo.bar}`} />
+
+            <div className="p-5 flex flex-col flex-1">
+              {/* Header */}
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="flex-1 min-w-0">
+                  <h2 className="text-base font-semibold text-stone-900 dark:text-stone-50 leading-snug mb-2 line-clamp-2">
                     {course.title}
                   </h2>
-                  <div
-                    className={`inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r ${levelInfo.bg} rounded-full shadow-lg`}
+                  <span
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-semibold ${levelInfo.badge}`}
                   >
-                    <span className="text-lg">{levelInfo.icon}</span>
-                    <span className={`font-bold text-sm ${levelInfo.text}`}>
-                      {course.level || "Beginner"} Level
-                    </span>
-                  </div>
+                    <span className="w-1.5 h-1.5 rounded-full bg-current opacity-80" />
+                    {course.level || "Beginner"} Level
+                  </span>
                 </div>
-                <div className="p-2 rounded-xl group-hover:rotate-12 transition-transform duration-300 opacity-60">
-                  <BookOpen className="w-6 h-6 text-blue-400" />
+                <div className="p-2 rounded-lg bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 shrink-0">
+                  <BookOpen className="w-4 h-4 text-stone-500 dark:text-stone-400" />
                 </div>
               </div>
-            </div>
 
-            {/* Course Content */}
-            <div className="p-6 flex-grow flex flex-col">
-              <p className="text-gray-300 text-sm leading-relaxed mb-6 flex-grow line-clamp-3">
+              <p className="text-sm leading-relaxed mb-4 flex-1 body-copy line-clamp-3">
                 {course.description}
               </p>
 
-              {/* Course Details */}
-              <div className="space-y-3 mb-6">
-                <div className="flex items-center gap-4 p-3 bg-slate-600/30 dark:bg-slate-700/40 rounded-xl border border-slate-500/30">
-                  <div className="p-2 bg-slate-600/50 dark:bg-slate-700/50 rounded-lg">
-                    <Clock className="w-4 h-4 text-blue-400" />
+              {/* Meta */}
+              <div className="space-y-2 mb-4">
+                <div className="flex items-center gap-2.5 p-2.5 rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900/50">
+                  <div className="p-1 rounded-md bg-white dark:bg-stone-800 shadow-sm">
+                    <Clock className="w-3.5 h-3.5 text-stone-500 dark:text-stone-400" />
                   </div>
                   <div>
-                    <span className="font-semibold text-blue-300 text-sm">
+                    <span className="block text-xs font-semibold uppercase tracking-wide text-stone-400 dark:text-stone-500">
                       Duration
                     </span>
-                    <p className="text-gray-300 text-sm">
+                    <p className="text-xs text-stone-700 dark:text-stone-200">
                       {course.duration || "Self-paced"}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 p-3 bg-slate-600/30 dark:bg-slate-700/40 rounded-xl border border-slate-500/30">
-                  <div className="p-2 bg-slate-600/50 dark:bg-slate-700/50 rounded-lg">
-                    <User className="w-4 h-4 text-blue-400" />
+                <div className="flex items-center gap-2.5 p-2.5 rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900/50">
+                  <div className="p-1 rounded-md bg-white dark:bg-stone-800 shadow-sm">
+                    <User className="w-3.5 h-3.5 text-stone-500 dark:text-stone-400" />
                   </div>
                   <div>
-                    <span className="font-semibold text-blue-300 text-sm">
+                    <span className="block text-xs font-semibold uppercase tracking-wide text-stone-400 dark:text-stone-500">
                       Instructor
                     </span>
-                    <p className="text-gray-300 text-sm">
+                    <p className="text-xs text-stone-700 dark:text-stone-200">
                       {course.teacher?.name || "Expert Instructor"}
                     </p>
                   </div>
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3">
+              {/* Actions */}
+              <div className="flex flex-col sm:flex-row gap-2.5 mt-auto">
                 <button
                   onClick={() => navigate(`/course/${course._id}`)}
-                  className="flex-1 group/btn relative overflow-hidden bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-4 rounded-2xl flex items-center justify-center gap-3 transition-all duration-300 font-semibold shadow-lg hover:shadow-2xl transform hover:scale-105"
+                  className="flex-1 primary-action py-2.5 gap-2 text-sm"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
-                  <BookOpen className="w-5 h-5 relative z-10 group-hover/btn:rotate-12 transition-transform duration-300" />
-                  <span className="relative z-10">Explore Course</span>
+                  <BookOpen className="w-4 h-4" />
+                  <span>Explore</span>
                 </button>
 
                 <button
                   onClick={() => handleInterestedClick(course._id)}
-                  className={`flex-1 group/btn relative overflow-hidden text-white px-6 py-4 rounded-2xl flex items-center justify-center gap-3 transition-all duration-300 font-semibold shadow-lg hover:shadow-2xl transform hover:scale-105 ${
+                  className={`flex-1 py-2.5 gap-2 text-sm btn-base border rounded-lg px-4 transition-all ${
                     interestedCourses.has(course._id)
-                      ? "bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700"
-                      : "bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700"
+                      ? "bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700"
+                      : "bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 border-stone-300 dark:border-stone-700 hover:bg-stone-50 dark:hover:bg-stone-800"
                   }`}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
                   <Heart
-                    className="w-5 h-5 relative z-10 group-hover/btn:scale-110 transition-transform duration-300"
-                    fill="currentColor"
+                    className="w-4 h-4"
+                    fill={interestedCourses.has(course._id) ? "currentColor" : "none"}
                   />
-                  <span className="relative z-10">
+                  <span>
                     {interestedCourses.has(course._id)
                       ? "Interested"
-                      : "Add Interest"}
+                      : "Interest"}
                   </span>
                 </button>
               </div>
             </div>
-
-            {/* Card Footer Accent */}
-            <div className="h-1 bg-gradient-to-r from-blue-400 via-blue-500 to-green-500"></div>
           </div>
         );
       })}

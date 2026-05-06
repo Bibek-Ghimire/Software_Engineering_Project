@@ -33,20 +33,20 @@ const NotificationPage = () => {
   const unreadCount = getUnreadCount();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950">
+    <div className="min-h-screen page-surface">
       <div className="p-8 max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-2">
+        <h1 className="section-title text-4xl mb-2">
           Notifications
         </h1>
         {unreadCount > 0 && (
-          <p className="text-sm text-blue-600 dark:text-blue-400 mb-6">
+          <p className="text-sm body-copy mb-6">
             You have {unreadCount} unread notification
             {unreadCount !== 1 ? "s" : ""}
           </p>
         )}
         {allNotifications.length === 0 && (
-          <div className="bg-white/90 dark:bg-blue-900/20 backdrop-blur-sm rounded-2xl p-12 text-center border border-blue-200/50 dark:border-blue-800/30">
-            <p className="text-blue-600 dark:text-blue-300 text-lg">
+          <div className="surface-card p-12 text-center">
+            <p className="body-copy text-lg">
               No notifications yet.
             </p>
           </div>
@@ -56,7 +56,7 @@ const NotificationPage = () => {
             {unreadCount > 0 && (
               <button
                 onClick={markAllAsRead}
-                className="mb-6 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl font-medium"
+                className="mb-6 primary-action rounded-xl px-6 py-3"
               >
                 Mark all as read
               </button>
@@ -65,10 +65,10 @@ const NotificationPage = () => {
               {allNotifications.map((notification) => (
                 <div
                   key={notification._id}
-                  className={`p-5 rounded-xl cursor-pointer transition-all duration-300 border ${
+                  className={`p-5 rounded-xl cursor-pointer transition-all duration-200 border ${
                     notification.isRead
-                      ? "bg-blue-50 dark:bg-blue-900/10 border-blue-200/50 dark:border-blue-800/20 text-gray-700 dark:text-gray-300"
-                      : "bg-white dark:bg-blue-900/30 border-blue-300 dark:border-blue-700/50 text-blue-900 dark:text-blue-100 font-semibold shadow-md hover:shadow-lg hover:border-blue-400 dark:hover:border-blue-600"
+                      ? "surface-panel"
+                      : "surface-card-strong border-l-4 border-l-orange-500 hover:shadow-md"
                   }`}
                   onClick={() =>
                     handleNotificationClick(
@@ -82,16 +82,16 @@ const NotificationPage = () => {
                       <h3 className="font-semibold mb-1">
                         {notification.title}
                       </h3>
-                      <p className="text-sm opacity-90">
+                      <p className="text-sm body-copy">
                         {notification.message}
                       </p>
-                      <p className="text-xs opacity-60 mt-2">
+                      <p className="text-xs body-copy mt-2">
                         {new Date(notification.createdAt).toLocaleString()}
                       </p>
                     </div>
                     {!notification.isRead && (
                       <div className="ml-3 flex-shrink-0">
-                        <span className="inline-block px-3 py-1 bg-red-500 dark:bg-red-600 text-white text-xs font-bold rounded-full">
+                        <span className="inline-block px-3 py-1 rounded-full bg-orange-100 text-orange-700 dark:bg-orange-500/20 dark:text-orange-300 text-xs font-bold border border-orange-200 dark:border-orange-900/40">
                           New
                         </span>
                       </div>
@@ -108,3 +108,4 @@ const NotificationPage = () => {
 };
 
 export default NotificationPage;
+

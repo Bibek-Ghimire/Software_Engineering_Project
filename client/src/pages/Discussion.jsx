@@ -62,16 +62,16 @@ const Discussion = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 text-gray-900 dark:text-white transition-colors duration-300">
+    <div className="page-surface flex min-h-screen transition-colors duration-300">
       {/* Sidebar */}
       <Sidebar />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col p-6 lg:p-10 relative">
+      <div className="relative flex flex-1 flex-col p-6 lg:p-10">
         {/* Dark Mode Toggle */}
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className="absolute top-6 right-6 p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 shadow hover:scale-110 transition"
+          className="icon-action absolute top-6 right-6"
         >
           {darkMode ? (
             <Sun className="w-5 h-5" />
@@ -81,34 +81,32 @@ const Discussion = () => {
         </button>
 
         {/* Page Title */}
-        <h1 className="text-4xl font-bold text-center text-blue-700 dark:text-blue-300 mb-10">
-          💬 Discussions
-        </h1>
+        <h1 className="section-title text-center mb-10">Discussions</h1>
 
         <div className="w-full max-w-3xl mx-auto space-y-10">
           {/* Add Discussion Form */}
           <form
             onSubmit={handleSubmit}
-            className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 space-y-4"
+            className="surface-card space-y-4 p-6"
           >
             <input
               type="text"
               placeholder="Discussion Title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              className="form-input-compact"
               required
             />
             <textarea
               placeholder="Description / Question"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              className="form-input-compact resize-none"
               rows="4"
             ></textarea>
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition font-medium"
+              className="primary-action w-full rounded-full py-3 font-medium"
               disabled={loading}
             >
               {loading ? "Posting..." : "Post Discussion"}
@@ -120,24 +118,22 @@ const Discussion = () => {
             {discussions.map((d) => (
               <div
                 key={d._id}
-                className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 hover:shadow-xl transition"
+                className="surface-card p-5 transition hover:-translate-y-0.5 hover:shadow-lg"
               >
-                <h3 className="text-xl font-semibold text-blue-700 dark:text-blue-300">
+                <h3 className="text-lg font-semibold text-stone-900 dark:text-stone-50">
                   {d.title}
                 </h3>
                 {d.description && (
-                  <p className="text-gray-700 dark:text-gray-300 mt-2">
-                    {d.description}
-                  </p>
+                  <p className="body-copy mt-2">{d.description}</p>
                 )}
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-3">
-                  👤 {d.author} | 🕒 {new Date(d.createdAt).toLocaleString()}
+                <p className="mt-3 text-xs body-copy">
+                  {d.author} · {new Date(d.createdAt).toLocaleString()}
                 </p>
               </div>
             ))}
 
             {discussions.length === 0 && (
-              <p className="text-center text-gray-500 dark:text-gray-400">
+              <p className="text-center body-copy text-sm">
                 No discussions yet. Be the first to start one!
               </p>
             )}

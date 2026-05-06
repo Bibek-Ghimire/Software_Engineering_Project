@@ -15,40 +15,52 @@ export const BatchStatistics = () => {
 
   if (error) {
     return (
-      <div className="bg-red-100 text-red-700 p-4 rounded">Error: {error}</div>
+      <div className="surface-panel p-4 text-red-700 dark:text-red-300">
+        Error: {error}
+      </div>
     );
   }
 
   if (!batchStats) return null;
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-4">Batch Statistics</h2>
+    <div className="surface-card p-6">
+      <h2 className="section-title mb-4 text-2xl md:text-3xl">
+        Batch Statistics
+      </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-blue-50 p-4 rounded-lg">
-          <p className="text-gray-600 text-sm">Total Batches</p>
+        <div className="surface-panel p-4">
+          <p className="text-slate-500 dark:text-slate-400 text-sm">
+            Total Batches
+          </p>
           <p className="text-3xl font-bold text-blue-600">
             {batchStats.totalBatches}
           </p>
         </div>
 
-        <div className="bg-green-50 p-4 rounded-lg">
-          <p className="text-gray-600 text-sm">Total Students</p>
+        <div className="surface-panel p-4">
+          <p className="text-slate-500 dark:text-slate-400 text-sm">
+            Total Students
+          </p>
           <p className="text-3xl font-bold text-green-600">
             {batchStats.totalStudents}
           </p>
         </div>
 
-        <div className="bg-purple-50 p-4 rounded-lg">
-          <p className="text-gray-600 text-sm">Avg Batch Size</p>
+        <div className="surface-panel p-4">
+          <p className="text-slate-500 dark:text-slate-400 text-sm">
+            Avg Batch Size
+          </p>
           <p className="text-3xl font-bold text-purple-600">
             {batchStats.avgBatchSize}
           </p>
         </div>
 
-        <div className="bg-orange-50 p-4 rounded-lg">
-          <p className="text-gray-600 text-sm">Full Batches</p>
+        <div className="surface-panel p-4">
+          <p className="text-slate-500 dark:text-slate-400 text-sm">
+            Full Batches
+          </p>
           <p className="text-3xl font-bold text-orange-600">
             {batchStats.fullBatches}
           </p>
@@ -56,31 +68,33 @@ export const BatchStatistics = () => {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Batch Details</h3>
+        <h3 className="text-lg font-semibold mb-4 text-slate-900 dark:text-white">
+          Batch Details
+        </h3>
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-gray-100 border-b">
+          <table className="w-full text-sm overflow-hidden rounded-2xl border border-slate-200/70 dark:border-slate-700/70">
+            <thead className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
               <tr>
-                <th className="px-4 py-2 text-left">Batch Name</th>
-                <th className="px-4 py-2 text-left">Interests</th>
-                <th className="px-4 py-2 text-center">Members</th>
-                <th className="px-4 py-2 text-center">Fill %</th>
+                <th className="px-4 py-3 text-left">Batch Name</th>
+                <th className="px-4 py-3 text-left">Interests</th>
+                <th className="px-4 py-3 text-center">Members</th>
+                <th className="px-4 py-3 text-center">Fill %</th>
               </tr>
             </thead>
             <tbody>
               {batchStats.batchDetails?.map((batch) => (
                 <tr
                   key={batch.batchId}
-                  className="border-b hover:bg-gray-50"
+                  className="border-b border-slate-200/70 hover:bg-slate-50/80 dark:border-slate-700/70 dark:hover:bg-slate-800/50"
                 >
-                  <td className="px-4 py-2 font-medium">{batch.name}</td>
-                  <td className="px-4 py-2">
+                  <td className="px-4 py-3 font-medium">{batch.name}</td>
+                  <td className="px-4 py-3">
                     {batch.interests.join(", ") || "N/A"}
                   </td>
-                  <td className="px-4 py-2 text-center">
+                  <td className="px-4 py-3 text-center">
                     {batch.memberCount}/{batch.maxSize}
                   </td>
-                  <td className="px-4 py-2 text-center">
+                  <td className="px-4 py-3 text-center">
                     <div className="flex items-center justify-center gap-2">
                       <div className="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
                         <div
@@ -102,7 +116,7 @@ export const BatchStatistics = () => {
 
       <button
         onClick={refetch}
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        className="secondary-action mt-4"
       >
         Refresh Statistics
       </button>
@@ -133,13 +147,13 @@ export const AutoAllocateBatchesButton = ({ onSuccess, onError }) => {
       <button
         onClick={handleClick}
         disabled={loading}
-        className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 disabled:bg-gray-400 transition"
+        className="primary-action rounded-full px-6 py-3 disabled:bg-slate-400"
       >
         {loading ? "Allocating..." : "Auto-Allocate Batches"}
       </button>
 
       {result && (
-        <div className="bg-green-100 border border-green-400 text-green-700 p-4 rounded">
+        <div className="surface-panel border-emerald-200 p-4 text-emerald-700 dark:border-emerald-800/50 dark:text-emerald-300">
           <p className="font-semibold">{result.message}</p>
           <p className="text-sm mt-2">
             Created {result.data.totalBatches} batches for{" "}
@@ -170,17 +184,21 @@ export const SimilarUsersCard = ({ userId }) => {
   }
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h3 className="text-lg font-semibold mb-4">Similar Users</h3>
+    <div className="surface-card p-6">
+      <h3 className="text-lg font-semibold mb-4 text-slate-900 dark:text-white">
+        Similar Users
+      </h3>
       <div className="space-y-3">
         {similarUsers.map((item, idx) => (
           <div
             key={idx}
-            className="flex justify-between items-center p-3 bg-gray-50 rounded"
+            className="flex items-center justify-between rounded-2xl border border-slate-200/70 bg-slate-50/80 p-3 dark:border-slate-700/70 dark:bg-slate-800/50"
           >
             <div>
               <p className="font-medium">{item.user.name}</p>
-              <p className="text-sm text-gray-600">{item.user.email}</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">
+                {item.user.email}
+              </p>
             </div>
             <p className="text-sm font-semibold text-blue-600">
               {(item.similarityScore * 100).toFixed(1)}%
@@ -205,23 +223,27 @@ export const BatchMembers = ({ batchId }) => {
   }
 
   if (!batch) {
-    return <div className="text-gray-600">Batch not found</div>;
+    return (
+      <div className="text-slate-600 dark:text-slate-300">Batch not found</div>
+    );
   }
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
+    <div className="surface-card p-6">
       <h3 className="text-lg font-semibold mb-4">
         {batch.name} ({batch.members?.length || 0}/{batch.maxSize})
       </h3>
 
       {batch.interests?.length > 0 && (
         <div className="mb-4">
-          <p className="text-sm text-gray-600 mb-2">Key Interests:</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">
+            Key Interests:
+          </p>
           <div className="flex gap-2 flex-wrap">
             {batch.interests.map((interest, idx) => (
               <span
                 key={idx}
-                className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm"
+                className="control-pill rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
               >
                 {interest}
               </span>
@@ -234,15 +256,17 @@ export const BatchMembers = ({ batchId }) => {
         {batch.members?.map((member) => (
           <div
             key={member._id}
-            className="p-3 bg-gray-50 rounded flex justify-between items-center"
+            className="flex items-center justify-between rounded-2xl border border-slate-200/70 bg-slate-50/80 p-3 dark:border-slate-700/70 dark:bg-slate-800/50"
           >
             <div>
               <p className="font-medium">{member.name}</p>
-              <p className="text-sm text-gray-600">{member.email}</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">
+                {member.email}
+              </p>
             </div>
             <div>
               {member.interests?.length > 0 && (
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   {member.interests.slice(0, 2).join(", ")}
                 </p>
               )}
@@ -262,8 +286,8 @@ export const BatchMembers = ({ batchId }) => {
 export const CompactBatchInfoCard = ({ batchData }) => {
   if (!batchData) {
     return (
-      <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-4 border border-gray-200">
-        <p className="text-sm text-gray-600">
+      <div className="surface-panel p-4">
+        <p className="text-sm text-slate-600 dark:text-slate-300">
           Not assigned to a batch yet. Complete your profile to be assigned.
         </p>
       </div>
@@ -271,27 +295,29 @@ export const CompactBatchInfoCard = ({ batchData }) => {
   }
 
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-200">
-      <h3 className="font-semibold text-gray-900 mb-2">{batchData.name}</h3>
-      <p className="text-sm text-gray-600 mb-2">
+    <div className="surface-panel p-4">
+      <h3 className="font-semibold text-slate-900 dark:text-white mb-2">
+        {batchData.name}
+      </h3>
+      <p className="text-sm text-slate-600 dark:text-slate-300 mb-2">
         {batchData.memberCount} of {batchData.maxSize} members
       </p>
-      <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden mb-2">
+      <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden mb-2 dark:bg-slate-700">
         <div
-          className="bg-gradient-to-r from-blue-500 to-indigo-600 h-full"
+          className="bg-gradient-to-r from-orange-500 to-amber-500 h-full"
           style={{ width: `${batchData.fillPercentage}%` }}
         ></div>
       </div>
       {batchData.dominantInterests?.length > 0 && (
-        <div className="mt-3 pt-3 border-t border-blue-200">
-          <p className="text-xs font-semibold text-gray-600 mb-2">
+        <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-700">
+          <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">
             Batch Interests
           </p>
           <div className="flex flex-wrap gap-1">
             {batchData.dominantInterests.map((interest, idx) => (
               <span
                 key={idx}
-                className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs"
+                className="rounded-full bg-blue-100 px-2 py-1 text-xs text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
               >
                 {interest}
               </span>

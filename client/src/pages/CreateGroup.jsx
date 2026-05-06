@@ -60,7 +60,7 @@ function CreateGroup() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 text-gray-800 dark:text-white transition-colors duration-300">
+    <div className="flex min-h-screen page-surface text-gray-800 dark:text-white transition-colors duration-300">
       {/* Sidebar */}
       <Sidebar />
 
@@ -69,7 +69,7 @@ function CreateGroup() {
         {/* Dark Mode Toggle */}
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className="absolute top-4 right-4 p-3 rounded-full bg-white/90 dark:bg-blue-900/60 backdrop-blur-sm text-blue-600 dark:text-blue-300 shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 border border-blue-200/50 dark:border-blue-800/40 ring-2 ring-blue-100/50 dark:ring-blue-800/50"
+          className="absolute top-4 right-4 p-3 rounded-full bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 shadow-sm hover:shadow-md hover:scale-105 transition-all duration-200 border border-slate-200 dark:border-slate-700"
         >
           {darkMode ? (
             <Sun className="w-5 h-5" />
@@ -80,15 +80,13 @@ function CreateGroup() {
 
         <form
           onSubmit={handleSubmit}
-          className="bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-xl w-full max-w-lg space-y-6 border border-gray-200 dark:border-gray-700"
+          className="surface-card p-8 w-full max-w-lg space-y-6"
         >
-          <h2 className="text-3xl font-bold text-blue-700 dark:text-blue-300 text-center">
-            Create Study Group
-          </h2>
+          <h2 className="section-title text-center">Create Study Group</h2>
 
           {/* Group Name */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
               Group Name *
             </label>
             <input
@@ -97,13 +95,13 @@ function CreateGroup() {
               required
               value={formData.name}
               onChange={handleChange}
-              className="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+              className="form-input mt-1"
             />
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
               Description *
             </label>
             <textarea
@@ -111,13 +109,13 @@ function CreateGroup() {
               required
               value={formData.description}
               onChange={handleChange}
-              className="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+              className="form-input mt-1 resize-none"
             ></textarea>
           </div>
 
           {/* Member Count */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
               No. of Members *
             </label>
             <input
@@ -126,14 +124,14 @@ function CreateGroup() {
               required
               value={formData.memberCount}
               onChange={handleChange}
-              className="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+              className="form-input mt-1"
               min={1}
             />
           </div>
 
           {/* Member Names */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
               Member Names (comma-separated)
             </label>
             <input
@@ -142,13 +140,13 @@ function CreateGroup() {
               placeholder="Enter team members' names"
               value={formData.members}
               onChange={handleChange}
-              className="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+              className="form-input mt-1"
             />
           </div>
 
           {/* Course Detail */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
               Course Detail
             </label>
             <input
@@ -157,13 +155,13 @@ function CreateGroup() {
               placeholder="e.g., DSA, React, Python for AI"
               value={formData.courseDetail}
               onChange={handleChange}
-              className="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+              className="form-input mt-1"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition"
+            className="primary-action w-full py-3.5 rounded-2xl"
           >
             Create Group
           </button>

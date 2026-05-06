@@ -21,11 +21,11 @@ export const NotificationProvider = ({ children }) => {
             headers: { Authorization: `Bearer ${token}` },
           },
         );
-        console.log("📬 Fetched notifications from API:", response.data);
+        console.log(" Fetched notifications from API:", response.data);
         setAllNotifications(response.data);
       }
     } catch (error) {
-      console.error("🔔 Error fetching notifications:", error);
+      console.error(" Error fetching notifications:", error);
     }
   }, []);
 
@@ -40,11 +40,11 @@ export const NotificationProvider = ({ children }) => {
         const userId = userData._id || userData.id;
 
         if (!userId) {
-          console.error("🔔 No userId found in user data:", userData);
+          console.error(" No userId found in user data:", userData);
           return;
         }
 
-        console.log("🔔 Initializing notification socket for user:", userId);
+        console.log(" Initializing notification socket for user:", userId);
 
         // Connect to notification socket with namespace
         const newSocket = io("http://localhost:5000/notifications", {
@@ -57,7 +57,7 @@ export const NotificationProvider = ({ children }) => {
 
         newSocket.on("connect", () => {
           console.log(
-            "🔔 Connected to notification socket:",
+            " Connected to notification socket:",
             newSocket.id,
             "- Joining room for user:",
             userId,
@@ -67,20 +67,20 @@ export const NotificationProvider = ({ children }) => {
         });
 
         newSocket.on("connection_confirmed", (data) => {
-          console.log("✅ Notification connection confirmed:", data);
+          console.log(" Notification connection confirmed:", data);
         });
 
         newSocket.on("disconnect", () => {
-          console.log("🔔 Disconnected from notification socket");
+          console.log(" Disconnected from notification socket");
         });
 
         newSocket.on("connect_error", (error) => {
-          console.error("🔔 Notification socket connection error:", error);
+          console.error(" Notification socket connection error:", error);
         });
 
         // Listen for enrollment approved notifications
         newSocket.on("enrollment_approved", (data) => {
-          console.log("📬 Enrollment approved notification received:", data);
+          console.log(" Enrollment approved notification received:", data);
           setNotification(data);
           setIsPopupOpen(true);
           // Refresh notifications from API
@@ -88,7 +88,7 @@ export const NotificationProvider = ({ children }) => {
         });
 
         newSocket.on("error", (error) => {
-          console.error("🔔 Notification socket error:", error);
+          console.error(" Notification socket error:", error);
         });
 
         setSocket(newSocket);
@@ -99,13 +99,13 @@ export const NotificationProvider = ({ children }) => {
         // Cleanup on unmount
         return () => {
           if (newSocket && userId) {
-            console.log("🔔 Cleaning up socket for user:", userId);
+            console.log(" Cleaning up socket for user:", userId);
             newSocket.emit("leave_notifications", userId);
             newSocket.disconnect();
           }
         };
       } catch (err) {
-        console.error("🔔 Error in notification provider:", err);
+        console.error(" Error in notification provider:", err);
       }
     }
   }, [fetchNotifications]);
@@ -139,7 +139,7 @@ export const NotificationProvider = ({ children }) => {
             headers: { Authorization: `Bearer ${token}` },
           },
         );
-        console.log("✅ Notification marked as read:", notificationId);
+        console.log(" Notification marked as read:", notificationId);
 
         // Update local state
         setAllNotifications((prevNotifications) =>
@@ -149,7 +149,7 @@ export const NotificationProvider = ({ children }) => {
         );
       }
     } catch (error) {
-      console.error("🔔 Error marking notification as read:", error);
+      console.error(" Error marking notification as read:", error);
     }
   }, []);
 

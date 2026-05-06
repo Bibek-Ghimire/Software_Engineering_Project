@@ -61,7 +61,7 @@ const StudyGroupsPage = () => {
   if (loading) return <div className="p-8 text-center">Loading groups...</div>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 p-8 text-gray-800 dark:text-white transition-colors duration-300">
+    <div className="min-h-screen page-surface p-8 text-gray-800 dark:text-white transition-colors duration-300">
       {/* Header */}
       <div className="flex justify-between items-center mb-8 max-w-6xl mx-auto">
         <h2 className="text-2xl font-semibold flex items-center gap-2">
@@ -135,3 +135,4 @@ const StudyGroupsPage = () => {
 };
 
 export default StudyGroupsPage;
+

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion"; // eslint-disable-line no-unused-vars
@@ -55,7 +55,7 @@ const TeacherPublicProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 via-white to-blue-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-6">
+    <div className="min-h-screen page-surface py-12 px-6">
       <motion.div
         className="max-w-5xl mx-auto bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-10"
         initial={{ opacity: 0, y: 50 }}
@@ -162,3 +162,5 @@ const TeacherPublicProfile = () => {
 };
 
 export default TeacherPublicProfile;
+
+

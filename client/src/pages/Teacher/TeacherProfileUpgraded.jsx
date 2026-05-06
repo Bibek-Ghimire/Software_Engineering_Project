@@ -209,7 +209,7 @@ const TeacherProfileUpgraded = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950">
+      <div className="flex items-center justify-center min-h-screen page-surface">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-lg font-semibold text-blue-700 dark:text-blue-300">
@@ -221,7 +221,7 @@ const TeacherProfileUpgraded = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950">
+    <div className="flex min-h-screen page-surface">
       <TeacherSidebar />
 
       <div className="flex-1 p-8 lg:p-12 relative">
@@ -734,3 +734,4 @@ const TeacherProfileUpgraded = () => {
 };
 
 export default TeacherProfileUpgraded;
+

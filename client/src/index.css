@@ -1,25 +1,144 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* 3D perspective container */
-.perspective {
-  perspective: 1000px;
+:root {
+  --accent: #c2651a;
+  --accent-hover: #a85516;
+  --accent-subtle: #fef3e6;
 }
 
-/* Preserve 3D transform for children */
-.transform-style-preserve-3d {
-  transform-style: preserve-3d;
+.dark {
+  --accent: #e07038;
+  --accent-hover: #c8622f;
+  --accent-subtle: #2c1a09;
 }
 
-/* Rotate helpers (for smooth hover rotation) */
-.rotate-x-\[6deg\] {
-  transform: rotateX(6deg);
-}
-.rotate-y-\[6deg\] {
-  transform: rotateY(6deg);
+@layer base {
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    line-height: 1.5;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    @apply bg-stone-50 text-stone-900 dark:bg-stone-950 dark:text-stone-100;
+  }
+
+  button, input, textarea, select { font: inherit; }
 }
 
-.input-field {
-  @apply border border-gray-300 dark:border-gray-700 rounded-lg p-2 w-full;
+@layer components {
+
+  /* ─── Layout ─────────────────────────────────────── */
+  .page-surface {
+    @apply min-h-screen bg-stone-50 dark:bg-stone-950;
+  }
+
+  .section-shell {
+    @apply max-w-6xl mx-auto px-5;
+  }
+
+  /* ─── Typography ─────────────────────────────────── */
+  .brand-title {
+    font-family: "Space Grotesk", sans-serif;
+    letter-spacing: -0.03em;
+  }
+
+  .section-title {
+    @apply brand-title text-3xl font-bold tracking-tight text-stone-900 dark:text-stone-50 md:text-4xl;
+  }
+
+  .body-copy {
+    @apply text-stone-500 dark:text-stone-400;
+  }
+
+  /* ─── Accent mark ────────────────────────────────── */
+  .tone-line,
+  .section-kicker {
+    display: block;
+    height: 3px;
+    width: 36px;
+    border-radius: 999px;
+    background: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  /* ─── Cards ──────────────────────────────────────── */
+  .surface-card {
+    @apply bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl shadow-sm;
+  }
+
+  .surface-card-strong {
+    @apply bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl shadow-md;
+  }
+
+  .artisan-card      { @apply surface-card; }
+  .artisan-card-strong { @apply surface-card-strong; }
+
+  .surface-panel {
+    @apply bg-stone-50 dark:bg-stone-800/50 border border-stone-200 dark:border-stone-700 rounded-xl;
+  }
+
+  /* ─── Buttons ────────────────────────────────────── */
+  .btn-base {
+    @apply inline-flex items-center justify-center gap-2 font-semibold transition-all duration-200
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .primary-action {
+    @apply btn-base bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white
+           rounded-lg px-5 py-2.5 shadow-sm hover:-translate-y-px;
+  }
+
+  .secondary-action {
+    @apply btn-base bg-white dark:bg-stone-900 hover:bg-stone-50 dark:hover:bg-stone-800
+           border border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-300
+           rounded-lg px-5 py-2.5 shadow-sm hover:-translate-y-px;
+  }
+
+  .cta-main  { @apply primary-action; }
+  .cta-ghost { @apply secondary-action; }
+
+  .icon-action {
+    @apply btn-base bg-white dark:bg-stone-900 hover:bg-stone-50 dark:hover:bg-stone-800
+           border border-stone-200 dark:border-stone-700
+           text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100
+           rounded-xl p-2.5 shadow-sm;
+  }
+
+  .control-pill {
+    @apply inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200;
+  }
+
+  .control-pill-default {
+    @apply control-pill bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700
+           text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 hover:-translate-y-px;
+  }
+
+  /* ─── Navigation ─────────────────────────────────── */
+  .nav-chip {
+    @apply rounded-lg px-3 py-2 text-sm font-medium text-stone-600 dark:text-stone-400
+           hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800
+           transition-all duration-150;
+  }
+
+  /* ─── Form inputs ────────────────────────────────── */
+  .form-input {
+    @apply w-full rounded-xl border border-stone-300 dark:border-stone-700
+           bg-white dark:bg-stone-900 px-4 py-3
+           text-stone-900 dark:text-stone-100 outline-none transition-all duration-200
+           placeholder:text-stone-400 dark:placeholder:text-stone-500
+           focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20;
+  }
+
+  .form-input-compact { @apply form-input py-2.5 text-sm; }
+  .input              { @apply form-input; }
+  .input-field        { @apply form-input-compact; }
 }

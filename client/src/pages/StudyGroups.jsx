@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { PlusCircle, Users, Search, BookOpen } from "lucide-react";
 import groupBanner from "../assets/images/group-banner.png";
 
@@ -29,7 +29,7 @@ const StudyGroups = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 py-16 px-6 md:px-12">
+    <div className="min-h-screen page-surface py-16 px-6 md:px-12">
       {/* Content Wrapper */}
       <div className="bg-white/80 dark:bg-blue-900/20 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-blue-200/50 dark:border-blue-800/30">
         <div className="text-center mb-10">
@@ -98,7 +98,7 @@ const StudyGroups = () => {
         {/* Search Groups */}
         <div className="mt-12 max-w-lg mx-auto">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-300 w-5 h-5" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-stone-400 dark:text-stone-500 w-5 h-5" />
             <input
               type="text"
               placeholder="Search groups..."
@@ -112,3 +112,5 @@ const StudyGroups = () => {
 };
 
 export default StudyGroups;
+
+

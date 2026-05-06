@@ -85,41 +85,41 @@ const Resource = () => {
     const type = fileType?.toLowerCase() || "";
     if (type.includes("pdf"))
       return {
-        icon: "📄",
+        icon: "",
         color:
           "from-red-100 to-red-200 dark:from-red-900/30 dark:to-red-800/30",
         textColor: "text-red-700 dark:text-red-400",
       };
     if (type.includes("doc") || type.includes("word"))
       return {
-        icon: "📘",
+        icon: "",
         color:
           "from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30",
         textColor: "text-blue-700 dark:text-blue-400",
       };
     if (type.includes("ppt") || type.includes("presentation"))
       return {
-        icon: "📊",
+        icon: "",
         color:
           "from-orange-100 to-orange-200 dark:from-orange-900/30 dark:to-orange-800/30",
         textColor: "text-orange-700 dark:text-orange-400",
       };
     if (type.includes("video") || type.includes("mp4"))
       return {
-        icon: "🎥",
+        icon: "",
         color:
           "from-purple-100 to-purple-200 dark:from-purple-900/30 dark:to-purple-800/30",
         textColor: "text-purple-700 dark:text-purple-400",
       };
     if (type.includes("image") || type.includes("jpg") || type.includes("png"))
       return {
-        icon: "🖼️",
+        icon: "",
         color:
           "from-green-100 to-green-200 dark:from-green-900/30 dark:to-green-800/30",
         textColor: "text-green-700 dark:text-green-400",
       };
     return {
-      icon: "📁",
+      icon: "",
       color:
         "from-gray-100 to-gray-200 dark:from-gray-700/30 dark:to-gray-600/30",
       textColor: "text-gray-700 dark:text-gray-400",
@@ -128,20 +128,15 @@ const Resource = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950">
+      <div className="flex min-h-screen page-surface">
         <div className="w-64 fixed top-0 left-0 h-full z-30">
           <Sidebar />
         </div>
         <div className="flex-1 ml-64 flex items-center justify-center">
           <div className="text-center">
-            <div className="p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-blue-200/50 dark:border-gray-600/50">
-              <ClipLoader
-                size={60}
-                color={darkMode ? "#60a5fa" : "#2563eb"}
-              />
-              <p className="text-blue-600 dark:text-blue-400 font-medium mt-4">
-                Loading resources...
-              </p>
+            <div className="surface-card p-6">
+              <div className="w-10 h-10 rounded-full border-2 border-stone-200 dark:border-stone-700 border-t-orange-500 animate-spin mx-auto" />
+              <p className="body-copy font-medium mt-4">Loading resources...</p>
             </div>
           </div>
         </div>
@@ -150,7 +145,7 @@ const Resource = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-all duration-500">
+    <div className="flex min-h-screen page-surface transition-all duration-500">
       {/* Sidebar */}
       <div className="w-64 fixed top-0 left-0 h-full z-30">
         <Sidebar />
@@ -161,7 +156,7 @@ const Resource = () => {
         {/* Dark Mode Toggle */}
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className="absolute top-6 right-6 p-3 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-lg hover:shadow-xl hover:scale-110 border border-blue-200/50 dark:border-gray-600/50 transition-all duration-300 z-10"
+          className="icon-action absolute top-6 right-6 z-10"
         >
           {darkMode ? (
             <Sun className="w-5 h-5" />
@@ -171,34 +166,28 @@ const Resource = () => {
         </button>
 
         {/* Header Section */}
-        <div className="mb-10 text-center lg:text-left">
-          <div className="flex items-center justify-center lg:justify-start gap-4 mb-6">
-            <div className="p-4 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl shadow-lg">
-              <Folder className="w-10 h-10 text-white" />
-            </div>
-            <div>
-              <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 dark:from-blue-400 dark:via-blue-300 dark:to-blue-200 bg-clip-text text-transparent">
-                Learning Resources
-              </h1>
-              <p className="text-blue-600/80 dark:text-blue-300/80 text-lg mt-2">
-                Explore curated notes, guides, slides, and videos shared by
-                instructors
-              </p>
-            </div>
+        <div className="mb-10">
+          <div className="mb-6">
+            <span className="section-kicker" />
+            <h1 className="section-title">Learning Resources</h1>
+            <p className="body-copy mt-2">
+              Explore curated notes, guides, slides, and videos shared by
+              instructors
+            </p>
           </div>
 
           {/* Search Bar */}
           <div className="mt-8 flex justify-center">
             <div className="relative w-full max-w-2xl">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <Search className="w-5 h-5 text-blue-400 dark:text-blue-500" />
+                <Search className="w-5 h-5 text-stone-400 dark:text-stone-500" />
               </div>
               <input
                 type="text"
                 placeholder="Search by title, description, instructor, or file type..."
                 value={search}
                 onChange={handleSearch}
-                className="w-full pl-12 pr-4 py-4 rounded-2xl border-2 border-blue-200/50 dark:border-gray-600/50 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-gray-800 dark:text-white placeholder-blue-400/70 dark:placeholder-blue-500/70 shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-300/50 dark:focus:ring-blue-600/50 focus:border-blue-400 dark:focus:border-blue-500 transition-all duration-300"
+                className="form-input w-full pl-12 pr-4 py-4 rounded-2xl"
               />
             </div>
           </div>
@@ -206,28 +195,26 @@ const Resource = () => {
 
         {/* Stats Section */}
         {resources.length > 0 && (
-          <div className="mb-10 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg border border-blue-200/50 dark:border-gray-600/50 p-6">
+          <div className="mb-10 surface-card p-6">
             <div className="flex items-center justify-center gap-8">
               <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                <div className="text-3xl font-black text-stone-900 dark:text-stone-50">
                   {filteredResources.length}
                 </div>
-                <div className="text-sm text-blue-600/70 dark:text-blue-400/70">
+                <div className="body-copy text-sm">
                   {search ? "Found" : "Total"} Resources
                 </div>
               </div>
-              <div className="w-px h-10 bg-blue-200 dark:bg-gray-600"></div>
+              <div className="w-px h-10 bg-stone-200 dark:bg-stone-700" />
               <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                <div className="text-3xl font-black text-stone-900 dark:text-stone-50">
                   {new Set(filteredResources.map((res) => res.fileType)).size}
                 </div>
-                <div className="text-sm text-blue-600/70 dark:text-blue-400/70">
-                  File Types
-                </div>
+                <div className="body-copy text-sm">File Types</div>
               </div>
-              <div className="w-px h-10 bg-blue-200 dark:bg-gray-600"></div>
+              <div className="w-px h-10 bg-stone-200 dark:bg-stone-700" />
               <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                <div className="text-3xl font-black text-stone-900 dark:text-stone-50">
                   {
                     new Set(
                       filteredResources
@@ -236,9 +223,7 @@ const Resource = () => {
                     ).size
                   }
                 </div>
-                <div className="text-sm text-blue-600/70 dark:text-blue-400/70">
-                  Instructors
-                </div>
+                <div className="body-copy text-sm">Instructors</div>
               </div>
             </div>
           </div>
@@ -247,14 +232,14 @@ const Resource = () => {
         {/* Resources Grid */}
         {filteredResources.length === 0 && !loading ? (
           <div className="flex flex-col items-center justify-center py-20">
-            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl shadow-xl p-16 border border-blue-200/50 dark:border-gray-600/50 text-center max-w-lg">
-              <div className="w-20 h-20 bg-gradient-to-r from-blue-100 to-blue-200 dark:from-blue-900/50 dark:to-blue-800/50 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Folder className="w-10 h-10 text-blue-600 dark:text-blue-400" />
+            <div className="surface-card-strong p-16 text-center max-w-lg">
+              <div className="w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-5 bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
+                <Folder className="w-7 h-7 text-stone-500 dark:text-stone-400" />
               </div>
-              <h3 className="text-2xl font-bold text-blue-800 dark:text-blue-300 mb-3">
+              <h3 className="text-xl font-bold text-stone-900 dark:text-stone-50 mb-3">
                 {search ? "No Matching Resources" : "No Resources Available"}
               </h3>
-              <p className="text-blue-600/70 dark:text-blue-400/70 text-lg">
+              <p className="body-copy text-lg">
                 {search
                   ? "Try adjusting your search terms or browse all resources"
                   : "Check back soon for new learning materials!"}
@@ -265,7 +250,7 @@ const Resource = () => {
                     setSearch("");
                     setFilteredResources(resources);
                   }}
-                  className="mt-6 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl font-medium transition-all duration-300 shadow-lg hover:shadow-xl"
+                  className="mt-6 primary-action px-6 py-3 rounded-xl"
                 >
                   Clear Search
                 </button>
@@ -276,48 +261,45 @@ const Resource = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {filteredResources.map((res) => {
               const fileInfo = getFileTypeInfo(res.fileType);
+
               return (
                 <div
                   key={res._id}
-                  className="group bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl border border-blue-200/50 dark:border-gray-600/50 overflow-hidden transition-all duration-300 hover:scale-105 hover:border-blue-300/70 dark:hover:border-blue-500/50 flex flex-col"
+                  className="group surface-card-strong overflow-hidden transition-all duration-300 hover:shadow-xl flex flex-col"
                 >
-                  {/* File Type Header */}
-                  <div
-                    className={`p-4 bg-gradient-to-r ${fileInfo.color} border-b border-blue-100/50 dark:border-gray-700/50`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="text-2xl">{fileInfo.icon}</div>
-                        <div>
-                          <h3 className="font-bold text-blue-800 dark:text-blue-200 text-lg leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
+                  <div className="h-1 bg-orange-400" />
+                  <div className="p-4 border-b border-stone-100 dark:border-stone-800">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-10 h-10 rounded-xl flex items-center justify-center border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-lg">
+                          {fileInfo.icon}
+                        </div>
+                        <div className="min-w-0">
+                          <h3 className="font-semibold text-stone-900 dark:text-stone-50 text-base leading-tight truncate">
                             {res.title}
                           </h3>
-                          <span
-                            className={`text-xs font-medium px-2 py-1 rounded-full ${fileInfo.color} ${fileInfo.textColor} mt-1 inline-block`}
-                          >
+                          <span className="text-xs font-medium px-2 py-0.5 rounded-full mt-1 inline-block border border-stone-200 dark:border-stone-700 body-copy">
                             {res.fileType}
                           </span>
                         </div>
                       </div>
-                      <FileText className="w-6 h-6 text-blue-600/70 dark:text-blue-400/70 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors" />
+                      <FileText className="w-4 h-4 text-stone-400 dark:text-stone-500 flex-shrink-0" />
                     </div>
                   </div>
 
-                  {/* Card Content */}
                   <div className="p-6 flex flex-col flex-grow">
-                    <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-6 flex-grow">
+                    <p className="body-copy text-sm leading-relaxed mb-6 flex-grow">
                       {res.description}
                     </p>
 
-                    {/* Resource Details */}
                     <div className="space-y-3 mb-6">
                       {res.teacher?.name && (
                         <div className="flex items-center gap-3 text-sm">
-                          <div className="p-1.5 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
-                            <User className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                          <div className="p-1.5 rounded-lg bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
+                            <User className="w-4 h-4 text-stone-500 dark:text-stone-400" />
                           </div>
-                          <span className="text-gray-600 dark:text-gray-300">
-                            <span className="font-medium text-blue-700 dark:text-blue-300">
+                          <span className="body-copy">
+                            <span className="font-medium text-stone-900 dark:text-stone-100">
                               Instructor:
                             </span>{" "}
                             {res.teacher.name}
@@ -326,11 +308,11 @@ const Resource = () => {
                       )}
 
                       <div className="flex items-center gap-3 text-sm">
-                        <div className="p-1.5 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
-                          <File className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                        <div className="p-1.5 rounded-lg bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
+                          <File className="w-4 h-4 text-stone-500 dark:text-stone-400" />
                         </div>
-                        <span className="text-gray-600 dark:text-gray-300">
-                          <span className="font-medium text-blue-700 dark:text-blue-300">
+                        <span className="body-copy">
+                          <span className="font-medium text-stone-900 dark:text-stone-100">
                             Type:
                           </span>{" "}
                           {res.fileType}
@@ -338,10 +320,9 @@ const Resource = () => {
                       </div>
                     </div>
 
-                    {/* Download Button */}
                     <button
                       onClick={() => handleDownload(res.fileUrl, res.title)}
-                      className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-4 rounded-xl flex items-center justify-center gap-3 transition-all duration-300 font-medium shadow-lg hover:shadow-xl transform hover:scale-105 group-hover:from-blue-600 group-hover:to-blue-700"
+                      className="w-full primary-action px-6 py-4 rounded-xl flex items-center justify-center gap-3"
                     >
                       <Download className="w-5 h-5" />
                       Download Resource
@@ -353,13 +334,7 @@ const Resource = () => {
           </div>
         )}
 
-        {/* Decorative Elements */}
-        <div className="fixed top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
-          <div className="absolute top-32 right-32 w-40 h-40 bg-blue-200/15 dark:bg-blue-800/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-32 left-32 w-48 h-48 bg-blue-300/15 dark:bg-blue-700/10 rounded-full blur-3xl"></div>
-          <div className="absolute top-2/3 right-1/4 w-32 h-32 bg-blue-400/15 dark:bg-blue-600/10 rounded-full blur-2xl"></div>
-          <div className="absolute top-1/4 left-3/4 w-28 h-28 bg-blue-500/15 dark:bg-blue-500/10 rounded-full blur-2xl"></div>
-        </div>
+
       </div>
     </div>
   );

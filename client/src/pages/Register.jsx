@@ -10,9 +10,6 @@ import {
   EyeOff,
   ArrowRight,
   ArrowLeft,
-  UserPlus,
-  CheckCircle,
-  Shield,
   X,
 } from "lucide-react";
 
@@ -112,30 +109,22 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-indigo-50 to-blue-50 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 text-gray-800 dark:text-gray-200 overflow-x-hidden">
+    <div className="page-surface min-h-screen text-gray-800 dark:text-gray-200 overflow-x-hidden">
       {/* Theme Toggle Button */}
       <div className="absolute top-6 right-6 z-20">
         <ThemeToggle />
       </div>
 
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-       
-        <div
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"
-          style={{ animationDelay: "500ms" }}
-        ></div>
-      </div>
-
       <div className="relative z-10 min-h-screen flex items-center justify-center p-6">
-        <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-xl rounded-2xl p-8 w-full max-w-md">
+        <div className="surface-card-strong w-full max-w-md p-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent mb-2">
+            <span className="tone-line mb-4"></span>
+            <h2 className="brand-title text-3xl font-bold mb-2">
               Join the Community
             </h2>
-            <p className="text-gray-600 dark:text-gray-300 text-sm">
-              Create your account to start learning with peers
+            <p className="text-slate-600 dark:text-slate-300 text-sm">
+              Create your account to start learning with your cohort.
             </p>
           </div>
 
@@ -149,7 +138,7 @@ const Register = () => {
               <div className="relative">
                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 w-5 h-5" />
                 <select
-                  className="w-full appearance-none bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-12 py-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                  className="form-input appearance-none px-12"
                   value={role} // bind to state
                   onChange={(e) => setRole(e.target.value)} // update state on change
                   required
@@ -165,7 +154,7 @@ const Register = () => {
               <input
                 type="text"
                 placeholder="Full Name"
-                className="w-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-12 py-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                className="form-input px-12"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
@@ -176,7 +165,7 @@ const Register = () => {
               <input
                 type="email"
                 placeholder="Email Address"
-                className="w-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-12 py-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                className="form-input px-12"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -187,7 +176,7 @@ const Register = () => {
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password (min 6 characters)"
-                className="w-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-12 py-4 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                className="form-input px-12"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -205,7 +194,7 @@ const Register = () => {
             </div>
 
             {/* Interests Section */}
-            <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-600">
+            <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-700">
               <label className="text-sm font-semibold text-gray-800 dark:text-white block mb-3">
                 Select Your Interests (Min. 1)
               </label>
@@ -215,7 +204,7 @@ const Register = () => {
                 <input
                   type="text"
                   placeholder="Type a topic and press Enter..."
-                  className="w-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  className="form-input-compact"
                   value={interestInput}
                   onChange={(e) => setInterestInput(e.target.value)}
                   onKeyPress={handleKeyPress}
@@ -227,13 +216,13 @@ const Register = () => {
                 {interests.map((interest) => (
                   <div
                     key={interest}
-                    className="bg-blue-100 dark:bg-blue-900/30 border border-blue-300 dark:border-blue-600 text-gray-800 dark:text-white rounded-full px-3 py-1 text-sm flex items-center gap-2 group"
+                    className="bg-orange-100 dark:bg-orange-500/20 border border-orange-300 dark:border-orange-500/40 text-gray-800 dark:text-white rounded-full px-3 py-1 text-sm flex items-center gap-2 group"
                   >
                     {interest}
                     <button
                       type="button"
                       onClick={() => handleRemoveInterest(interest)}
-                      className="hover:bg-purple-600/50 rounded-full p-0.5 transition-colors"
+                      className="hover:bg-rose-600/40 rounded-full p-0.5 transition-colors"
                     >
                       <X className="w-3 h-3" />
                     </button>
@@ -259,7 +248,7 @@ const Register = () => {
                         ? "bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-400 opacity-50"
                         : interests.length >= 5
                           ? "bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-400 opacity-50"
-                          : "bg-blue-100 dark:bg-blue-900/30 text-gray-800 dark:text-white hover:bg-blue-200 dark:hover:bg-blue-800/50 cursor-pointer border border-blue-200 dark:border-blue-600"
+                          : "bg-orange-100 dark:bg-orange-500/20 text-gray-800 dark:text-white hover:bg-orange-200 dark:hover:bg-orange-500/30 cursor-pointer border border-orange-200 dark:border-orange-500/40"
                     }`}
                   >
                     {topic}
@@ -272,21 +261,21 @@ const Register = () => {
             <div className="flex items-start space-x-2 text-xs text-gray-700 dark:text-gray-300">
               <input
                 type="checkbox"
-                className="mt-1 rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-blue-600 focus:ring-blue-500"
+                className="mt-1 rounded border-gray-300 bg-white text-orange-600 focus:ring-orange-500 dark:border-gray-600 dark:bg-gray-700 dark:text-orange-400"
                 required
               />
               <span>
                 I agree to the{" "}
                 <Link
                   to="/terms"
-                  className="text-blue-600 hover:text-indigo-600"
+                  className="text-orange-600 hover:text-orange-700"
                 >
                   Terms of Service
                 </Link>{" "}
                 and{" "}
                 <Link
                   to="/privacy"
-                  className="text-blue-600 hover:text-indigo-600"
+                  className="text-orange-600 hover:text-orange-700"
                 >
                   Privacy Policy
                 </Link>
@@ -295,7 +284,7 @@ const Register = () => {
 
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600  text-white py-4 rounded-xl font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center group"
+              className="w-full cta-main py-4 rounded-full font-semibold transition-all duration-300 flex items-center justify-center group"
             >
               Create Account
               <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -307,7 +296,7 @@ const Register = () => {
               Already have an account?{" "}
               <Link
                 to="/login"
-                className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors font-medium"
+                className="text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 transition-colors font-medium"
               >
                 Sign In
               </Link>
@@ -318,7 +307,7 @@ const Register = () => {
         {/* Back to Home */}
         <Link
           to="/"
-          className="absolute top-6 left-6 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-3 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 flex items-center"
+          className="absolute top-6 left-6 surface-card px-4 py-3 text-gray-800 dark:text-white hover:bg-white/90 dark:hover:bg-slate-800/80 transition-all duration-300 flex items-center"
         >
           <ArrowLeft className="w-5 h-5 mr-2" />
           Back to Home

@@ -5,93 +5,68 @@ import {
   BookOpen,
   Users,
   MessageSquare,
+  Hash,
   LogOut,
   Award,
   GraduationCap,
   UserCircle,
-  PlusCircle,
   CreditCard,
 } from "lucide-react";
+import Logo from "../assets/images/Logo.png";
 
 const Sidebar = () => {
-  const navigate = useNavigate(); // added navigate
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Clear auth info
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("user");
-    // Redirect to homepage
     navigate("/");
   };
 
   return (
-    <div className="w-64 h-screen bg-gradient-to-b from-blue-50 to-white dark:from-blue-950 dark:to-gray-900 shadow-lg px-4 py-6 flex flex-col sticky top-0 border-r border-blue-200/60 dark:border-blue-900/40">
+    <div className="w-64 h-screen flex flex-col sticky top-0 surface-card rounded-none border-l-0 border-t-0 border-b-0 px-3 py-5">
       {/* Logo */}
-      <div>
-        <h1
-          className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-8 px-2 cursor-pointer hover:opacity-80 transition-opacity"
-          onClick={() => navigate("/dashboard/student")}
-        >
+      <button
+        onClick={() => navigate("/dashboard/student")}
+        className="flex items-center gap-2.5 px-2 py-2 mb-6 hover:opacity-80 transition-opacity"
+      >
+        <img src={Logo} alt="Syncademy" className="h-8 w-8 rounded-lg" />
+        <span className="brand-title text-xl font-bold text-slate-900 dark:text-white">
           Syncademy
-        </h1>
+        </span>
+      </button>
 
-        {/* Navigation Links */}
-        <nav className="space-y-1 overflow-y-auto max-h-[calc(100vh-200px)]">
-          <SidebarLink
-            to="/dashboard/student"
-            label="Dashboard"
-            icon={<LayoutDashboard />}
-          />
-          <SidebarLink
-            to="/courses"
-            label="Courses"
-            icon={<BookOpen />}
-          />
-          <SidebarLink
-            to="/groups"
-            label="Study Groups"
-            icon={<Users />}
-          />
-          <SidebarLink
-            to="/resources"
-            label="Resources"
-            icon={<GraduationCap />}
-          />
-          <SidebarLink
-            to="/leaderboard"
-            label="Leaderboard"
-            icon={<Award />}
-          />
-          <SidebarLink
-            to="/payments"
-            label="Payments"
-            icon={<CreditCard />}
-          />
-          <SidebarLink
-            to="/student/chat"
-            label="Chat"
-            icon={<MessageSquare />}
-          />
-          <SidebarLink
-            to="/discussions"
-            label="Discussions"
-            icon={<MessageSquare />}
-          />
-          <SidebarLink
-            to="/profile"
-            label="Profile"
-            icon={<UserCircle />}
-          />
-        </nav>
-      </div>
+      {/* Navigation */}
+      <nav className="flex-1 space-y-0.5 overflow-y-auto">
+        <p className="px-3 pt-1 pb-2 text-xs font-semibold body-copy uppercase tracking-wider">
+          Main
+        </p>
+        <SidebarLink to="/dashboard/student" label="Dashboard" icon={<LayoutDashboard size={18} />} />
+        <SidebarLink to="/courses" label="Courses" icon={<BookOpen size={18} />} />
+        <SidebarLink to="/groups" label="Study Groups" icon={<Users size={18} />} />
+        <SidebarLink to="/resources" label="Resources" icon={<GraduationCap size={18} />} />
 
-      {/* Logout Button */}
-      <div className="border-t border-blue-200/60 dark:border-blue-900/40 pt-4">
+        <p className="px-3 pt-4 pb-2 text-xs font-semibold body-copy uppercase tracking-wider">
+          Community
+        </p>
+        <SidebarLink to="/leaderboard" label="Leaderboard" icon={<Award size={18} />} />
+        <SidebarLink to="/student/chat" label="Chat" icon={<MessageSquare size={18} />} />
+        <SidebarLink to="/discussions" label="Discussions" icon={<Hash size={18} />} />
+
+        <p className="px-3 pt-4 pb-2 text-xs font-semibold body-copy uppercase tracking-wider">
+          Account
+        </p>
+        <SidebarLink to="/payments" label="Payments" icon={<CreditCard size={18} />} />
+        <SidebarLink to="/profile" label="Profile" icon={<UserCircle size={18} />} />
+      </nav>
+
+      {/* Logout */}
+      <div className="border-t border-slate-200/70 dark:border-slate-700/70 pt-3 mt-2">
         <button
           onClick={handleLogout}
-          className="flex items-center px-3 py-2 rounded-lg transition-all duration-300 text-sm font-medium text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/60 w-full text-left group"
+          className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-rose-700 dark:hover:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition-all duration-150"
         >
-          <LogOut className="mr-3 w-5 h-5 group-hover:scale-110 transition-transform" />{" "}
+          <LogOut size={18} />
           Logout
         </button>
       </div>
@@ -103,14 +78,14 @@ const SidebarLink = ({ to, label, icon }) => (
   <NavLink
     to={to}
     className={({ isActive }) =>
-      `flex items-center px-3 py-2.5 rounded-lg transition-all duration-300 text-sm font-medium ${
+      `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 ${
         isActive
-          ? "bg-blue-200 text-blue-800 dark:bg-blue-700/60 dark:text-blue-100 shadow-md"
-          : "text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/40 hover:text-blue-800 dark:hover:text-blue-200"
+          ? "bg-orange-50 text-orange-700 dark:bg-orange-950/20 dark:text-orange-300 border border-orange-200 dark:border-orange-900/40"
+          : "text-slate-700 dark:text-slate-300 hover:bg-white/70 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
       }`
     }
   >
-    <span className="mr-3">{icon}</span>
+    <span className="flex-shrink-0">{icon}</span>
     {label}
   </NavLink>
 );

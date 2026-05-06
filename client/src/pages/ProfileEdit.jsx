@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Linkedin, Github } from "lucide-react";
@@ -86,7 +86,7 @@ const ProfileEdit = () => {
 
       navigate("/profile");
     } catch (err) {
-      console.error("❌ Error updating profile:", err.response?.data || err);
+      console.error(" Error updating profile:", err.response?.data || err);
       alert("Failed to save profile. Please try again.");
     } finally {
       setLoading(false);
@@ -94,10 +94,10 @@ const ProfileEdit = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 p-8">
+    <div className="min-h-screen page-surface p-8">
       <div className="max-w-3xl mx-auto bg-white/90 dark:bg-blue-900/20 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-blue-200/50 dark:border-blue-800/30">
         <h2 className="text-3xl font-bold mb-6 text-blue-700">
-          ✏️ Edit Profile
+           Edit Profile
         </h2>
         <form
           onSubmit={handleSubmit}
@@ -170,7 +170,7 @@ const ProfileEdit = () => {
                     }
                     className="text-red-500 font-bold ml-1"
                   >
-                    ×
+                    
                   </button>
                 </span>
               ))}
@@ -214,7 +214,7 @@ const ProfileEdit = () => {
                     }
                     className="text-red-500 font-bold ml-1"
                   >
-                    ×
+                    
                   </button>
                 </span>
               ))}
@@ -275,3 +275,5 @@ const ProfileEdit = () => {
 };
 
 export default ProfileEdit;
+
+

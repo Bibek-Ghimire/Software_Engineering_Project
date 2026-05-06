@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+﻿import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
@@ -275,7 +275,7 @@ const Payments = () => {
   const failedPayments = getFilteredPayments("failed");
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950">
+    <div className="flex min-h-screen page-surface">
       {/* Sidebar */}
       <div className="w-64 fixed top-0 left-0 h-full z-30">
         <Sidebar />
@@ -341,7 +341,7 @@ const Payments = () => {
                         </span>{" "}
                         has been approved. Complete the payment of{" "}
                         <span className="font-bold text-lg">
-                          ₹{notification.course?.price}
+                          {notification.course?.price}
                         </span>{" "}
                         to finalize your enrollment.
                       </p>
@@ -383,7 +383,7 @@ const Payments = () => {
                       >
                         {lastEnrollmentPaymentId === payment._id && (
                           <div className="mb-3 px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs font-semibold inline-block">
-                            Just Approved ✓
+                            Just Approved 
                           </div>
                         )}
                         <div className="flex justify-between items-start mb-4">
@@ -406,7 +406,7 @@ const Payments = () => {
                             Amount Due
                           </p>
                           <p className="text-3xl font-bold text-gray-800 dark:text-white">
-                            ₹{payment.amount}
+                            {payment.amount}
                           </p>
                         </div>
 
@@ -464,7 +464,7 @@ const Payments = () => {
                                           }
                                           className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
                                         >
-                                          ←
+                                          
                                         </button>
                                         {selectedPaymentMethod === "card_credit"
                                           ? "Credit Card Details"
@@ -553,7 +553,7 @@ const Payments = () => {
                                           }
                                           className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
                                         >
-                                          ←
+                                          
                                         </button>
                                         eSewa Wallet Details
                                       </h4>
@@ -583,7 +583,7 @@ const Payments = () => {
                                           }
                                           className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
                                         >
-                                          ←
+                                          
                                         </button>
                                         Khalti Wallet Details
                                       </h4>
@@ -693,7 +693,7 @@ const Payments = () => {
                             Amount Paid
                           </p>
                           <p className="text-3xl font-bold text-gray-800 dark:text-white">
-                            ₹{payment.amount}
+                            {payment.amount}
                           </p>
                         </div>
 
@@ -745,7 +745,7 @@ const Payments = () => {
                             Amount
                           </p>
                           <p className="text-3xl font-bold text-gray-800 dark:text-white">
-                            ₹{payment.amount}
+                            {payment.amount}
                           </p>
                         </div>
 
@@ -787,3 +787,5 @@ const Payments = () => {
 };
 
 export default Payments;
+
+

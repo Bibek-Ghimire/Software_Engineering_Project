@@ -45,10 +45,10 @@ const NotificationPopup = ({
             animate={{ opacity: 1, translateY: 0, translateX: 0 }}
             exit={{ opacity: 0, translateY: 100, translateX: 100 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="w-full max-w-md bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-2xl shadow-2xl border border-green-200 dark:border-green-800/50 pointer-events-auto overflow-hidden"
+            className="surface-card-strong w-full max-w-md overflow-hidden pointer-events-auto"
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-green-500 to-blue-500 px-6 py-4 flex items-center justify-between">
+            <div className="bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <CheckCircle className="w-6 h-6 text-white flex-shrink-0" />
                 <h3 className="text-lg font-bold text-white">
@@ -65,26 +65,24 @@ const NotificationPopup = ({
 
             {/* Content */}
             <div className="px-6 py-4">
-              <p className="text-gray-700 dark:text-gray-300 mb-4">
-                {notification.message}
-              </p>
+              <p className="body-copy mb-4">{notification.message}</p>
 
               {/* Course Details */}
               {notification.course && (
-                <div className="bg-white dark:bg-gray-800 rounded-xl p-4 mb-4 border border-gray-200 dark:border-gray-700">
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                <div className="surface-panel mb-4 p-4">
+                  <p className="text-sm text-slate-500 dark:text-slate-400 mb-1">
                     Course
                   </p>
-                  <p className="font-semibold text-gray-900 dark:text-white mb-3">
+                  <p className="font-semibold text-slate-900 dark:text-white mb-3">
                     {notification.course.title}
                   </p>
                   {notification.course.price && (
                     <div className="flex items-baseline gap-2">
-                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                      <span className="text-sm text-slate-500 dark:text-slate-400">
                         Payment Amount:
                       </span>
                       <span className="text-2xl font-bold text-green-600 dark:text-green-400">
-                        ₹{notification.course.price}
+                        {notification.course.price}
                       </span>
                     </div>
                   )}
@@ -92,22 +90,22 @@ const NotificationPopup = ({
               )}
 
               {/* Time info */}
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
                 {new Date(notification.timestamp).toLocaleString()}
               </p>
             </div>
 
             {/* Actions */}
-            <div className="px-6 py-4 bg-gray-50 dark:bg-gray-900/50 flex gap-3">
+            <div className="px-6 py-4 bg-slate-50/80 dark:bg-slate-950/40 flex gap-3">
               <button
                 onClick={handleClose}
-                className="flex-1 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 font-medium transition"
+                className="flex-1 rounded-full border border-slate-200 bg-white/80 px-4 py-2 font-medium text-slate-700 transition hover:bg-white dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-300 dark:hover:bg-slate-800"
               >
                 Dismiss
               </button>
               <button
                 onClick={handleActionClick}
-                className="flex-1 px-4 py-2 rounded-lg bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-medium transition flex items-center justify-center gap-2"
+                className="flex-1 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 px-4 py-2 font-medium text-white transition flex items-center justify-center gap-2 hover:from-emerald-600 hover:to-teal-600"
               >
                 <CreditCard className="w-4 h-4" />
                 Pay Now

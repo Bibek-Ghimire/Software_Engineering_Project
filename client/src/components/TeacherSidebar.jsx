@@ -4,7 +4,6 @@ import { NavLink, useNavigate } from "react-router-dom";
 import {
   User,
   PlusCircle,
-  BookOpen,
   Users,
   ChevronLeft,
   ChevronRight,
@@ -14,6 +13,7 @@ import {
   LayoutDashboard,
   MessageSquare,
 } from "lucide-react";
+import Logo from "../assets/images/Logo.png";
 
 const TeacherSidebar = () => {
   const navigate = useNavigate();
@@ -70,7 +70,7 @@ const TeacherSidebar = () => {
 
   return (
     <div
-      className={`flex flex-col justify-between h-screen bg-gradient-to-b from-blue-50 to-white dark:from-blue-950 dark:to-gray-900 shadow-lg border-r border-blue-200/60 dark:border-blue-900/40 transition-all duration-300 ${
+      className={`flex flex-col justify-between h-screen artisan-card border-r border-slate-200/70 dark:border-slate-700/70 transition-all duration-300 ${
         collapsed ? "w-20" : "w-64"
       }`}
     >
@@ -78,14 +78,19 @@ const TeacherSidebar = () => {
       <div className="flex items-center justify-between px-4 py-6">
         {!collapsed && (
           <h1
-            className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent cursor-pointer hover:opacity-80 transition-opacity"
+            className="brand-title text-2xl font-bold cursor-pointer hover:opacity-80 transition-opacity flex items-center gap-2"
             onClick={() => navigate("/dashboard/teacher")}
           >
+            <img
+              src={Logo}
+              alt="Syncademy"
+              className="h-8 w-8 rounded-lg"
+            />
             Syncademy
           </h1>
         )}
         <button
-          className="p-1 rounded hover:bg-blue-100 dark:hover:bg-blue-900/40 transition text-blue-700 dark:text-blue-300"
+          className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition text-slate-700 dark:text-slate-300"
           onClick={() => setCollapsed(!collapsed)}
         >
           {collapsed ? (
@@ -105,8 +110,8 @@ const TeacherSidebar = () => {
             className={({ isActive }) =>
               `flex items-center px-3 py-2.5 rounded-lg transition-all duration-300 text-sm font-medium ${
                 isActive
-                  ? "bg-blue-200 text-blue-800 dark:bg-blue-700/60 dark:text-blue-100 shadow-md"
-                  : "text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/40 hover:text-blue-800 dark:hover:text-blue-200"
+                  ? "bg-orange-100 text-orange-800 dark:bg-orange-500/20 dark:text-orange-300 shadow-md"
+                  : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-200"
               }`
             }
           >
@@ -117,10 +122,10 @@ const TeacherSidebar = () => {
       </nav>
 
       {/* Logout Button */}
-      <div className="border-t border-blue-200/60 dark:border-blue-900/40 pt-4 px-2">
+      <div className="border-t border-slate-200/70 dark:border-slate-700/70 pt-4 px-2">
         <button
           onClick={handleLogout}
-          className="flex items-center w-full px-3 py-2 rounded-lg transition-all duration-300 text-sm font-medium text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/40 hover:text-blue-800 dark:hover:text-blue-200 group"
+          className="flex items-center w-full px-3 py-2 rounded-lg transition-all duration-300 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-rose-50 dark:hover:bg-rose-500/10 hover:text-rose-700 dark:hover:text-rose-300 group"
         >
           <LogOut className="mr-3 w-5 h-5 group-hover:scale-110 transition-transform" />
           {!collapsed && "Logout"}

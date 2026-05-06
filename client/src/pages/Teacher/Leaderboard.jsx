@@ -1,4 +1,4 @@
-// src/pages/Leaderboard.jsx
+﻿// src/pages/Leaderboard.jsx
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
@@ -77,42 +77,42 @@ const Leaderboard = () => {
       gradient: "from-cyan-400 via-blue-500 to-purple-600",
       shadow: "shadow-blue-500/20",
       badge: "from-cyan-200 to-blue-200",
-      icon: "💎",
+      icon: "",
       glow: "shadow-cyan-500/30",
     },
     Platinum: {
-      gradient: "from-slate-400 via-slate-500 to-slate-600",
-      shadow: "shadow-slate-500/20",
-      badge: "from-slate-200 to-slate-300",
-      icon: "🥈",
-      glow: "shadow-slate-500/30",
+      gradient: "from-stone-400 via-stone-500 to-stone-600",
+      shadow: "shadow-stone-500/20",
+      badge: "from-stone-200 to-stone-300",
+      icon: "",
+      glow: "shadow-stone-500/30",
     },
     Gold: {
       gradient: "from-yellow-400 via-amber-500 to-orange-500",
       shadow: "shadow-yellow-500/20",
       badge: "from-yellow-200 to-amber-200",
-      icon: "🥇",
+      icon: "",
       glow: "shadow-yellow-500/30",
     },
     Silver: {
       gradient: "from-gray-300 via-gray-400 to-gray-500",
       shadow: "shadow-gray-500/20",
       badge: "from-gray-200 to-gray-300",
-      icon: "🥉",
+      icon: "",
       glow: "shadow-gray-500/30",
     },
     Bronze: {
       gradient: "from-orange-400 via-amber-600 to-yellow-600",
       shadow: "shadow-orange-500/20",
       badge: "from-orange-200 to-yellow-200",
-      icon: "🏆",
+      icon: "",
       glow: "shadow-orange-500/30",
     },
     Basic: {
       gradient: "from-green-400 via-emerald-500 to-teal-500",
       shadow: "shadow-green-500/20",
       badge: "from-green-200 to-emerald-200",
-      icon: "⭐",
+      icon: "",
       glow: "shadow-green-500/30",
     },
   };
@@ -122,19 +122,19 @@ const Leaderboard = () => {
       bg: "bg-gradient-to-r from-green-100 to-emerald-100",
       text: "text-green-700",
       border: "border-green-200",
-      icon: "🌱",
+      icon: "",
     },
     Intermediate: {
       bg: "bg-gradient-to-r from-yellow-100 to-amber-100",
       text: "text-amber-700",
       border: "border-yellow-200",
-      icon: "🔥",
+      icon: "",
     },
     Expert: {
       bg: "bg-gradient-to-r from-red-100 to-pink-100",
       text: "text-red-700",
       border: "border-red-200",
-      icon: "⚡",
+      icon: "",
     },
   };
 
@@ -156,12 +156,12 @@ const Leaderboard = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 transition-all duration-700">
+    <div className="flex min-h-screen page-surface transition-all duration-700">
       {/* Sidebar */}
       <div className="w-64 fixed top-0 left-0 h-full z-30">
         <TeacherSidebar />
       </div>
-      <div className="ml-64 min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-950 dark:via-gray-900 dark:to-gray-950 w-full relative">
+      <div className="ml-64 min-h-screen page-surface w-full relative">
         <button
           onClick={() => setDarkMode(!darkMode)}
           className="absolute top-8 right-8 p-4 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-xl hover:shadow-2xl hover:scale-110 border-2 border-blue-200/50 dark:border-gray-600/50 transition-all duration-300 z-10 group"
@@ -236,7 +236,7 @@ const Leaderboard = () => {
               >
                 <div className="flex items-center gap-3">
                   <div
-                    className={`p-2 rounded-lg bg-gradient-to-r from-slate-100 to-slate-200`}
+                    className={`p-2 rounded-lg bg-gradient-to-r from-stone-100 to-stone-200`}
                   >
                     <stat.icon className={`w-5 h-5 ${stat.color}`} />
                   </div>
@@ -480,3 +480,5 @@ const Leaderboard = () => {
 };
 
 export default Leaderboard;
+
+
