@@ -483,7 +483,7 @@ const StudentDashboard = () => {
                   !
                 </h1>
                 <p className="text-lg text-blue-50 font-medium">
-                  Your learning journey awaits. Explore new horizons today! 🚀
+                  Your learning journey awaits. Explore new horizons today! 
                 </p>
               </motion.div>
 
@@ -511,7 +511,7 @@ const StudentDashboard = () => {
                 </div>
                 <div className="flex items-center gap-2 bg-white/20 backdrop-blur-xl rounded-full px-5 py-3 border border-white/30 hover:bg-white/30 transition-all">
                   <Zap className="w-4 h-4 text-yellow-300" />
-                  <span className="text-sm font-semibold">On Fire 🔥</span>
+                  <span className="text-sm font-semibold">On Fire</span>
                 </div>
               </motion.div>
             </div>

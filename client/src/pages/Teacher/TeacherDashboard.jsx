@@ -296,7 +296,7 @@ const TeacherDashboard = () => {
               Teaching Hub
             </h1>
             <p className="text-slate-600 dark:text-slate-300 mt-2 text-lg font-medium">
-              Empowering minds, shaping futures ✨
+              Empowering minds, shaping futures 
             </p>
           </div>
 
@@ -458,7 +458,7 @@ const TeacherDashboard = () => {
                 </h1>
                 <p className="text-lg text-blue-50 font-medium">
                   Ready to inspire and educate today? Your students are waiting!
-                  🚀
+                  
                 </p>
               </motion.div>
 

@@ -62,7 +62,7 @@ const Payments = () => {
     {
       id: "esewa",
       name: "eSewa",
-      image: "/images/payment-methods/esewa.png",
+      image: "/images/payment-methods/esewa.jpg",
       description: "Quick payment via eSewa digital wallet",
       color: "from-green-500 to-green-600",
       textColor: "text-green-600",

@@ -31,7 +31,7 @@ export const registerUser = async (req, res) => {
     await newUser.save();
 
     console.log(
-      `✅ User registered - Name: ${newUser.name}, Role: ${newUser.role}, ID: ${newUser._id}`,
+      ` User registered - Name: ${newUser.name}, Role: ${newUser.role}, ID: ${newUser._id}`,
     );
 
     // Automatically allocate student to a batch
