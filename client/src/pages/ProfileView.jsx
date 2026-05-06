@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+﻿import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import {
@@ -142,7 +142,7 @@ const ProfileView = () => {
         <div className="flex items-center justify-center min-h-screen page-surface">
         <div className="text-center">
           <div className="w-10 h-10 rounded-full border-2 border-stone-200 dark:border-stone-700 border-t-orange-500 animate-spin mx-auto mb-4" />
-          <p className="text-base font-semibold body-copy animate-pulse">
+          <p className="text-base font-semibold body-copy ">
             Loading profile...
           </p>
         </div>
@@ -179,12 +179,12 @@ const ProfileView = () => {
                 <img
                   src={`http://localhost:5000${user.profilePicture}`}
                   alt="Profile"
-                  className="w-40 h-40 rounded-full border-4 border-white dark:border-slate-800 shadow-lg object-cover ring-4 ring-slate-200/70 dark:ring-slate-700/70 transition-all duration-300 group-hover:scale-105"
+                  className="w-40 h-40 rounded-full border-4 border-white dark:border-stone-800 shadow-lg object-cover ring-4 ring-stone-200/70 dark:ring-stone-700/70 transition-all duration-300 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 rounded-full bg-slate-900/5 dark:bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 rounded-full bg-stone-900/5 dark:bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
             ) : (
-              <div className="w-40 h-40 rounded-full bg-slate-900 dark:bg-slate-100 flex items-center justify-center text-white dark:text-slate-900 text-4xl font-bold shadow-lg ring-4 ring-slate-200/70 dark:ring-slate-700/70 transition-all duration-300 group-hover:scale-105 relative overflow-hidden">
+              <div className="w-40 h-40 rounded-full bg-stone-900 dark:bg-stone-100 flex items-center justify-center text-white dark:text-stone-900 text-4xl font-bold shadow-lg ring-4 ring-stone-200/70 dark:ring-stone-700/70 transition-all duration-300 group-hover:scale-105 relative overflow-hidden">
                 {user.name[0]}
               </div>
             )}
@@ -246,7 +246,7 @@ const ProfileView = () => {
                 <InfoItem
                   label="Email"
                   value={user.email}
-                  icon={<Mail className="w-4 h-4 text-sky-500" />}
+                  icon={<Mail className="w-4 h-4 text-orange-500" />}
                 />
                 <InfoItem
                   label="College"
@@ -290,8 +290,8 @@ const ProfileView = () => {
                   ))
                 ) : (
                   <div className="text-center py-8 w-full">
-                    <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                      <Star className="w-6 h-6 text-slate-500 dark:text-slate-400" />
+                    <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
+                      <Star className="w-6 h-6 text-stone-500 dark:text-stone-400" />
                     </div>
                     <p className="body-copy">No skills added</p>
                   </div>
@@ -319,8 +319,8 @@ const ProfileView = () => {
                   ))
                 ) : (
                   <div className="text-center py-8 w-full">
-                    <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                      <Star className="w-6 h-6 text-slate-500 dark:text-slate-400" />
+                    <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
+                      <Star className="w-6 h-6 text-stone-500 dark:text-stone-400" />
                     </div>
                     <p className="body-copy">No interests added</p>
                   </div>
@@ -371,7 +371,7 @@ const ProfileView = () => {
                     rel="noreferrer"
                     className="group flex items-center gap-3 p-4 surface-panel transition-all duration-300 hover:shadow-md"
                   >
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-blue-600 text-white transition-transform duration-300 group-hover:rotate-6">
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-orange-600 text-white transition-transform duration-300 group-hover:rotate-6">
                       <Linkedin className="w-4 h-4 text-white" />
                     </div>
                     <span className="body-copy font-semibold group-hover:underline">
@@ -386,7 +386,7 @@ const ProfileView = () => {
                     rel="noreferrer"
                     className="group flex items-center gap-3 p-4 surface-panel transition-all duration-300 hover:shadow-md"
                   >
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-slate-800 text-white transition-transform duration-300 group-hover:rotate-6">
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-stone-800 text-white transition-transform duration-300 group-hover:rotate-6">
                       <Github className="w-4 h-4 text-white" />
                     </div>
                     <span className="body-copy font-semibold group-hover:underline">

@@ -214,8 +214,8 @@ const TeacherProfile = () => {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-sky-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-xl font-semibold text-sky-700 animate-pulse">
+          <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-base font-semibold text-stone-700 dark:text-stone-300 ">
             Loading profile...
           </p>
         </div>
@@ -232,12 +232,12 @@ const TeacherProfile = () => {
       <div className="ml-72 min-h-screen page-surface w-full relative">
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className="absolute top-8 right-8 p-4 rounded-2xl bg-white/90 dark:bg-stone-900/90 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-xl hover:shadow-2xl hover:scale-110 border-2 border-blue-200/50 dark:border-gray-600/50 transition-all duration-300 z-10 group"
+          className="absolute top-8 right-8 p-4 rounded-2xl bg-white/90 dark:bg-stone-900/90 backdrop-blur-sm text-orange-600 dark:text-orange-400 shadow-xl hover:shadow-2xl hover:scale-110 border-2 border-stone-200/50 dark:border-stone-700/50 transition-all duration-300 z-10 group"
         >
           {darkMode ? (
-            <Sun className="w-6 h-6 group-hover:rotate-180 transition-transform duration-500" />
+            <Sun className="w-6 h-6" />
           ) : (
-            <Moon className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+            <Moon className="w-6 h-6" />
           )}
         </button>
         {/* Decorative background elements */}
@@ -245,7 +245,7 @@ const TeacherProfile = () => {
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr opacity-0"></div>
 
         <motion.div
-          className="max-w-6xl mx-auto bg-white/90 dark:bg-stone-900/90 backdrop-blur-sm rounded-3xl shadow-2xl p-10 border border-sky-100/50 dark:border-stone-700/50 relative z-10"
+          className="max-w-6xl mx-auto bg-white/90 dark:bg-stone-900/90 backdrop-blur-sm rounded-3xl shadow-2xl p-10 border border-orange-50/50 dark:border-stone-700/50 relative z-10"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -262,17 +262,17 @@ const TeacherProfile = () => {
                   <img
                     src={`http://localhost:5000${profile.profilePicture}`}
                     alt="Teacher"
-                    className="w-40 h-40 rounded-full object-cover border-4 border-white shadow-2xl ring-4 ring-sky-200/50 dark:ring-sky-800/50"
+                    className="w-40 h-40 rounded-full object-cover border-4 border-white shadow-2xl ring-4 ring-stone-200/50 dark:ring-stone-800/50"
                   />
                 ) : (
-                  <div className="w-40 h-40 rounded-full bg-gradient-to-br from-sky-400 to-blue-600 flex items-center justify-center text-white text-4xl font-bold shadow-2xl ring-4 ring-sky-200/50 dark:ring-sky-800/50">
+                  <div className="w-40 h-40 rounded-full bg-gradient-to-br from-orange-400 to-blue-600 flex items-center justify-center text-white text-4xl font-bold shadow-2xl ring-4 ring-stone-200/50 dark:ring-stone-800/50">
                     {profile.name ? profile.name[0] : "T"}
                   </div>
                 )}
-                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-sky-400/20 to-blue-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-orange-400/20 to-blue-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </motion.div>
               {isEditing && !viewOnly && (
-                <label className="absolute bottom-2 right-2 bg-gradient-to-r from-sky-500 to-blue-600 p-3 rounded-full cursor-pointer hover:from-sky-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-110 border-2 border-white dark:border-stone-700">
+                <label className="absolute bottom-2 right-2 bg-gradient-to-r from-stone-700 to-stone-900 p-3 rounded-full cursor-pointer hover:from-stone-800 hover:to-stone-900 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-110 border-2 border-white dark:border-stone-700">
                   <input
                     type="file"
                     className="hidden"
@@ -288,17 +288,17 @@ const TeacherProfile = () => {
             </div>
 
             <div className="flex-1 text-center md:text-left">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-sky-600 to-blue-700 dark:from-sky-400 dark:to-blue-500 bg-clip-text text-transparent mb-3 flex items-center justify-center md:justify-start gap-3">
-                <div className="w-8 h-8 bg-gradient-to-r from-sky-500 to-blue-600 rounded-lg flex items-center justify-center">
+              <h1 className="text-4xl font-bold brand-title text-stone-900 dark:text-stone-50 mb-3 flex items-center justify-center md:justify-start gap-3">
+                <div className="w-8 h-8 bg-gradient-to-r from-stone-700 to-stone-900 rounded-lg flex items-center justify-center">
                   <User className="w-4 h-4 text-white" />
                 </div>
                 {profile.name}
               </h1>
               <div className="space-y-2">
-                <p className="text-sky-600 dark:text-sky-400 flex items-center justify-center md:justify-start gap-2 text-lg font-medium">
+                <p className="text-stone-600 dark:text-stone-400 flex items-center justify-center md:justify-start gap-2 text-lg font-medium">
                   <Mail className="w-4 h-4" /> {profile.email}
                 </p>
-                <p className="text-sky-600 dark:text-sky-400 flex items-center justify-center md:justify-start gap-2">
+                <p className="text-stone-600 dark:text-stone-400 flex items-center justify-center md:justify-start gap-2">
                   <GraduationCap className="w-4 h-4" />
                   {profile.qualification || "Qualification not added yet"}
                 </p>
@@ -315,7 +315,7 @@ const TeacherProfile = () => {
                 className={`px-8 py-3 rounded-full shadow-lg font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 ${
                   isEditing
                     ? "bg-gradient-to-r from-red-500 to-pink-600 text-white hover:from-red-600 hover:to-pink-700"
-                    : "bg-gradient-to-r from-sky-500 to-blue-600 text-white hover:from-sky-600 hover:to-blue-700"
+                    : "bg-gradient-to-r from-stone-700 to-stone-900 text-white hover:from-stone-800 hover:to-stone-900"
                 }`}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -343,10 +343,10 @@ const TeacherProfile = () => {
               transition={{ duration: 0.5, delay: 0.1 }}
             >
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r from-sky-500 to-blue-600 rounded-xl flex items-center justify-center shadow-md">
+                <div className="w-10 h-10 bg-gradient-to-r from-stone-700 to-stone-900 rounded-xl flex items-center justify-center shadow-md">
                   <BookOpen className="w-5 h-5 text-white" />
                 </div>
-                <h2 className="text-2xl font-bold text-sky-700 dark:text-sky-300">
+                <h2 className="text-2xl font-bold text-stone-700 dark:text-stone-300">
                   Teaching Information
                 </h2>
               </div>
@@ -354,7 +354,7 @@ const TeacherProfile = () => {
               {isEditing && !viewOnly ? (
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-semibold text-sky-600 dark:text-sky-400 mb-2 uppercase tracking-wide">
+                    <label className="block text-sm font-semibold text-stone-600 dark:text-stone-400 mb-2 uppercase tracking-wide">
                       Subject
                     </label>
                     <input
@@ -363,11 +363,11 @@ const TeacherProfile = () => {
                       value={formData.subject || ""}
                       onChange={handleChange}
                       placeholder="What subject do you teach?"
-                      className="w-full p-4 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-stone-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
+                      className="w-full p-4 border-2 border-stone-200 dark:border-stone-700 rounded-xl dark:bg-stone-700/50 dark:text-white focus:border-orange-400 focus:ring-2 focus:ring-orange-100 dark:focus:ring-orange-900/20 transition-all duration-300 backdrop-blur-sm"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-sky-600 dark:text-sky-400 mb-2 uppercase tracking-wide">
+                    <label className="block text-sm font-semibold text-stone-600 dark:text-stone-400 mb-2 uppercase tracking-wide">
                       Qualification
                     </label>
                     <input
@@ -376,11 +376,11 @@ const TeacherProfile = () => {
                       value={formData.qualification || ""}
                       onChange={handleChange}
                       placeholder="Your highest qualification"
-                      className="w-full p-4 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-stone-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
+                      className="w-full p-4 border-2 border-stone-200 dark:border-stone-700 rounded-xl dark:bg-stone-700/50 dark:text-white focus:border-orange-400 focus:ring-2 focus:ring-orange-100 dark:focus:ring-orange-900/20 transition-all duration-300 backdrop-blur-sm"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-sky-600 dark:text-sky-400 mb-2 uppercase tracking-wide">
+                    <label className="block text-sm font-semibold text-stone-600 dark:text-stone-400 mb-2 uppercase tracking-wide">
                       Institution
                     </label>
                     <input
@@ -389,11 +389,11 @@ const TeacherProfile = () => {
                       value={formData.college || ""}
                       onChange={handleChange}
                       placeholder="Your institution/college"
-                      className="w-full p-4 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-stone-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
+                      className="w-full p-4 border-2 border-stone-200 dark:border-stone-700 rounded-xl dark:bg-stone-700/50 dark:text-white focus:border-orange-400 focus:ring-2 focus:ring-orange-100 dark:focus:ring-orange-900/20 transition-all duration-300 backdrop-blur-sm"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-sky-600 dark:text-sky-400 mb-2 uppercase tracking-wide">
+                    <label className="block text-sm font-semibold text-stone-600 dark:text-stone-400 mb-2 uppercase tracking-wide">
                       Bio
                     </label>
                     <textarea
@@ -402,29 +402,29 @@ const TeacherProfile = () => {
                       onChange={handleChange}
                       placeholder="Tell us about yourself and your teaching philosophy..."
                       rows={4}
-                      className="w-full p-4 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-stone-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm resize-none"
+                      className="w-full p-4 border-2 border-stone-200 dark:border-stone-700 rounded-xl dark:bg-stone-700/50 dark:text-white focus:border-orange-400 focus:ring-2 focus:ring-orange-100 dark:focus:ring-orange-900/20 transition-all duration-300 backdrop-blur-sm resize-none"
                     />
                   </div>
                 </div>
               ) : (
                 <div className="space-y-6">
                   <InfoCard
-                    icon={<BookOpen className="w-4 h-4 text-sky-500" />}
+                    icon={<BookOpen className="w-4 h-4 text-orange-500" />}
                     label="Subject"
                     value={profile.subject || "Not added yet"}
                   />
                   <InfoCard
-                    icon={<GraduationCap className="w-4 h-4 text-sky-500" />}
+                    icon={<GraduationCap className="w-4 h-4 text-orange-500" />}
                     label="Qualification"
                     value={profile.qualification || "Not added yet"}
                   />
                   <InfoCard
-                    icon={<MapPin className="w-4 h-4 text-sky-500" />}
+                    icon={<MapPin className="w-4 h-4 text-orange-500" />}
                     label="Institution"
                     value={profile.college || "Not added yet"}
                   />
-                  <div className="bg-gradient-to-r from-sky-50 to-blue-50 dark:from-gray-700/50 dark:to-gray-600/50 rounded-xl p-6 border-l-4 border-sky-400 shadow-inner">
-                    <p className="text-sm font-semibold text-sky-600 dark:text-sky-400 mb-2 uppercase tracking-wide">
+                  <div className="bg-gradient-to-r from-orange-50 to-blue-50 dark:from-gray-700/50 dark:to-gray-600/50 rounded-xl p-6 border-l-4 border-orange-400 shadow-inner">
+                    <p className="text-sm font-semibold text-stone-600 dark:text-stone-400 mb-2 uppercase tracking-wide">
                       About
                     </p>
                     <p className="text-stone-700 dark:text-stone-300 leading-relaxed">
@@ -446,7 +446,7 @@ const TeacherProfile = () => {
                 <div className="w-10 h-10 bg-gradient-to-r from-amber-500 to-orange-600 rounded-xl flex items-center justify-center shadow-md">
                   <Award className="w-5 h-5 text-white" />
                 </div>
-                <h2 className="text-2xl font-bold text-sky-700 dark:text-sky-300">
+                <h2 className="text-2xl font-bold text-stone-700 dark:text-stone-300">
                   Achievements
                 </h2>
               </div>
@@ -468,7 +468,7 @@ const TeacherProfile = () => {
                             e.target.value,
                           )
                         }
-                        className="flex-1 p-3 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-stone-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300"
+                        className="flex-1 p-3 border-2 border-stone-200 dark:border-stone-700 rounded-xl dark:bg-stone-700/50 dark:text-white focus:border-orange-400 focus:ring-2 focus:ring-orange-100 dark:focus:ring-orange-900/20 transition-all duration-300"
                         placeholder="Add an achievement..."
                       />
                       <button
@@ -533,7 +533,7 @@ const TeacherProfile = () => {
                   >
                     <Star className="w-5 h-5 text-white" />
                   </div>
-                  <h2 className="text-2xl font-bold text-sky-700 dark:text-sky-300 capitalize">
+                  <h2 className="text-2xl font-bold text-stone-700 dark:text-stone-300 capitalize">
                     {field}
                   </h2>
                 </div>
@@ -551,7 +551,7 @@ const TeacherProfile = () => {
                           onChange={(e) =>
                             handleItemChange(field, index, e.target.value)
                           }
-                          className="flex-1 p-3 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-stone-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300"
+                          className="flex-1 p-3 border-2 border-stone-200 dark:border-stone-700 rounded-xl dark:bg-stone-700/50 dark:text-white focus:border-orange-400 focus:ring-2 focus:ring-orange-100 dark:focus:ring-orange-900/20 transition-all duration-300"
                           placeholder={`Add a ${field.slice(0, -1)}...`}
                         />
                         <button
@@ -612,17 +612,17 @@ const TeacherProfile = () => {
               transition={{ duration: 0.5, delay: 0.4 }}
             >
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-md">
+                <div className="w-10 h-10 bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl flex items-center justify-center">
                   <FileText className="w-5 h-5 text-white" />
                 </div>
-                <h2 className="text-2xl font-bold text-sky-700 dark:text-sky-300">
+                <h2 className="text-2xl font-bold text-stone-700 dark:text-stone-300">
                   Resume
                 </h2>
               </div>
 
               {isEditing && !viewOnly ? (
                 <div className="space-y-4">
-                  <div className="border-2 border-dashed border-sky-300 dark:border-sky-700 rounded-xl p-6 text-center hover:border-sky-400 transition-colors duration-300">
+                  <div className="border-2 border-dashed border-stone-300 dark:border-stone-700 rounded-xl p-6 text-center hover:border-orange-400 transition-colors duration-300">
                     <input
                       type="file"
                       onChange={handleResumeUpload}
@@ -642,7 +642,7 @@ const TeacherProfile = () => {
                             <Upload className="w-5 h-5 text-white" />
                           )}
                         </div>
-                        <p className="text-sky-600 dark:text-sky-400 font-semibold">
+                        <p className="text-stone-600 dark:text-stone-400 font-semibold">
                           {uploadingResume ? "Uploading..." : "Upload Resume"}
                         </p>
                       </div>
@@ -685,10 +685,10 @@ const TeacherProfile = () => {
               transition={{ duration: 0.5, delay: 0.5 }}
             >
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r from-sky-500 to-blue-600 rounded-xl flex items-center justify-center shadow-md">
+                <div className="w-10 h-10 bg-gradient-to-r from-stone-700 to-stone-900 rounded-xl flex items-center justify-center shadow-md">
                   <Mail className="w-5 h-5 text-white" />
                 </div>
-                <h2 className="text-2xl font-bold text-sky-700 dark:text-sky-300">
+                <h2 className="text-2xl font-bold text-stone-700 dark:text-stone-300">
                   Connect
                 </h2>
               </div>
@@ -696,7 +696,7 @@ const TeacherProfile = () => {
               {isEditing && !viewOnly ? (
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-semibold text-sky-600 dark:text-sky-400 mb-2 uppercase tracking-wide">
+                    <label className="block text-sm font-semibold text-stone-600 dark:text-stone-400 mb-2 uppercase tracking-wide">
                       LinkedIn
                     </label>
                     <input
@@ -705,11 +705,11 @@ const TeacherProfile = () => {
                       value={formData.linkedin || ""}
                       onChange={handleChange}
                       placeholder="https://linkedin.com/in/yourprofile"
-                      className="w-full p-4 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-stone-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
+                      className="w-full p-4 border-2 border-stone-200 dark:border-stone-700 rounded-xl dark:bg-stone-700/50 dark:text-white focus:border-orange-400 focus:ring-2 focus:ring-orange-100 dark:focus:ring-orange-900/20 transition-all duration-300 backdrop-blur-sm"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-sky-600 dark:text-sky-400 mb-2 uppercase tracking-wide">
+                    <label className="block text-sm font-semibold text-stone-600 dark:text-stone-400 mb-2 uppercase tracking-wide">
                       GitHub
                     </label>
                     <input
@@ -718,7 +718,7 @@ const TeacherProfile = () => {
                       value={formData.github || ""}
                       onChange={handleChange}
                       placeholder="https://github.com/yourusername"
-                      className="w-full p-4 border-2 border-sky-200/50 dark:border-sky-700/50 rounded-xl dark:bg-stone-700/50 dark:text-white focus:border-sky-400 focus:ring-4 focus:ring-sky-200/20 transition-all duration-300 backdrop-blur-sm"
+                      className="w-full p-4 border-2 border-stone-200 dark:border-stone-700 rounded-xl dark:bg-stone-700/50 dark:text-white focus:border-orange-400 focus:ring-2 focus:ring-orange-100 dark:focus:ring-orange-900/20 transition-all duration-300 backdrop-blur-sm"
                     />
                   </div>
                 </div>
@@ -729,12 +729,12 @@ const TeacherProfile = () => {
                       href={profile.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex items-center gap-3 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-xl border border-blue-200/50 dark:border-blue-700/50 hover:shadow-md transition-all duration-300 hover:scale-105"
+                      className="group flex items-center gap-3 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-stone-800/50 dark:to-indigo-900/30 rounded-xl border border-stone-200/50 dark:border-blue-700/50 hover:shadow-md transition-all duration-300 hover:scale-105"
                     >
-                      <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
+                      <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
                         <Linkedin className="w-4 h-4 text-white" />
                       </div>
-                      <span className="text-blue-600 dark:text-blue-400 font-semibold group-hover:underline">
+                      <span className="text-orange-600 dark:text-orange-400 font-semibold group-hover:underline">
                         LinkedIn Profile
                       </span>
                     </a>
@@ -746,7 +746,7 @@ const TeacherProfile = () => {
                       rel="noopener noreferrer"
                       className="group flex items-center gap-3 p-4 surface-panel rounded-xl hover:shadow-md transition-all duration-300 hover:scale-105"
                     >
-                      <div className="w-8 h-8 bg-stone-800 dark:bg-stone-700 rounded-lg flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
+                      <div className="w-8 h-8 bg-stone-800 dark:bg-stone-700 rounded-lg flex items-center justify-center">
                         <Github className="w-4 h-4 text-white" />
                       </div>
                       <span className="text-stone-700 dark:text-stone-300 font-semibold group-hover:underline">
@@ -756,8 +756,8 @@ const TeacherProfile = () => {
                   )}
                   {!profile.linkedin && !profile.github && (
                     <div className="text-center py-8">
-                      <div className="w-16 h-16 bg-gradient-to-br from-sky-200 to-blue-300 rounded-full mx-auto mb-4 flex items-center justify-center">
-                        <Mail className="w-6 h-6 text-sky-600" />
+                      <div className="w-16 h-16 bg-gradient-to-br from-stone-200 to-blue-300 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <Mail className="w-6 h-6 text-stone-500 dark:text-stone-400" />
                       </div>
                       <p className="text-stone-500 dark:text-stone-400">
                         No social links added yet
@@ -793,16 +793,16 @@ const TeacherProfile = () => {
 
 // Enhanced InfoCard component
 const InfoCard = ({ icon, label, value }) => (
-  <div className="group p-4 bg-gradient-to-r from-sky-25 to-blue-25 dark:from-sky-900/20 dark:to-blue-900/20 rounded-xl border border-sky-100/50 dark:border-sky-800/50 hover:shadow-md transition-all duration-300">
+  <div className="group p-4 bg-gradient-to-r from-stone-400 to-blue-25 dark:from-stone-900/20 dark:to-blue-900/20 rounded-xl border border-orange-50/50 dark:border-stone-800/50 hover:shadow-md transition-all duration-300">
     <div className="flex items-center gap-2 mb-2">
-      <div className="p-1.5 bg-sky-100 dark:bg-sky-900/50 rounded-md group-hover:scale-110 transition-transform duration-300">
+      <div className="p-1.5 bg-orange-50 dark:bg-stone-900/50 rounded-md group-hover:scale-110 transition-transform duration-300">
         {icon}
       </div>
-      <p className="text-sky-600 dark:text-sky-400 text-sm font-bold uppercase tracking-wide">
+      <p className="text-stone-600 dark:text-stone-400 text-sm font-bold uppercase tracking-wide">
         {label}
       </p>
     </div>
-    <p className="font-bold text-lg text-stone-800 dark:text-stone-200 group-hover:text-sky-700 dark:group-hover:text-sky-300 transition-colors duration-300">
+    <p className="font-bold text-lg text-stone-800 dark:text-stone-200 group-hover:text-stone-700 dark:group-hover:text-stone-300 transition-colors duration-300">
       {value}
     </p>
   </div>

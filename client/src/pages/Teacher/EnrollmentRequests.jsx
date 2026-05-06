@@ -156,8 +156,8 @@ const EnrollmentRequests = () => {
         </div>
         <div className="ml-64 w-full flex items-center justify-center p-6">
           <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600"></div>
-            <p className="mt-4 text-gray-700 dark:text-gray-300 text-lg font-semibold">
+            <div className="w-10 h-10 border-2 border-stone-200 dark:border-stone-700 border-t-orange-500 rounded-full animate-spin"></div>
+            <p className="mt-4 text-stone-700 dark:text-stone-300 text-lg font-semibold">
               Loading enrollment requests...
             </p>
           </div>
@@ -177,12 +177,12 @@ const EnrollmentRequests = () => {
       <div className="ml-64 w-full relative">
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className="absolute top-8 right-8 p-4 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-xl hover:shadow-2xl hover:scale-110 border-2 border-blue-200/50 dark:border-gray-600/50 transition-all duration-300 z-10 group"
+          className="absolute top-8 right-8 icon-action absolute top-8 right-8 z-10"
         >
           {darkMode ? (
-            <Sun className="w-6 h-6 group-hover:rotate-180 transition-transform duration-500" />
+            <Sun className="w-6 h-6" />
           ) : (
-            <Moon className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+            <Moon className="w-6 h-6" />
           )}
         </button>
         <div className="p-8">
@@ -192,10 +192,10 @@ const EnrollmentRequests = () => {
             animate={{ opacity: 1, y: 0 }}
             className="mb-8"
           >
-            <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-2">
+            <h1 className="text-4xl font-bold text-stone-900 dark:text-stone-50 mb-2">
               Enrollment Requests
             </h1>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-stone-500 dark:text-stone-500">
               Manage student enrollment requests for your courses
             </p>
           </motion.div>
@@ -208,8 +208,8 @@ const EnrollmentRequests = () => {
                 onClick={() => setFilter(f)}
                 className={`px-4 py-2 rounded-lg font-semibold transition-all ${
                   filter === f
-                    ? "bg-blue-600 text-white shadow-lg"
-                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-blue-400"
+                    ? "bg-orange-600 text-white shadow-sm"
+                    : "surface-panel text-stone-700 dark:text-stone-300 hover:border-orange-400"
                 }`}
               >
                 {f.charAt(0).toUpperCase() + f.slice(1)}
@@ -224,8 +224,8 @@ const EnrollmentRequests = () => {
               animate={{ opacity: 1 }}
               className="text-center py-12"
             >
-              <BookOpen className="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" />
-              <p className="text-gray-600 dark:text-gray-400 text-lg">
+              <BookOpen className="w-14 h-14 mx-auto text-stone-300 dark:text-stone-600 mb-4" />
+              <p className="text-stone-500 dark:text-stone-500 text-lg">
                 No {filter !== "all" ? filter : ""} enrollment requests
               </p>
             </motion.div>
@@ -237,33 +237,33 @@ const EnrollmentRequests = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-l-4 border-blue-500"
+                  className="surface-card p-6 border-l-4 border-orange-400"
                 >
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-3">
-                        <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                          <User className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                        <div className="w-12 h-12 bg-orange-50 dark:bg-orange-950/20 border border-orange-100 dark:border-orange-900/40 rounded-full flex items-center justify-center">
+                          <User className="w-6 h-6 text-orange-600 dark:text-orange-400" />
                         </div>
                         <div>
-                          <h3 className="text-lg font-bold text-gray-800 dark:text-white">
+                          <h3 className="text-lg font-bold text-stone-900 dark:text-stone-50">
                             {request.student?.name || "Unknown Student"}
                           </h3>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1">
+                          <p className="text-sm text-stone-500 dark:text-stone-500 flex items-center gap-1">
                             <Mail className="w-4 h-4" />
                             {request.student?.email || "No email"}
                           </p>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300 mb-2">
+                      <div className="flex items-center gap-2 text-stone-700 dark:text-stone-300 mb-2">
                         <BookOpen className="w-4 h-4" />
                         <span className="font-semibold">
                           {request.course?.title || "Unknown Course"}
                         </span>
                       </div>
 
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                      <p className="text-sm text-stone-500 dark:text-stone-400">
                         Requested on{" "}
                         {new Date(request.createdAt).toLocaleDateString()}
                       </p>
@@ -294,7 +294,7 @@ const EnrollmentRequests = () => {
                             state: { studentData: request.student },
                           });
                         }}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition-all"
+                        className="secondary-action text-sm"
                         title="View student profile"
                       >
                         <Eye className="w-4 h-4" />

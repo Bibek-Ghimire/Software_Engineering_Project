@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../services/authService";
 import toast from "react-hot-toast";
@@ -81,7 +81,7 @@ const Login = () => {
   };
 
   return (
-    <div className="page-surface min-h-screen overflow-x-hidden text-gray-800 dark:text-gray-200">
+    <div className="page-surface min-h-screen overflow-x-hidden text-stone-900 dark:text-stone-100">
       {/* Theme Toggle Button */}
       <div className="absolute top-6 right-6 z-20">
         <ThemeToggle />
@@ -95,7 +95,7 @@ const Login = () => {
             <h2 className="brand-title text-3xl font-bold mb-2">
               Welcome Back
             </h2>
-            <p className="text-slate-600 dark:text-slate-300 text-sm">
+            <p className="text-stone-600 dark:text-stone-300 text-sm">
               Sign in to continue your collaborative learning flow.
             </p>
           </div>
@@ -118,7 +118,7 @@ const Login = () => {
                 <option value="student"> Student</option>
                 <option value="teacher"> Teacher</option>
               </select>
-              <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 dark:text-slate-400">
+              <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-stone-500 dark:text-stone-400">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-5 h-5"
@@ -131,7 +131,7 @@ const Login = () => {
             </div>
 
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 dark:text-slate-400 w-5 h-5" />
+              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-stone-500 dark:text-stone-400 w-5 h-5" />
               <input
                 type="email"
                 placeholder="Email Address"
@@ -142,7 +142,7 @@ const Login = () => {
             </div>
 
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 dark:text-slate-400 w-5 h-5" />
+              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-stone-500 dark:text-stone-400 w-5 h-5" />
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
@@ -153,7 +153,7 @@ const Login = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 transition-colors"
               >
                 {showPassword ? (
                   <EyeOff className="w-5 h-5" />
@@ -164,10 +164,10 @@ const Login = () => {
             </div>
 
             <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center text-gray-700 dark:text-gray-300 cursor-pointer">
+              <label className="flex items-center text-stone-700 dark:text-stone-300 cursor-pointer">
                 <input
                   type="checkbox"
-                  className="mr-2 rounded border-gray-300 bg-white text-orange-600 focus:ring-orange-500 dark:border-gray-600 dark:bg-gray-700 dark:text-orange-400"
+                  className="mr-2 rounded border-stone-300 bg-white text-orange-600 focus:ring-orange-500 dark:border-stone-700 dark:bg-stone-800 dark:text-orange-400"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
                 />
@@ -175,7 +175,7 @@ const Login = () => {
               </label>
               <Link
                 to="/forgot-password"
-                className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+                className="text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition-colors"
               >
                 Forgot password?
               </Link>
@@ -191,7 +191,7 @@ const Login = () => {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-gray-700 dark:text-gray-300 text-sm">
+            <p className="text-stone-700 dark:text-stone-300 text-sm">
               Don't have an account?{" "}
               <Link
                 to="/register"
@@ -206,10 +206,10 @@ const Login = () => {
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
+                <div className="w-full border-t border-stone-300 dark:border-stone-700"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-transparent text-gray-600 dark:text-gray-300">
+                <span className="px-2 bg-transparent text-stone-600 dark:text-stone-400">
                   Or continue with
                 </span>
               </div>
@@ -258,7 +258,7 @@ const Login = () => {
         {/* Back to Home */}
         <Link
           to="/"
-          className="absolute top-6 left-6 surface-card px-4 py-3 text-gray-800 dark:text-white hover:bg-white/90 dark:hover:bg-slate-800/80 transition-all duration-300 flex items-center"
+          className="absolute top-6 left-6 surface-card px-4 py-3 text-stone-900 dark:text-stone-50 hover:bg-white/90 dark:hover:bg-stone-800/80 transition-all duration-300 flex items-center"
         >
           <ArrowLeft className="w-5 h-5 mr-2" />
           Back to Home

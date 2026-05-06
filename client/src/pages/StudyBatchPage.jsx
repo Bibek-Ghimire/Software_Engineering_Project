@@ -131,7 +131,7 @@ export default function StudyBatchPage() {
               <p className="body-copy mb-4">
                 {batch.memberCount} of {batch.maxSize} members
               </p>
-              <div className="w-full max-w-xs bg-slate-200 dark:bg-stone-800 rounded-full h-3 overflow-hidden">
+              <div className="w-full max-w-xs bg-stone-200 dark:bg-stone-800 rounded-full h-3 overflow-hidden">
                 <div
                   className="bg-gradient-to-r from-orange-500 to-amber-500 h-full transition-all duration-300"
                   style={{ width: `${batch.fillPercentage}%` }}
@@ -225,7 +225,7 @@ export default function StudyBatchPage() {
                       {member.interests.slice(0, 2).map((interest, idx) => (
                         <span
                           key={idx}
-                          className="px-2 py-1 rounded-full text-xs font-medium border border-stone-200 bg-slate-100 text-slate-700 dark:border-stone-700 dark:bg-stone-900 dark:text-slate-300"
+                          className="px-2 py-1 rounded-full text-xs font-medium border border-stone-200 bg-stone-100 text-stone-700 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-300"
                         >
                           {interest}
                         </span>
@@ -248,7 +248,7 @@ export default function StudyBatchPage() {
                       {member.skills.slice(0, 2).map((skill, idx) => (
                         <span
                           key={idx}
-                          className="px-2 py-1 rounded-full text-xs font-medium border border-stone-200 bg-slate-100 text-slate-700 dark:border-stone-700 dark:bg-stone-900 dark:text-slate-300"
+                          className="px-2 py-1 rounded-full text-xs font-medium border border-stone-200 bg-stone-100 text-stone-700 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-300"
                         >
                           {skill}
                         </span>
@@ -292,7 +292,7 @@ export default function StudyBatchPage() {
                       {item.user.interests?.slice(0, 2).map((interest, i) => (
                         <span
                           key={i}
-                          className="px-2 py-1 rounded-full text-xs font-medium border border-stone-200 bg-slate-100 text-slate-700 dark:border-stone-700 dark:bg-stone-900 dark:text-slate-300"
+                          className="px-2 py-1 rounded-full text-xs font-medium border border-stone-200 bg-stone-100 text-stone-700 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-300"
                         >
                           {interest}
                         </span>

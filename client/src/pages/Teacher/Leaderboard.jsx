@@ -164,12 +164,12 @@ const Leaderboard = () => {
       <div className="ml-64 min-h-screen page-surface w-full relative">
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className="absolute top-8 right-8 p-4 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-xl hover:shadow-2xl hover:scale-110 border-2 border-blue-200/50 dark:border-gray-600/50 transition-all duration-300 z-10 group"
+          className="absolute top-8 right-8 icon-action absolute top-8 right-8 z-10"
         >
           {darkMode ? (
-            <Sun className="w-6 h-6 group-hover:rotate-180 transition-transform duration-500" />
+            <Sun className="w-6 h-6" />
           ) : (
-            <Moon className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+            <Moon className="w-6 h-6" />
           )}
         </button>
         {/* Header Section */}
@@ -185,7 +185,7 @@ const Leaderboard = () => {
               <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-gray-800 via-blue-700 to-purple-700 bg-clip-text text-transparent mb-4">
                 Leaderboard
               </h1>
-              <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              <p className="text-lg text-stone-600 dark:text-stone-400 max-w-2xl mx-auto">
                 Celebrating our top-performing educators and their outstanding
                 contributions to learning
               </p>
@@ -206,7 +206,7 @@ const Leaderboard = () => {
                 icon: Users,
                 label: "Active Teachers",
                 value: teachers.length,
-                color: "text-blue-600",
+                color: "text-orange-600",
               },
               {
                 icon: BookOpen,
@@ -309,7 +309,7 @@ const Leaderboard = () => {
 
                         <div>
                           <div className="flex items-center gap-2 mb-2">
-                            <h3 className="text-xl lg:text-2xl font-bold text-blue-600 leading-tight">
+                            <h3 className="text-xl lg:text-2xl font-bold text-orange-600 leading-tight">
                               {teacher.name}
                             </h3>
                             <motion.span
@@ -339,10 +339,10 @@ const Leaderboard = () => {
                           <div className="w-11 h-11 mx-auto mb-2 rounded-lg bg-white/25 backdrop-blur-sm flex items-center justify-center shadow-lg border border-white/30">
                             <BookOpen className="w-6 h-6 text-white" />
                           </div>
-                          <p className="text-2xl font-bold text-blue-600 leading-none">
+                          <p className="text-2xl font-bold text-orange-600 leading-none">
                             {teacher.coursesCreated}
                           </p>
-                          <p className="text-xs text-blue-700 font-semibold mt-1 uppercase tracking-wide">
+                          <p className="text-xs text-orange-700 font-semibold mt-1 uppercase tracking-wide">
                             Courses
                           </p>
                         </motion.div>
@@ -353,10 +353,10 @@ const Leaderboard = () => {
                           <div className="w-11 h-11 mx-auto mb-2 rounded-lg bg-white/25 backdrop-blur-sm flex items-center justify-center shadow-lg border border-white/30">
                             <TrendingUp className="w-6 h-6 text-white" />
                           </div>
-                          <p className="text-2xl font-bold text-blue-600 leading-none">
+                          <p className="text-2xl font-bold text-orange-600 leading-none">
                             {teacher.engagementScore}
                           </p>
-                          <p className="text-xs text-blue-700 font-semibold mt-1 uppercase tracking-wide">
+                          <p className="text-xs text-orange-700 font-semibold mt-1 uppercase tracking-wide">
                             Engagement
                           </p>
                         </motion.div>
@@ -367,10 +367,10 @@ const Leaderboard = () => {
                           <div className="w-11 h-11 mx-auto mb-2 rounded-lg bg-white/25 backdrop-blur-sm flex items-center justify-center shadow-lg border border-white/30">
                             <Star className="w-6 h-6 text-white" />
                           </div>
-                          <p className="text-2xl font-bold text-blue-600 leading-none">
+                          <p className="text-2xl font-bold text-orange-600 leading-none">
                             {teacher.totalScore}
                           </p>
-                          <p className="text-xs text-blue-700 font-semibold mt-1 uppercase tracking-wide">
+                          <p className="text-xs text-orange-700 font-semibold mt-1 uppercase tracking-wide">
                             Total Score
                           </p>
                         </motion.div>
@@ -382,7 +382,7 @@ const Leaderboard = () => {
                       <div className="mt-8">
                         <motion.button
                           onClick={() => toggleExpand(teacher._id)}
-                          className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors duration-200 font-medium"
+                          className="flex items-center gap-2 text-orange-600 hover:text-orange-700 transition-colors duration-200 font-medium"
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                         >
@@ -423,11 +423,11 @@ const Leaderboard = () => {
                                 >
                                   {/* Card background effect */}
                                   <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 to-purple-50/30 pointer-events-none rounded-2xl"></div>
-                                  <div className="absolute top-0 right-0 w-32 h-32 bg-blue-400/10 rounded-full blur-3xl pointer-events-none"></div>
+                                  <div className="absolute top-0 right-0 w-32 h-32 bg-stone-400/10 rounded-full blur-3xl pointer-events-none"></div>
 
                                   <div className="relative z-10">
                                     <div className="flex justify-between items-start mb-4">
-                                      <h4 className="font-bold text-gray-800 text-lg group-hover/card:text-blue-600 transition-colors pr-2">
+                                      <h4 className="font-bold text-gray-800 text-lg group-hover/card:text-orange-600 transition-colors pr-2">
                                         {course.title}
                                       </h4>
                                       <motion.span
@@ -451,7 +451,7 @@ const Leaderboard = () => {
                                       >
                                         {course.level}
                                       </span>
-                                      <div className="flex items-center gap-1.5 text-xs text-gray-500 bg-gray-100/50 px-3 py-1.5 rounded-full">
+                                      <div className="flex items-center gap-1.5 text-xs text-gray-500 bg-stone-100/50 px-3 py-1.5 rounded-full">
                                         <Clock className="w-3.5 h-3.5" />
                                         {course.duration}
                                       </div>

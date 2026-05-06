@@ -1,4 +1,4 @@
-// src/pages/StudyGroupsPage.jsx
+﻿// src/pages/StudyGroupsPage.jsx
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { Users, Trash2, Pencil, UserPlus } from "lucide-react";
@@ -61,18 +61,18 @@ const StudyGroupsPage = () => {
   if (loading) return <div className="p-8 text-center">Loading groups...</div>;
 
   return (
-    <div className="min-h-screen page-surface p-8 text-gray-800 dark:text-white transition-colors duration-300">
+    <div className="min-h-screen page-surface p-8 text-stone-900 dark:text-stone-50 transition-colors duration-300">
       {/* Header */}
       <div className="flex justify-between items-center mb-8 max-w-6xl mx-auto">
         <h2 className="text-2xl font-semibold flex items-center gap-2">
-          <Users className="w-6 h-6 text-blue-500" /> Study Groups
+          <Users className="w-6 h-6 text-orange-500" /> Study Groups
         </h2>
 
         {/* Create Group Link */}
         {user?.role === "teacher" && (
           <Link
             to="/creategroup"
-            className="flex items-center gap-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl transition"
+            className="flex items-center gap-1 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl transition"
           >
             <Pencil className="w-4 h-4" /> Create Group
           </Link>
@@ -84,9 +84,9 @@ const StudyGroupsPage = () => {
         {groups.map((group) => (
           <div
             key={group._id}
-            className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:scale-105"
+            className="bg-white dark:bg-stone-900 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:scale-105"
           >
-            <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+            <h3 className="text-xl font-bold text-stone-900 dark:text-stone-50">
               {group.name}
             </h3>
             <p className="text-gray-500 dark:text-gray-300 mt-1">
@@ -99,7 +99,7 @@ const StudyGroupsPage = () => {
                 <>
                   <Link
                     to={`/edit-group/${group._id}`}
-                    className="text-blue-500 hover:underline flex items-center gap-1"
+                    className="text-orange-500 hover:underline flex items-center gap-1"
                   >
                     <Pencil className="w-4 h-4" /> Edit
                   </Link>

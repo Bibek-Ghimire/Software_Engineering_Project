@@ -1,4 +1,4 @@
-// src/pages/CreateGroup.jsx
+﻿// src/pages/CreateGroup.jsx
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
@@ -60,7 +60,7 @@ function CreateGroup() {
   };
 
   return (
-    <div className="flex min-h-screen page-surface text-gray-800 dark:text-white transition-colors duration-300">
+    <div className="flex min-h-screen page-surface text-stone-900 dark:text-stone-50 transition-colors duration-300">
       {/* Sidebar */}
       <Sidebar />
 
@@ -69,7 +69,7 @@ function CreateGroup() {
         {/* Dark Mode Toggle */}
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className="absolute top-4 right-4 p-3 rounded-full bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 shadow-sm hover:shadow-md hover:scale-105 transition-all duration-200 border border-slate-200 dark:border-slate-700"
+          className="absolute top-4 right-4 icon-action"
         >
           {darkMode ? (
             <Sun className="w-5 h-5" />
@@ -86,7 +86,7 @@ function CreateGroup() {
 
           {/* Group Name */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+            <label className="block text-sm font-medium text-stone-700 dark:text-stone-300">
               Group Name *
             </label>
             <input
@@ -101,7 +101,7 @@ function CreateGroup() {
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+            <label className="block text-sm font-medium text-stone-700 dark:text-stone-300">
               Description *
             </label>
             <textarea
@@ -115,7 +115,7 @@ function CreateGroup() {
 
           {/* Member Count */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+            <label className="block text-sm font-medium text-stone-700 dark:text-stone-300">
               No. of Members *
             </label>
             <input
@@ -131,7 +131,7 @@ function CreateGroup() {
 
           {/* Member Names */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+            <label className="block text-sm font-medium text-stone-700 dark:text-stone-300">
               Member Names (comma-separated)
             </label>
             <input
@@ -146,7 +146,7 @@ function CreateGroup() {
 
           {/* Course Detail */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+            <label className="block text-sm font-medium text-stone-700 dark:text-stone-300">
               Course Detail
             </label>
             <input

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, CheckCircle, CreditCard } from "lucide-react";
 
@@ -48,7 +48,7 @@ const NotificationPopup = ({
             className="surface-card-strong w-full max-w-md overflow-hidden pointer-events-auto"
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-4 flex items-center justify-between">
+            <div className="bg-gradient-to-r from-stone-500 to-stone-600 px-6 py-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <CheckCircle className="w-6 h-6 text-white flex-shrink-0" />
                 <h3 className="text-lg font-bold text-white">
@@ -70,15 +70,15 @@ const NotificationPopup = ({
               {/* Course Details */}
               {notification.course && (
                 <div className="surface-panel mb-4 p-4">
-                  <p className="text-sm text-slate-500 dark:text-slate-400 mb-1">
+                  <p className="text-sm text-stone-500 dark:text-stone-400 mb-1">
                     Course
                   </p>
-                  <p className="font-semibold text-slate-900 dark:text-white mb-3">
+                  <p className="font-semibold text-stone-900 dark:text-white mb-3">
                     {notification.course.title}
                   </p>
                   {notification.course.price && (
                     <div className="flex items-baseline gap-2">
-                      <span className="text-sm text-slate-500 dark:text-slate-400">
+                      <span className="text-sm text-stone-500 dark:text-stone-400">
                         Payment Amount:
                       </span>
                       <span className="text-2xl font-bold text-green-600 dark:text-green-400">
@@ -90,22 +90,22 @@ const NotificationPopup = ({
               )}
 
               {/* Time info */}
-              <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
+              <p className="text-xs text-stone-500 dark:text-stone-400 mb-4">
                 {new Date(notification.timestamp).toLocaleString()}
               </p>
             </div>
 
             {/* Actions */}
-            <div className="px-6 py-4 bg-slate-50/80 dark:bg-slate-950/40 flex gap-3">
+            <div className="px-6 py-4 bg-stone-50/80 dark:bg-stone-950/40 flex gap-3">
               <button
                 onClick={handleClose}
-                className="flex-1 rounded-full border border-slate-200 bg-white/80 px-4 py-2 font-medium text-slate-700 transition hover:bg-white dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-300 dark:hover:bg-slate-800"
+                className="flex-1 rounded-full border border-stone-200 bg-white/80 px-4 py-2 font-medium text-stone-700 transition hover:bg-white dark:border-stone-700 dark:bg-stone-900/60 dark:text-stone-300 dark:hover:bg-stone-800"
               >
                 Dismiss
               </button>
               <button
                 onClick={handleActionClick}
-                className="flex-1 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 px-4 py-2 font-medium text-white transition flex items-center justify-center gap-2 hover:from-emerald-600 hover:to-teal-600"
+                className="flex-1 rounded-full bg-gradient-to-r from-stone-500 to-stone-600 px-4 py-2 font-medium text-white transition flex items-center justify-center gap-2 hover:from-emerald-600 hover:to-teal-600"
               >
                 <CreditCard className="w-4 h-4" />
                 Pay Now

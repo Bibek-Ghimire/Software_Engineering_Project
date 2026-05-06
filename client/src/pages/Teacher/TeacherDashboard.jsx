@@ -47,64 +47,46 @@ import {
 
 const user = JSON.parse(localStorage.getItem("user")) || { name: "Teacher" };
 
-const StatCard = ({ title, value, color, icon, trend, subtitle }) => (
+const StatCard = ({ title, value, icon, trend, subtitle }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
-    whileHover={{ y: -8 }}
-    className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${color} p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer`}
+    whileHover={{ y: -4 }}
+    className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer"
   >
-    <div
-      className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity duration-300"
-      style={{
-        backgroundImage: `radial-gradient(circle at 20% 50%, rgba(255,255,255,0.3) 0%, transparent 50%)`,
-      }}
-    ></div>
-
-    <div className="relative z-10 flex justify-between items-start">
-      <div className="space-y-3">
-        <p className="text-white/80 text-sm font-medium">{title}</p>
+    <div className="flex justify-between items-start">
+      <div className="space-y-1">
+        <p className="text-stone-500 dark:text-stone-400 text-sm font-medium">{title}</p>
         <div className="flex items-baseline gap-2">
-          <h3 className="text-4xl font-black">{value}</h3>
+          <h3 className="text-3xl font-bold text-stone-900 dark:text-stone-50">{value}</h3>
           {trend && (
-            <span className="text-emerald-300 text-sm font-bold">{trend}</span>
+            <span className="text-emerald-600 dark:text-emerald-400 text-xs font-semibold">{trend}</span>
           )}
         </div>
-        <p className="text-white/70 text-xs font-medium">{subtitle}</p>
+        <p className="text-stone-400 dark:text-stone-500 text-xs">{subtitle}</p>
       </div>
-      <div className="p-3 rounded-xl bg-white/20 backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
+      <div className="p-3 rounded-xl bg-orange-50 dark:bg-orange-950/30 border border-orange-100 dark:border-orange-900/40 transition-transform duration-200">
         {icon}
       </div>
     </div>
-
-    <div className="absolute bottom-0 right-0 w-20 h-20 bg-white/10 rounded-tl-full scale-150 group-hover:scale-170 transition-transform duration-500"></div>
   </motion.div>
 );
 
-const ActionCard = ({ title, description, icon, onClick, color }) => (
+const ActionCard = ({ title, description, icon, onClick }) => (
   <motion.div
-    whileHover={{ y: -8 }}
+    whileHover={{ y: -4 }}
     onClick={onClick}
-    className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${color} p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer`}
+    className="surface-card p-6 cursor-pointer hover:shadow-md transition-all duration-200 group"
   >
-    <div
-      className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity duration-300"
-      style={{
-        backgroundImage: `radial-gradient(circle at 20% 50%, rgba(255,255,255,0.3) 0%, transparent 50%)`,
-      }}
-    ></div>
-
-    <div className="relative z-10 flex items-start gap-4">
-      <div className="p-3 rounded-xl bg-white/20 backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
+    <div className="flex items-start gap-4">
+      <div className="p-3 rounded-xl bg-orange-50 dark:bg-orange-950/30 border border-orange-100 dark:border-orange-900/40 group-hover:bg-orange-100 dark:group-hover:bg-orange-950/50 transition-colors duration-200">
         {icon}
       </div>
       <div className="flex-1">
-        <h3 className="text-lg font-bold">{title}</h3>
-        <p className="text-white/70 text-sm font-medium mt-1">{description}</p>
+        <h3 className="text-base font-bold text-stone-900 dark:text-stone-50">{title}</h3>
+        <p className="text-stone-500 dark:text-stone-400 text-sm mt-1">{description}</p>
       </div>
     </div>
-
-    <div className="absolute bottom-0 right-0 w-20 h-20 bg-white/10 rounded-tl-full scale-150 group-hover:scale-170 transition-transform duration-500"></div>
   </motion.div>
 );
 
@@ -254,7 +236,7 @@ const TeacherDashboard = () => {
       case "Silver":
         return "bg-gray-400 text-white";
       default:
-        return "bg-blue-200 text-blue-800";
+        return "bg-stone-200 text-stone-700";
     }
   };
 
@@ -270,9 +252,9 @@ const TeacherDashboard = () => {
   ];
 
   const performanceData = [
-    { name: "Completed", value: 75, color: "#3B82F6" },
-    { name: "In Progress", value: 20, color: "#10B981" },
-    { name: "Pending", value: 5, color: "#F59E0B" },
+    { name: "Completed", value: 75, color: "#c2651a" },
+    { name: "In Progress", value: 20, color: "#78716c" },
+    { name: "Pending", value: 5, color: "#d6d3d1" },
   ];
 
   return (
@@ -292,49 +274,45 @@ const TeacherDashboard = () => {
           transition={{ duration: 0.5 }}
         >
           <div>
-            <h1 className="text-5xl font-black bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-800 bg-clip-text text-transparent leading-tight">
+            <h1 className="brand-title text-4xl font-bold text-stone-900 dark:text-stone-50 leading-tight">
               Teaching Hub
             </h1>
-            <p className="text-stone-600 dark:text-stone-300 mt-2 text-lg font-medium">
-              Empowering minds, shaping futures 
+            <p className="text-stone-500 dark:text-stone-400 mt-1.5 text-base">
+              Empowering minds, shaping futures
             </p>
           </div>
 
-          <div className="flex items-center gap-4">
-            <motion.button
+          <div className="flex items-center gap-2">
+            <button
               onClick={toggleDarkMode}
-              className="group relative p-3 rounded-2xl surface-card border border-stone-200 dark:border-stone-700 hover:bg-stone-50 dark:hover:bg-stone-800 transition-all duration-300"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              className="icon-action"
             >
               {darkMode ? (
                 <Sun className="w-5 h-5 text-amber-500" />
               ) : (
-                <Moon className="w-5 h-5 text-blue-500" />
+                <Moon className="w-5 h-5 text-stone-500" />
               )}
-            </motion.button>
+            </button>
 
-            <motion.button
+            <button
               onClick={() => setShowNotifications(!showNotifications)}
-              className="relative p-3 rounded-2xl surface-card border border-stone-200 dark:border-stone-700 hover:bg-stone-50 dark:hover:bg-stone-800 transition-all duration-300"
-              whileHover={{ scale: 1.05 }}
+              className="icon-action relative"
             >
-              <Bell className="w-5 h-5 text-stone-600 dark:text-stone-300" />
+              <Bell className="w-5 h-5" />
               {notifications.filter((n) => !n.isRead).length > 0 && (
-                <span className="absolute -top-2 -right-3 inline-flex items-center justify-center px-2.5 py-0.5 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 dark:bg-red-500 rounded-full min-w-6 h-6 flex items-center justify-center">
-                  +{notifications.filter((n) => !n.isRead).length}
+                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+                  {notifications.filter((n) => !n.isRead).length}
                 </span>
               )}
-            </motion.button>
+            </button>
 
-            <motion.button
+            <button
               onClick={() => navigate("/teacher/profile")}
-              className="group flex items-center gap-3 p-3 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600 transition-all duration-300 shadow-lg hover:shadow-xl"
-              whileHover={{ scale: 1.02 }}
+              className="secondary-action gap-2"
             >
-              <User className="w-5 h-5" />
-              <span className="font-semibold hidden sm:block">Profile</span>
-            </motion.button>
+              <User className="w-4 h-4" />
+              <span className="hidden sm:inline">Profile</span>
+            </button>
           </div>
         </motion.div>
 
@@ -352,7 +330,7 @@ const TeacherDashboard = () => {
               </h3>
               <button
                 onClick={() => setShowNotifications(false)}
-                className="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                className="text-stone-500 hover:text-stone-700 dark:hover:text-stone-300"
               >
                 
               </button>
@@ -370,10 +348,9 @@ const TeacherDashboard = () => {
                     key={notification._id}
                     className={`p-4 hover:bg-stone-50 dark:hover:bg-stone-800/60 transition-colors cursor-pointer ${
                       !notification.isRead
-                        ? "bg-blue-50 dark:bg-blue-900/20"
+                        ? "bg-orange-50 dark:bg-orange-950/10 border-l-4 border-l-orange-500"
                         : ""
                     }`}
-                    whileHover={{ x: 4 }}
                     onClick={() =>
                       !notification.isRead &&
                       markNotificationAsRead(notification._id)
@@ -381,7 +358,7 @@ const TeacherDashboard = () => {
                   >
                     <div className="flex items-start gap-3">
                       <div
-                        className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${!notification.isRead ? "bg-blue-600" : "bg-transparent"}`}
+                        className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${!notification.isRead ? "bg-orange-500" : "bg-transparent"}`}
                       ></div>
                       <div className="flex-1 min-w-0">
                         <p className="font-semibold text-stone-900 dark:text-stone-50 text-sm">
@@ -423,19 +400,12 @@ const TeacherDashboard = () => {
 
         {/* Hero Banner */}
         <motion.div
-          className="relative w-full h-96 rounded-3xl overflow-hidden shadow-2xl group"
+          className="relative w-full h-72 rounded-2xl overflow-hidden shadow-md group"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-500 to-indigo-700"></div>
-          <div className="absolute inset-0 backdrop-blur-3xl opacity-40" />
-          <div
-            className="absolute inset-0 opacity-25 bg-repeat"
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-            }}
-          ></div>
+          <div className="absolute inset-0 bg-stone-900"></div>
 
           <div className="relative z-10 h-full flex items-center justify-between px-12 py-8">
             <div className="text-white space-y-6 max-w-2xl">
@@ -456,7 +426,7 @@ const TeacherDashboard = () => {
                     {user.name}
                   </span>
                 </h1>
-                <p className="text-lg text-blue-50 font-medium">
+                <p className="text-lg text-stone-100 font-medium">
                   Ready to inspire and educate today? Your students are waiting!
                   
                 </p>
@@ -520,36 +490,32 @@ const TeacherDashboard = () => {
         </motion.div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
             title="Active Courses"
             value={courses.length}
-            color="from-blue-500 to-cyan-500"
-            icon={<BookMarked className="w-7 h-7" />}
+            icon={<BookMarked className="w-5 h-5 text-orange-600 dark:text-orange-400" />}
             trend="+12%"
             subtitle="This month"
           />
           <StatCard
             title="Study Groups"
             value={groups.length}
-            color="from-emerald-500 to-teal-500"
-            icon={<Users className="w-7 h-7" />}
+            icon={<Users className="w-5 h-5 text-orange-600 dark:text-orange-400" />}
             trend="+8%"
             subtitle="Active groups"
           />
           <StatCard
             title="Total Students"
             value={studentsCount}
-            color="from-violet-500 to-purple-500"
-            icon={<User className="w-7 h-7" />}
+            icon={<User className="w-5 h-5 text-orange-600 dark:text-orange-400" />}
             trend="+24%"
             subtitle="Enrolled"
           />
           <StatCard
             title="Engagements"
             value={engagements}
-            color="from-rose-500 to-pink-500"
-            icon={<TrendingUp className="w-7 h-7" />}
+            icon={<TrendingUp className="w-5 h-5 text-orange-600 dark:text-orange-400" />}
             trend="+18%"
             subtitle="This week"
           />
@@ -594,12 +560,12 @@ const TeacherDashboard = () => {
                   >
                     <stop
                       offset="5%"
-                      stopColor="#3B82F6"
+                      stopColor="#c2651a"
                       stopOpacity={0.3}
                     />
                     <stop
                       offset="95%"
-                      stopColor="#3B82F6"
+                      stopColor="#c2651a"
                       stopOpacity={0.05}
                     />
                   </linearGradient>
@@ -614,7 +580,7 @@ const TeacherDashboard = () => {
                   tickLine={false}
                   tick={{
                     fontSize: 12,
-                    fill: darkMode ? "#94A3B8" : "#64748B",
+                    fill: darkMode ? "#a8a29e" : "#78716c",
                   }}
                 />
                 <YAxis
@@ -622,26 +588,26 @@ const TeacherDashboard = () => {
                   tickLine={false}
                   tick={{
                     fontSize: 12,
-                    fill: darkMode ? "#94A3B8" : "#64748B",
+                    fill: darkMode ? "#a8a29e" : "#78716c",
                   }}
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: darkMode ? "#1E293B" : "white",
-                    border: "none",
-                    borderRadius: "16px",
-                    boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)",
+                    backgroundColor: darkMode ? "#1c1917" : "white",
+                    border: "1px solid #e7e5e4",
+                    borderRadius: "12px",
+                    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.07)",
                   }}
                 />
                 <Area
                   type="monotone"
                   dataKey="sales"
-                  stroke="#3B82F6"
-                  strokeWidth={3}
+                  stroke="#c2651a"
+                  strokeWidth={2.5}
                   fill="url(#colorGradient)"
                   dot={{
-                    r: 6,
-                    fill: "#3B82F6",
+                    r: 5,
+                    fill: "#c2651a",
                     strokeWidth: 2,
                     stroke: "white",
                   }}
@@ -722,33 +688,30 @@ const TeacherDashboard = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
         >
           <div className="flex items-center gap-3 mb-6">
-            <Target className="w-6 h-6 text-blue-600" />
+            <Target className="w-6 h-6 text-orange-600" />
             <h2 className="text-2xl font-bold text-stone-900 dark:text-stone-50">
               Quick Actions
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <ActionCard
               title="Create New Course"
-              description="Design and launch courses"
-              icon={<PlusCircle className="w-8 h-8" />}
+              description="Design and launch your next course"
+              icon={<PlusCircle className="w-6 h-6 text-orange-600 dark:text-orange-400" />}
               onClick={() => navigate("/teacher/course")}
-              color="from-blue-500 to-cyan-500"
             />
             <ActionCard
               title="Manage Students"
-              description="View and organize students"
-              icon={<Users className="w-8 h-8" />}
+              description="View and organise your enrolled students"
+              icon={<Users className="w-6 h-6 text-orange-600 dark:text-orange-400" />}
               onClick={() => navigate("/teacher/approved-students")}
-              color="from-emerald-500 to-teal-500"
             />
             <ActionCard
               title="View Leaderboard"
-              description="Check teacher rankings"
-              icon={<Award className="w-8 h-8" />}
+              description="Check rankings among educators"
+              icon={<Award className="w-6 h-6 text-orange-600 dark:text-orange-400" />}
               onClick={() => navigate("/teacher/leaderboard")}
-              color="from-violet-500 to-purple-500"
             />
           </div>
         </motion.div>
@@ -766,14 +729,13 @@ const TeacherDashboard = () => {
                 Top Educators
               </h2>
             </div>
-            <motion.button
+            <button
               onClick={() => navigate("/teacher/leaderboard")}
-              className="group flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600 transition-all duration-300 shadow-lg text-sm font-semibold"
-              whileHover={{ scale: 1.02 }}
+              className="secondary-action gap-1.5 text-sm"
             >
               View All
-              <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-            </motion.button>
+              <ArrowUpRight className="w-4 h-4" />
+            </button>
           </div>
 
           <div className="relative">
@@ -790,7 +752,7 @@ const TeacherDashboard = () => {
                     description="Check teacher rankings"
                     icon={<Award className="w-8 h-8" />}
                     onClick={() => navigate("/teacher/leaderboard")}
-                    color="from-violet-500 to-purple-500"
+                    color="from-stone-600 to-stone-700"
                   />
                 </p>
               </motion.div>
@@ -828,7 +790,7 @@ const TeacherDashboard = () => {
                         <div className="space-y-3">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2 text-stone-600 dark:text-stone-300">
-                              <Clock className="w-4 h-4 text-blue-500" />
+                              <Clock className="w-4 h-4 text-orange-500" />
                               <span className="text-sm font-medium">
                                 Teaching Hours
                               </span>
@@ -869,9 +831,9 @@ const TeacherDashboard = () => {
                             <span>Progress to next tier</span>
                             <span>85%</span>
                           </div>
-                          <div className="h-2 bg-slate-200 dark:bg-stone-800 rounded-full overflow-hidden">
+                          <div className="h-2 bg-stone-200 dark:bg-stone-800 rounded-full overflow-hidden">
                             <motion.div
-                              className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"
+                              className="h-full bg-gradient-to-r from-orange-500 to-amber-500 rounded-full"
                               initial={{ width: 0 }}
                               animate={{ width: "85%" }}
                               transition={{

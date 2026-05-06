@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
@@ -186,8 +186,8 @@ const StudentProfileUpgraded = () => {
     return (
       <div className="flex items-center justify-center min-h-screen page-surface">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-lg font-semibold text-blue-700 dark:text-blue-300">
+          <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-lg font-semibold text-orange-700 dark:text-orange-300">
             Loading profile...
           </p>
         </div>
@@ -202,12 +202,12 @@ const StudentProfileUpgraded = () => {
       <div className="flex-1 p-8 lg:p-12 relative">
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className="absolute top-8 right-8 p-4 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-xl hover:shadow-2xl hover:scale-110 border-2 border-blue-200/50 dark:border-gray-600/50 transition-all duration-300 z-10 group"
+          className="absolute top-8 right-8 icon-action absolute top-8 right-8 z-10"
         >
           {darkMode ? (
-            <Sun className="w-6 h-6 group-hover:rotate-180 transition-transform duration-500" />
+            <Sun className="w-6 h-6" />
           ) : (
-            <Moon className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+            <Moon className="w-6 h-6" />
           )}
         </button>
         <motion.div
@@ -249,7 +249,7 @@ const StudentProfileUpgraded = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-blue-200/50 dark:border-blue-800/30"
+            className="bg-white dark:bg-stone-900 rounded-2xl shadow-xl overflow-hidden border border-stone-200/50 dark:border-blue-800/30"
           >
             {/* Profile Picture Section */}
             <div className="bg-gradient-to-r from-blue-500 to-indigo-600 h-40"></div>
@@ -265,16 +265,16 @@ const StudentProfileUpgraded = () => {
                         `http://localhost:5000${profile.profilePicture}`
                       }
                       alt="Profile"
-                      className="w-32 h-32 rounded-full border-4 border-white dark:border-gray-700 shadow-lg object-cover"
+                      className="w-32 h-32 rounded-full border-4 border-white dark:border-stone-700 shadow-lg object-cover"
                     />
                   ) : (
-                    <div className="w-32 h-32 rounded-full border-4 border-white dark:border-gray-700 shadow-lg bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center text-white text-4xl font-bold">
+                    <div className="w-32 h-32 rounded-full border-4 border-white dark:border-stone-700 shadow-lg bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center text-white text-4xl font-bold">
                       {profile.name?.[0]?.toUpperCase()}
                     </div>
                   )}
 
                   {isEditing && (
-                    <label className="absolute bottom-0 right-0 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full cursor-pointer shadow-lg transition-all hover:scale-110">
+                    <label className="absolute bottom-0 right-0 bg-orange-600 hover:bg-orange-700 text-white p-3 rounded-full cursor-pointer shadow-lg transition-all hover:scale-110">
                       <Upload className="w-5 h-5" />
                       <input
                         type="file"
@@ -292,7 +292,7 @@ const StudentProfileUpgraded = () => {
                 {/* Name and Email */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">
                       Full Name
                     </label>
                     {isEditing ? (
@@ -301,7 +301,7 @@ const StudentProfileUpgraded = () => {
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-3 border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                       />
                     ) : (
                       <p className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -311,10 +311,10 @@ const StudentProfileUpgraded = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                    <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2 flex items-center gap-2">
                       <Mail className="w-4 h-4" /> Email (Non-editable)
                     </label>
-                    <p className="text-lg font-semibold text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-700 px-4 py-3 rounded-lg">
+                    <p className="text-lg font-semibold text-gray-900 dark:text-white bg-stone-100 dark:bg-stone-800 px-4 py-3 rounded-lg">
                       {profile.email}
                     </p>
                   </div>
@@ -323,7 +323,7 @@ const StudentProfileUpgraded = () => {
                 {/* College and Bio */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">
                       College / Institution
                     </label>
                     {isEditing ? (
@@ -333,10 +333,10 @@ const StudentProfileUpgraded = () => {
                         value={formData.college}
                         onChange={handleInputChange}
                         placeholder="Enter your college name"
-                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-3 border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                       />
                     ) : (
-                      <p className="text-gray-600 dark:text-gray-400">
+                      <p className="text-stone-500 dark:text-stone-500">
                         {profile.college || "Not specified"}
                       </p>
                     )}
@@ -345,7 +345,7 @@ const StudentProfileUpgraded = () => {
 
                 {/* Bio */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">
                     Bio
                   </label>
                   {isEditing ? (
@@ -355,10 +355,10 @@ const StudentProfileUpgraded = () => {
                       onChange={handleInputChange}
                       placeholder="Tell us about yourself..."
                       rows="4"
-                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                      className="w-full px-4 py-3 border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
                     />
                   ) : (
-                    <p className="text-gray-600 dark:text-gray-400">
+                    <p className="text-stone-500 dark:text-stone-500">
                       {profile.bio || "No bio added yet"}
                     </p>
                   )}
@@ -366,7 +366,7 @@ const StudentProfileUpgraded = () => {
 
                 {/* Skills */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                  <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-3">
                     Skills
                   </label>
                   {isEditing ? (
@@ -382,11 +382,11 @@ const StudentProfileUpgraded = () => {
                             }
                           }}
                           placeholder="Add a skill..."
-                          className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="flex-1 px-4 py-3 border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                         />
                         <button
                           onClick={handleAddSkill}
-                          className="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center gap-2"
+                          className="px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors flex items-center gap-2"
                         >
                           <Plus className="w-4 h-4" /> Add
                         </button>
@@ -424,7 +424,7 @@ const StudentProfileUpgraded = () => {
                           </span>
                         ))
                       ) : (
-                        <p className="text-gray-500 dark:text-gray-400">
+                        <p className="text-stone-500 dark:text-stone-400">
                           No skills added yet
                         </p>
                       )}
@@ -434,7 +434,7 @@ const StudentProfileUpgraded = () => {
 
                 {/* Interests */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                  <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-3">
                     Interests
                   </label>
                   {isEditing ? (
@@ -450,11 +450,11 @@ const StudentProfileUpgraded = () => {
                             }
                           }}
                           placeholder="Add an interest..."
-                          className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="flex-1 px-4 py-3 border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                         />
                         <button
                           onClick={handleAddInterest}
-                          className="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center gap-2"
+                          className="px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors flex items-center gap-2"
                         >
                           <Plus className="w-4 h-4" /> Add
                         </button>
@@ -492,7 +492,7 @@ const StudentProfileUpgraded = () => {
                           </span>
                         ))
                       ) : (
-                        <p className="text-gray-500 dark:text-gray-400">
+                        <p className="text-stone-500 dark:text-stone-400">
                           No interests added yet
                         </p>
                       )}
@@ -503,7 +503,7 @@ const StudentProfileUpgraded = () => {
                 {/* Social Links */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                    <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2 flex items-center gap-2">
                       <Github className="w-4 h-4" /> GitHub URL
                     </label>
                     {isEditing ? (
@@ -513,7 +513,7 @@ const StudentProfileUpgraded = () => {
                         value={formData.github}
                         onChange={handleInputChange}
                         placeholder="https://github.com/username"
-                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-3 border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                       />
                     ) : (
                       <>
@@ -522,12 +522,12 @@ const StudentProfileUpgraded = () => {
                             href={profile.github}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-600 dark:text-blue-400 hover:underline break-all"
+                            className="text-orange-600 dark:text-orange-400 hover:underline break-all"
                           >
                             {profile.github}
                           </a>
                         ) : (
-                          <p className="text-gray-500 dark:text-gray-400">
+                          <p className="text-stone-500 dark:text-stone-400">
                             Not provided
                           </p>
                         )}
@@ -536,7 +536,7 @@ const StudentProfileUpgraded = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                    <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2 flex items-center gap-2">
                       <Linkedin className="w-4 h-4" /> LinkedIn URL
                     </label>
                     {isEditing ? (
@@ -546,7 +546,7 @@ const StudentProfileUpgraded = () => {
                         value={formData.linkedin}
                         onChange={handleInputChange}
                         placeholder="https://linkedin.com/in/username"
-                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-3 border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                       />
                     ) : (
                       <>
@@ -555,12 +555,12 @@ const StudentProfileUpgraded = () => {
                             href={profile.linkedin}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-600 dark:text-blue-400 hover:underline break-all"
+                            className="text-orange-600 dark:text-orange-400 hover:underline break-all"
                           >
                             {profile.linkedin}
                           </a>
                         ) : (
-                          <p className="text-gray-500 dark:text-gray-400">
+                          <p className="text-stone-500 dark:text-stone-400">
                             Not provided
                           </p>
                         )}

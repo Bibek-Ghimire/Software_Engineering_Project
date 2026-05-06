@@ -220,7 +220,7 @@ const CourseDetail = () => {
       case "Expert":
         return "bg-red-100 text-red-800";
       default:
-        return "bg-blue-100 text-blue-800";
+        return "bg-orange-50 text-stone-700";
     }
   };
 
@@ -234,7 +234,7 @@ const CourseDetail = () => {
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="w-12 h-12 border-4 border-blue-400 border-t-blue-600 rounded-full"
+            className="w-12 h-12 border-4 border-orange-400 border-t-blue-600 rounded-full"
           />
         </div>
       </div>
@@ -286,19 +286,19 @@ const CourseDetail = () => {
         {/* Dark Mode Toggle */}
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className="absolute top-8 right-8 p-4 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-xl hover:shadow-2xl hover:scale-110 border-2 border-blue-200/50 dark:border-gray-600/50 transition-all duration-300 z-10 group"
+          className="absolute top-8 right-8 icon-action absolute top-8 right-8 z-10"
         >
           {darkMode ? (
-            <Sun className="w-6 h-6 group-hover:rotate-180 transition-transform duration-500" />
+            <Sun className="w-6 h-6" />
           ) : (
-            <Moon className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+            <Moon className="w-6 h-6" />
           )}
         </button>
         {/* Back Button */}
         <div className="pt-8 px-6">
           <motion.button
             onClick={() => navigate("/courses")}
-            className="flex items-center gap-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-semibold transition-colors"
+            className="flex items-center gap-2 text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 font-semibold transition-colors"
             whileHover={{ x: -4 }}
           >
             <ArrowLeft className="w-5 h-5" />
@@ -313,14 +313,14 @@ const CourseDetail = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden">
+          <div className="bg-white dark:bg-stone-900 rounded-3xl shadow-2xl overflow-hidden">
             {/* Header Background */}
             <div
               className={`h-64 bg-gradient-to-r ${getLevelColor(course.level)} opacity-90`}
             ></div>
 
             {/* Course Info Card */}
-            <div className="px-8 py-8 -mt-32 relative z-10 bg-white dark:bg-gray-800 rounded-3xl mx-8 mb-8 shadow-xl">
+            <div className="px-8 py-8 -mt-32 relative z-10 bg-white dark:bg-stone-900 rounded-3xl mx-8 mb-8 shadow-xl">
               <div className="flex flex-col md:flex-row justify-between items-start gap-6">
                 <div className="flex-1">
                   <div className="flex items-start gap-4 mb-4">
@@ -330,7 +330,7 @@ const CourseDetail = () => {
                       <BookOpen className="w-8 h-8 text-white" />
                     </div>
                     <div className="flex-1">
-                      <h1 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-3 leading-tight">
+                      <h1 className="text-4xl md:text-5xl font-bold text-stone-900 dark:text-stone-50 mb-3 leading-tight">
                         {course.title}
                       </h1>
                       <div className="flex flex-wrap items-center gap-3">
@@ -342,7 +342,7 @@ const CourseDetail = () => {
                         {course.rating && (
                           <div className="flex items-center gap-1">
                             <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-                            <span className="font-semibold text-gray-700 dark:text-gray-300">
+                            <span className="font-semibold text-stone-700 dark:text-stone-300">
                               {course.rating.toFixed(1)}
                             </span>
                           </div>
@@ -354,10 +354,10 @@ const CourseDetail = () => {
 
                 <div className="flex flex-col gap-3">
                   <div className="text-right">
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                    <p className="text-sm text-stone-500 dark:text-stone-500 mb-1">
                       Price
                     </p>
-                    <p className="text-4xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1 justify-end">
+                    <p className="text-4xl font-bold text-orange-600 dark:text-orange-400 flex items-center gap-1 justify-end">
                       <DollarSign className="w-8 h-8" />
                       {course.price}
                     </p>
@@ -379,7 +379,7 @@ const CourseDetail = () => {
                       isEnrolled
                         ? "bg-emerald-500 cursor-not-allowed"
                         : enrollmentRequestStatus === "pending"
-                          ? "bg-amber-400 cursor-not-allowed text-slate-900"
+                          ? "bg-amber-400 cursor-not-allowed text-stone-900"
                           : paymentStatus === "pending"
                             ? "bg-orange-500 hover:bg-orange-600"
                             : enrolling
@@ -425,7 +425,7 @@ const CourseDetail = () => {
                 whileHover={{ y: -5 }}
               >
                 <div className="flex items-center gap-3 mb-2">
-                  <Clock className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                  <Clock className="w-6 h-6 text-orange-600 dark:text-orange-400" />
                   <p className="text-sm body-copy font-semibold">
                     Duration
                   </p>
@@ -511,7 +511,7 @@ const CourseDetail = () => {
                     Your Instructor
                   </h2>
                   <div className="flex items-center gap-6">
-                    <div className="w-24 h-24 rounded-full bg-slate-900 dark:bg-slate-100 flex items-center justify-center flex-shrink-0 text-white dark:text-slate-900 shadow-sm">
+                    <div className="w-24 h-24 rounded-full bg-stone-900 dark:bg-stone-100 flex items-center justify-center flex-shrink-0 text-white dark:text-stone-900 shadow-sm">
                       <User className="w-12 h-12" />
                     </div>
                     <div className="flex-1">

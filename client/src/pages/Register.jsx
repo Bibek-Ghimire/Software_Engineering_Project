@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 import toast from "react-hot-toast";
@@ -109,7 +109,7 @@ const Register = () => {
   };
 
   return (
-    <div className="page-surface min-h-screen text-gray-800 dark:text-gray-200 overflow-x-hidden">
+    <div className="page-surface min-h-screen text-stone-900 dark:text-stone-100 overflow-x-hidden">
       {/* Theme Toggle Button */}
       <div className="absolute top-6 right-6 z-20">
         <ThemeToggle />
@@ -123,7 +123,7 @@ const Register = () => {
             <h2 className="brand-title text-3xl font-bold mb-2">
               Join the Community
             </h2>
-            <p className="text-slate-600 dark:text-slate-300 text-sm">
+            <p className="text-stone-600 dark:text-stone-300 text-sm">
               Create your account to start learning with your cohort.
             </p>
           </div>
@@ -134,9 +134,9 @@ const Register = () => {
             className="space-y-4"
           >
             <div className="relative">
-              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 w-5 h-5" />
+              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-stone-500 dark:text-stone-400 w-5 h-5" />
               <div className="relative">
-                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 w-5 h-5" />
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-stone-500 dark:text-stone-400 w-5 h-5" />
                 <select
                   className="form-input appearance-none px-12"
                   value={role} // bind to state
@@ -150,7 +150,7 @@ const Register = () => {
               </div>
             </div>
             <div className="relative">
-              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 w-5 h-5" />
+              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-stone-500 dark:text-stone-400 w-5 h-5" />
               <input
                 type="text"
                 placeholder="Full Name"
@@ -161,7 +161,7 @@ const Register = () => {
             </div>
 
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 w-5 h-5" />
+              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-stone-500 dark:text-stone-400 w-5 h-5" />
               <input
                 type="email"
                 placeholder="Email Address"
@@ -172,7 +172,7 @@ const Register = () => {
             </div>
 
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 w-5 h-5" />
+              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-stone-500 dark:text-stone-400 w-5 h-5" />
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password (min 6 characters)"
@@ -183,7 +183,7 @@ const Register = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-stone-500 dark:text-stone-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
               >
                 {showPassword ? (
                   <EyeOff className="w-5 h-5" />
@@ -194,8 +194,8 @@ const Register = () => {
             </div>
 
             {/* Interests Section */}
-            <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-700">
-              <label className="text-sm font-semibold text-gray-800 dark:text-white block mb-3">
+            <div className="mt-6 pt-4 border-t border-stone-200 dark:border-stone-700">
+              <label className="text-sm font-semibold text-stone-900 dark:text-stone-50 block mb-3">
                 Select Your Interests (Min. 1)
               </label>
 
@@ -216,7 +216,7 @@ const Register = () => {
                 {interests.map((interest) => (
                   <div
                     key={interest}
-                    className="bg-orange-100 dark:bg-orange-500/20 border border-orange-300 dark:border-orange-500/40 text-gray-800 dark:text-white rounded-full px-3 py-1 text-sm flex items-center gap-2 group"
+                    className="bg-orange-100 dark:bg-orange-500/20 border border-orange-300 dark:border-orange-500/40 text-stone-900 dark:text-stone-50 rounded-full px-3 py-1 text-sm flex items-center gap-2 group"
                   >
                     {interest}
                     <button
@@ -231,7 +231,7 @@ const Register = () => {
               </div>
 
               {/* Suggested Topics */}
-              <div className="text-xs text-gray-600 dark:text-gray-300 mb-2">
+              <div className="text-xs text-stone-600 dark:text-stone-400 mb-2">
                 Quick select:
               </div>
               <div className="flex flex-wrap gap-2 mb-4">
@@ -245,10 +245,10 @@ const Register = () => {
                     }
                     className={`px-3 py-1 text-xs rounded-full transition-all ${
                       interests.includes(topic)
-                        ? "bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-400 opacity-50"
+                        ? "bg-stone-200 dark:bg-stone-700 text-stone-500 dark:text-stone-500 opacity-50"
                         : interests.length >= 5
-                          ? "bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-400 opacity-50"
-                          : "bg-orange-100 dark:bg-orange-500/20 text-gray-800 dark:text-white hover:bg-orange-200 dark:hover:bg-orange-500/30 cursor-pointer border border-orange-200 dark:border-orange-500/40"
+                          ? "bg-stone-200 dark:bg-stone-700 text-stone-500 dark:text-stone-500 opacity-50"
+                          : "bg-orange-100 dark:bg-orange-500/20 text-stone-900 dark:text-stone-50 hover:bg-orange-200 dark:hover:bg-orange-500/30 cursor-pointer border border-orange-200 dark:border-orange-500/40"
                     }`}
                   >
                     {topic}
@@ -258,10 +258,10 @@ const Register = () => {
             </div>
 
             {/* Terms and Conditions */}
-            <div className="flex items-start space-x-2 text-xs text-gray-700 dark:text-gray-300">
+            <div className="flex items-start space-x-2 text-xs text-stone-700 dark:text-stone-300">
               <input
                 type="checkbox"
-                className="mt-1 rounded border-gray-300 bg-white text-orange-600 focus:ring-orange-500 dark:border-gray-600 dark:bg-gray-700 dark:text-orange-400"
+                className="mt-1 rounded border-stone-300 bg-white text-orange-600 focus:ring-orange-500 dark:border-stone-700 dark:bg-stone-800 dark:text-orange-400"
                 required
               />
               <span>
@@ -292,7 +292,7 @@ const Register = () => {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-gray-700 dark:text-gray-300 text-sm">
+            <p className="text-stone-700 dark:text-stone-300 text-sm">
               Already have an account?{" "}
               <Link
                 to="/login"
@@ -307,7 +307,7 @@ const Register = () => {
         {/* Back to Home */}
         <Link
           to="/"
-          className="absolute top-6 left-6 surface-card px-4 py-3 text-gray-800 dark:text-white hover:bg-white/90 dark:hover:bg-slate-800/80 transition-all duration-300 flex items-center"
+          className="absolute top-6 left-6 surface-card px-4 py-3 text-stone-900 dark:text-stone-50 hover:bg-white/90 dark:hover:bg-stone-800/80 transition-all duration-300 flex items-center"
         >
           <ArrowLeft className="w-5 h-5 mr-2" />
           Back to Home

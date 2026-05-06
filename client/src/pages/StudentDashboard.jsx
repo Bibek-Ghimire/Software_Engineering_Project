@@ -1,4 +1,4 @@
-// src/pages/StudentDashboard.jsx
+﻿// src/pages/StudentDashboard.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -291,7 +291,7 @@ const StudentDashboard = () => {
   const getTierColor = (tier) => {
     switch (tier) {
       case "Platinum":
-        return "bg-slate-500 text-white";
+        return "bg-stone-500 text-white";
       case "Diamond":
         return "bg-cyan-500 text-white";
       case "Gold":
@@ -299,7 +299,7 @@ const StudentDashboard = () => {
       case "Silver":
         return "bg-gray-400 text-white";
       default:
-        return "bg-blue-200 text-blue-800";
+        return "bg-stone-200 text-stone-700";
     }
   };
 
@@ -466,7 +466,7 @@ const StudentDashboard = () => {
                   </span>
                   !
                 </h1>
-                <p className="text-lg text-blue-50 font-medium">
+                <p className="text-lg text-stone-100 font-medium">
                   Your learning journey awaits. Explore new horizons today!
                 </p>
               </motion.div>
@@ -528,7 +528,7 @@ const StudentDashboard = () => {
           <EnhancedStatCard
             title="Enrolled Courses"
             value={courses.length}
-            iconColor="bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400"
+            iconColor="bg-stone-100 dark:bg-stone-800/60 text-orange-600 dark:text-orange-400"
             icon={<BookOpen className="w-5 h-5" />}
             subtitle="Active learning"
           />
@@ -621,7 +621,7 @@ const StudentDashboard = () => {
                     <Users className="w-6 h-6 text-stone-500 dark:text-stone-400" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
+                    <h3 className="text-2xl font-bold text-stone-900 dark:text-white">
                       Batch Allocation Pending
                     </h3>
                     <p className="text-sm body-copy mt-2 max-w-lg">
@@ -668,7 +668,7 @@ const StudentDashboard = () => {
                   <p className="text-xs body-copy font-semibold uppercase mb-2">
                     Batch Name
                   </p>
-                  <p className="text-lg font-bold text-slate-900 dark:text-white truncate">
+                  <p className="text-lg font-bold text-stone-900 dark:text-white truncate">
                     {batch.name || "Not Assigned"}
                   </p>
                 </div>
@@ -679,7 +679,7 @@ const StudentDashboard = () => {
                     Total Members
                   </p>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-black text-slate-900 dark:text-white">
+                    <span className="text-3xl font-black text-stone-900 dark:text-white">
                       {batchMembers.length}
                     </span>
                     <span className="text-sm body-copy">
@@ -698,13 +698,13 @@ const StudentDashboard = () => {
                       batch.interests.slice(0, 3).map((interest, idx) => (
                         <span
                           key={idx}
-                          className="px-3 py-1.5 rounded-full text-xs font-semibold border border-slate-200 bg-slate-100 text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
+                          className="px-3 py-1.5 rounded-full text-xs font-semibold border border-stone-200 bg-stone-100 text-stone-700 dark:border-stone-700 dark:bg-stone-800 dark:text-stone-300"
                         >
                           {interest}
                         </span>
                       ))
                     ) : (
-                      <span className="text-slate-500 dark:text-slate-400 text-sm">
+                      <span className="text-stone-500 dark:text-stone-400 text-sm">
                         No interests yet
                       </span>
                     )}
@@ -752,7 +752,7 @@ const StudentDashboard = () => {
                           />
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-bold text-slate-900 dark:text-white text-sm">
+                          <h4 className="font-bold text-stone-900 dark:text-white text-sm">
                             {member.name || "Student"}
                           </h4>
                           <p className="text-xs body-copy">{member.email}</p>
@@ -769,7 +769,7 @@ const StudentDashboard = () => {
                             {member.interests.slice(0, 2).map((interest, i) => (
                               <span
                                 key={i}
-                                className="px-2 py-1 rounded-full text-xs font-medium border border-slate-200 bg-slate-100 text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
+                                className="px-2 py-1 rounded-full text-xs font-medium border border-stone-200 bg-stone-100 text-stone-700 dark:border-stone-700 dark:bg-stone-800 dark:text-stone-300"
                               >
                                 {interest}
                               </span>
@@ -823,7 +823,7 @@ const StudentDashboard = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
-              <Trophy className="w-16 h-16 text-slate-400 mx-auto mb-4" />
+              <Trophy className="w-16 h-16 text-stone-400 mx-auto mb-4" />
               <p className="body-copy text-lg"></p>
             </motion.div>
           ) : (
@@ -856,7 +856,7 @@ const StudentDashboard = () => {
                             <Clock className="w-3.5 h-3.5" />
                             Hours
                           </span>
-                          <span className="font-semibold text-slate-900 dark:text-white">
+                          <span className="font-semibold text-stone-900 dark:text-white">
                             {getTeacherHours(teacher)}
                           </span>
                         </div>
@@ -865,7 +865,7 @@ const StudentDashboard = () => {
                             <TrendingUp className="w-3.5 h-3.5" />
                             Engagements
                           </span>
-                          <span className="font-semibold text-slate-900 dark:text-white">
+                          <span className="font-semibold text-stone-900 dark:text-white">
                             {getTeacherEngagements(teacher)}
                           </span>
                         </div>
@@ -874,7 +874,7 @@ const StudentDashboard = () => {
                             <Trophy className="w-3.5 h-3.5" />
                             Score
                           </span>
-                          <span className="font-semibold text-slate-900 dark:text-white">
+                          <span className="font-semibold text-stone-900 dark:text-white">
                             {getTeacherScore(teacher)}
                           </span>
                         </div>
@@ -931,7 +931,7 @@ const StudentDashboard = () => {
                   const levelLower = course.level?.toLowerCase();
                   let levelInfo = {
                     badge:
-                      "bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700",
+                      "bg-stone-50 text-stone-700 border-stone-200 dark:bg-stone-800 dark:text-stone-200 dark:border-stone-700",
                   };
 
                   if (levelLower === "beginner") {

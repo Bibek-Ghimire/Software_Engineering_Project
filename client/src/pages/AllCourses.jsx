@@ -1,4 +1,4 @@
-// src/pages/AllCourses.jsx
+﻿// src/pages/AllCourses.jsx
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {

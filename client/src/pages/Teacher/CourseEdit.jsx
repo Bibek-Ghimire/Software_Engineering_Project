@@ -1,4 +1,4 @@
-// src/pages/CourseEdit.jsx
+﻿// src/pages/CourseEdit.jsx
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { BookOpen, Sun, Moon } from "lucide-react";
@@ -88,12 +88,12 @@ const CourseEdit = () => {
   if (loading) return <div className="p-8 text-center">Loading course...</div>;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white transition-colors duration-300 p-6">
+    <div className="min-h-screen bg-stone-50 dark:bg-stone-950 text-stone-900 dark:text-stone-50 transition-colors duration-300 p-6">
       {/* Dark Mode Toggle */}
       <div className="flex justify-end mb-4">
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 shadow hover:scale-110 transition"
+          className="p-2 rounded-full bg-stone-200 dark:bg-stone-800 text-stone-900 dark:text-stone-100 shadow hover:scale-110 transition"
         >
           {darkMode ? (
             <Sun className="w-5 h-5" />
@@ -104,8 +104,8 @@ const CourseEdit = () => {
       </div>
 
       {/* Edit Course Form */}
-      <div className="mb-8 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
-        <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-2">
+      <div className="mb-8 bg-white dark:bg-stone-900 p-6 rounded-2xl shadow-lg">
+        <h2 className="text-2xl font-bold text-orange-600 dark:text-orange-400 mb-4 flex items-center gap-2">
           <BookOpen className="w-6 h-6" /> Edit Course
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
@@ -114,20 +114,20 @@ const CourseEdit = () => {
             placeholder="Title"
             value={formData.title}
             onChange={handleChange}
-            className="input px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+            className="input px-3 py-2 rounded-lg border border-stone-300 dark:border-stone-700 dark:bg-stone-800 dark:text-white"
           />
           <input
             name="description"
             placeholder="Description"
             value={formData.description}
             onChange={handleChange}
-            className="input px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+            className="input px-3 py-2 rounded-lg border border-stone-300 dark:border-stone-700 dark:bg-stone-800 dark:text-white"
           />
           <select
             name="level"
             value={formData.level}
             onChange={handleChange}
-            className="input px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+            className="input px-3 py-2 rounded-lg border border-stone-300 dark:border-stone-700 dark:bg-stone-800 dark:text-white"
           >
             <option>Beginner</option>
             <option>Intermediate</option>
@@ -138,7 +138,7 @@ const CourseEdit = () => {
             placeholder="Duration"
             value={formData.duration}
             onChange={handleChange}
-            className="input px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+            className="input px-3 py-2 rounded-lg border border-stone-300 dark:border-stone-700 dark:bg-stone-800 dark:text-white"
           />
           <input
             name="price"
@@ -146,7 +146,7 @@ const CourseEdit = () => {
             placeholder="Price $"
             value={formData.price}
             onChange={handleChange}
-            className="input px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+            className="input px-3 py-2 rounded-lg border border-stone-300 dark:border-stone-700 dark:bg-stone-800 dark:text-white"
           />
         </div>
         <button

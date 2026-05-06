@@ -1,4 +1,4 @@
-// src/pages/Resource.jsx
+﻿// src/pages/Resource.jsx
 import React, { useState, useEffect } from "react";
 import {
   FileText,
@@ -94,8 +94,8 @@ const Resource = () => {
       return {
         icon: "",
         color:
-          "from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30",
-        textColor: "text-blue-700 dark:text-blue-400",
+          "from-stone-100 to-stone-200 dark:from-stone-800/50 dark:to-stone-700/50",
+        textColor: "text-stone-700 dark:text-stone-300",
       };
     if (type.includes("ppt") || type.includes("presentation"))
       return {
@@ -121,8 +121,8 @@ const Resource = () => {
     return {
       icon: "",
       color:
-        "from-gray-100 to-gray-200 dark:from-gray-700/30 dark:to-gray-600/30",
-      textColor: "text-gray-700 dark:text-gray-400",
+        "from-stone-100 to-stone-200 dark:from-stone-800/50 dark:to-stone-700/50",
+      textColor: "text-stone-700 dark:text-stone-400",
     };
   };
 

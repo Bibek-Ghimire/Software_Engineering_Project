@@ -31,7 +31,7 @@ const StudyGroups = () => {
   return (
     <div className="min-h-screen page-surface py-16 px-6 md:px-12">
       {/* Content Wrapper */}
-      <div className="bg-white/80 dark:bg-blue-900/20 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-blue-200/50 dark:border-blue-800/30">
+      <div className="bg-white/80 dark:bg-orange-950/20 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-stone-200/50 dark:border-blue-800/30">
         <div className="text-center mb-10">
           <h1 className="text-4xl md:text-5xl font-extrabold text-white drop-shadow">
             Discover & Join Study Groups

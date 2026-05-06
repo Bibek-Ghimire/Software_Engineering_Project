@@ -1,4 +1,4 @@
-import { Toaster } from "react-hot-toast";
+﻿import { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";

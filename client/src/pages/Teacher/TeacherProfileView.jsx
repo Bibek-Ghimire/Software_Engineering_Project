@@ -73,16 +73,16 @@ const TeacherProfileView = () => {
       <div className="ml-64 min-h-screen page-surface w-full relative">
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className="absolute top-8 right-8 p-4 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-xl hover:shadow-2xl hover:scale-110 border-2 border-blue-200/50 dark:border-gray-600/50 transition-all duration-300 z-10 group"
+          className="absolute top-8 right-8 icon-action absolute top-8 right-8 z-10"
         >
           {darkMode ? (
-            <Sun className="w-6 h-6 group-hover:rotate-180 transition-transform duration-500" />
+            <Sun className="w-6 h-6" />
           ) : (
-            <Moon className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+            <Moon className="w-6 h-6" />
           )}
         </button>
         <motion.div
-          className="max-w-5xl mx-auto bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-10"
+          className="max-w-5xl mx-auto bg-white dark:bg-stone-900 rounded-3xl shadow-xl p-10"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -97,19 +97,19 @@ const TeacherProfileView = () => {
                     : "/default-teacher.png"
                 }
                 alt="Teacher"
-                className="w-40 h-40 rounded-full object-cover border-4 border-blue-500 shadow-md"
+                className="w-40 h-40 rounded-full object-cover border-4 border-orange-500 shadow-md"
                 whileHover={{ scale: 1.05 }}
               />
             </div>
             <div className="flex-1 text-center md:text-left">
-              <h1 className="text-3xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
-                <User className="text-blue-500" /> {profile.name}
+              <h1 className="text-3xl font-bold text-stone-900 dark:text-stone-50 flex items-center gap-2">
+                <User className="text-orange-500" /> {profile.name}
               </h1>
-              <p className="text-gray-600 dark:text-gray-300 flex items-center gap-2 mt-2">
-                <Mail className="text-blue-400" /> {profile.email}
+              <p className="text-stone-600 dark:text-stone-400 flex items-center gap-2 mt-2">
+                <Mail className="text-orange-400" /> {profile.email}
               </p>
-              <p className="text-gray-600 dark:text-gray-300 flex items-center gap-2 mt-1">
-                <GraduationCap className="text-blue-400" />{" "}
+              <p className="text-stone-600 dark:text-stone-400 flex items-center gap-2 mt-1">
+                <GraduationCap className="text-orange-400" />{" "}
                 {profile.qualification || "Not added yet"}
               </p>
             </div>
@@ -120,18 +120,18 @@ const TeacherProfileView = () => {
             {/* Left Section */}
             <div>
               <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4 flex items-center gap-2">
-                <BookOpen className="text-blue-500" /> Teaching Info
+                <BookOpen className="text-orange-500" /> Teaching Info
               </h2>
-              <p className="text-gray-600 dark:text-gray-300">
+              <p className="text-stone-600 dark:text-stone-400">
                 <b>Subject:</b> {profile.subject || "Not added yet"}
               </p>
-              <p className="mt-2 text-gray-600 dark:text-gray-300">
+              <p className="mt-2 text-stone-600 dark:text-stone-400">
                 <b>Qualification:</b> {profile.qualification || "Not added yet"}
               </p>
-              <p className="mt-2 text-gray-600 dark:text-gray-300">
+              <p className="mt-2 text-stone-600 dark:text-stone-400">
                 <b>College:</b> {profile.college || "Not added yet"}
               </p>
-              <p className="mt-2 text-gray-600 dark:text-gray-300">
+              <p className="mt-2 text-stone-600 dark:text-stone-400">
                 <b>Bio:</b> {profile.bio || "Not added yet"}
               </p>
             </div>
@@ -139,9 +139,9 @@ const TeacherProfileView = () => {
             {/* Right Section */}
             <div>
               <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4 flex items-center gap-2">
-                <Award className="text-blue-500" /> Achievements
+                <Award className="text-orange-500" /> Achievements
               </h2>
-              <p className="text-gray-600 dark:text-gray-300">
+              <p className="text-stone-600 dark:text-stone-400">
                 {profile.achievements?.length > 0
                   ? profile.achievements.join(", ")
                   : "No achievements added yet"}
@@ -156,7 +156,7 @@ const TeacherProfileView = () => {
                 <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4 flex items-center gap-2">
                   {field.charAt(0).toUpperCase() + field.slice(1)}
                 </h2>
-                <p className="text-gray-600 dark:text-gray-300">
+                <p className="text-stone-600 dark:text-stone-400">
                   {profile[field]?.length > 0
                     ? profile[field].join(", ")
                     : `No ${field} added yet`}
@@ -168,19 +168,19 @@ const TeacherProfileView = () => {
           {/* Resume */}
           <div className="mt-8">
             <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4 flex items-center gap-2">
-              <FileText className="text-blue-500" /> Resume
+              <FileText className="text-orange-500" /> Resume
             </h2>
             {profile.resume ? (
               <a
                 href={`http://localhost:5000${profile.resume}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:underline"
+                className="text-orange-600 hover:underline"
               >
                 View / Download Resume
               </a>
             ) : (
-              <p className="text-gray-600 dark:text-gray-300">
+              <p className="text-stone-600 dark:text-stone-400">
                 No resume uploaded yet
               </p>
             )}

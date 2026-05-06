@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from "react";
+﻿import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -254,8 +254,8 @@ const StudentCourseChat = () => {
         </div>
         <div className="ml-64 w-full flex items-center justify-center p-6">
           <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600"></div>
-            <p className="mt-4 text-gray-700 dark:text-gray-300 text-lg font-semibold">
+            <div className="w-10 h-10 border-2 border-stone-200 dark:border-stone-700 border-t-orange-500 rounded-full animate-spin"></div>
+            <p className="mt-4 text-stone-700 dark:text-stone-300 text-lg font-semibold">
               Loading chat...
             </p>
           </div>
@@ -275,22 +275,22 @@ const StudentCourseChat = () => {
       <div className="ml-64 w-full flex flex-col h-screen relative">
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className="absolute top-4 right-4 p-3 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-xl hover:shadow-2xl hover:scale-110 border-2 border-blue-200/50 dark:border-gray-600/50 transition-all duration-300 z-20 group"
+          className="absolute top-4 right-4 p-3 rounded-2xl bg-white/90 dark:bg-stone-900/90 backdrop-blur-sm text-orange-600 dark:text-orange-400 shadow-xl hover:shadow-2xl hover:scale-110 border-2 border-stone-200/50 dark:border-stone-700/50 transition-all duration-300 z-20 group"
         >
           {darkMode ? (
-            <Sun className="w-5 h-5 group-hover:rotate-180 transition-transform duration-500" />
+            <Sun className="w-5 h-5" />
           ) : (
-            <Moon className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
+            <Moon className="w-5 h-5" />
           )}
         </button>
         {/* Header */}
-        <div className="bg-white dark:bg-gray-800 shadow-lg border-b border-gray-200 dark:border-gray-700 p-4">
+        <div className="bg-white dark:bg-stone-900 shadow-lg border-b border-stone-200 dark:border-stone-700 p-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+            <h1 className="text-2xl font-bold text-stone-900 dark:text-stone-50">
               {courseName}
             </h1>
             {teacher && (
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-stone-500 dark:text-stone-500">
                 Instructor: {teacher.name}
               </p>
             )}
@@ -353,7 +353,7 @@ const StudentCourseChat = () => {
               })
             )}
             {Object.keys(typingUsers).length > 0 && (
-              <div className="flex gap-2 text-sm text-gray-500 dark:text-gray-400">
+              <div className="flex gap-2 text-sm text-stone-500 dark:text-stone-400">
                 <span className="inline-block">
                   {Object.values(typingUsers).join(", ")} typing...
                 </span>
@@ -363,7 +363,7 @@ const StudentCourseChat = () => {
           </div>
 
           {/* Input Area */}
-          <div className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4">
+          <div className="bg-white dark:bg-stone-900 border-t border-stone-100 dark:border-stone-800 p-4">
             <form
               onSubmit={handleSendMessage}
               className="flex gap-2"
@@ -373,12 +373,12 @@ const StudentCourseChat = () => {
                 value={messageText}
                 onChange={handleInputChange}
                 placeholder="Type a message..."
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                className="flex-1 px-4 py-2 border border-stone-300 dark:border-stone-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-stone-800 dark:text-white"
               />
               <button
                 type="submit"
                 disabled={sendingMessage || !messageText.trim()}
-                className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition disabled:opacity-50 flex items-center gap-2"
+                className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-semibold transition disabled:opacity-50 flex items-center gap-2"
               >
                 <Send className="w-4 h-4" />
                 Send

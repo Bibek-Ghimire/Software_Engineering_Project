@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Heart,
@@ -55,7 +55,7 @@ const RecommendedCourses = ({ limit = 6 }) => {
         {[...Array(3)].map((_, i) => (
           <div
             key={i}
-            className="surface-card h-72 animate-pulse"
+            className="surface-card h-72 "
           />
         ))}
       </div>

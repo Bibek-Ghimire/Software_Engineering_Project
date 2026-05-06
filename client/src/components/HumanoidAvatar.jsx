@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { User } from "lucide-react";
 
 const HumanoidAvatar = ({ src, name, size = 40, className = "" }) => {

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+﻿import React, { useContext } from "react";
 import { Moon, Sun } from "lucide-react";
 import { ThemeContext } from "../context/ThemeContext";
 
@@ -14,7 +14,7 @@ const ThemeToggle = () => {
       {isDark ? (
         <Sun className="w-5 h-5 text-amber-500" />
       ) : (
-        <Moon className="w-5 h-5 text-slate-700" />
+        <Moon className="w-5 h-5 text-stone-700" />
       )}
     </button>
   );

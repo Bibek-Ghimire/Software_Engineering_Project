@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { FileText, Download, TrendingUp } from "lucide-react";
 import HumanoidAvatar from "./HumanoidAvatar";
 import recommendationService from "../services/recommendationService";
@@ -43,7 +43,7 @@ const RecommendedResources = ({ limit = 6 }) => {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {[...Array(3)].map((_, i) => (
-          <div key={i} className="surface-card h-56 animate-pulse" />
+          <div key={i} className="surface-card h-56 " />
         ))}
       </div>
     );

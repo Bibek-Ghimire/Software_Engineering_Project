@@ -49,7 +49,7 @@ const Payments = () => {
       image: "/images/payment-methods/creditcard.jpg",
       description: "Pay securely with your credit card",
       color: "from-blue-500 to-blue-600",
-      textColor: "text-blue-600",
+      textColor: "text-orange-600",
     },
     {
       id: "card_debit",
@@ -286,12 +286,12 @@ const Payments = () => {
         {/* Dark Mode Toggle */}
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className="absolute top-8 right-8 p-4 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-xl hover:shadow-2xl hover:scale-110 border-2 border-blue-200/50 dark:border-gray-600/50 transition-all duration-300 z-10 group"
+          className="absolute top-8 right-8 icon-action absolute top-8 right-8 z-10"
         >
           {darkMode ? (
-            <Sun className="w-6 h-6 group-hover:rotate-180 transition-transform duration-500" />
+            <Sun className="w-6 h-6" />
           ) : (
-            <Moon className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+            <Moon className="w-6 h-6" />
           )}
         </button>
         <div className="p-8">
@@ -301,18 +301,18 @@ const Payments = () => {
             animate={{ opacity: 1, y: 0 }}
             className="mb-8"
           >
-            <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-2">
+            <h1 className="text-4xl font-bold text-stone-900 dark:text-stone-50 mb-2">
               Course Payments
             </h1>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-stone-500 dark:text-stone-500">
               Manage your course enrollment payments
             </p>
           </motion.div>
 
           {loading ? (
             <div className="text-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-              <p className="text-gray-600 dark:text-gray-400">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
+              <p className="text-stone-500 dark:text-stone-500">
                 Loading payments...
               </p>
             </div>
@@ -365,7 +365,7 @@ const Payments = () => {
               {/* Pending Payments Section */}
               {pendingPayments.length > 0 && (
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
+                  <h2 className="text-2xl font-bold text-stone-900 dark:text-stone-50 mb-4 flex items-center gap-2">
                     <Clock className="w-6 h-6 text-yellow-500" />
                     Pending Payments
                   </h2>
@@ -375,7 +375,7 @@ const Payments = () => {
                         key={payment._id}
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className={`bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-l-4 hover:shadow-xl transition-all ${
+                        className={`bg-white dark:bg-stone-900 rounded-xl shadow-lg p-6 border-l-4 hover:shadow-xl transition-all ${
                           lastEnrollmentPaymentId === payment._id
                             ? "border-l-green-500 ring-2 ring-green-400 dark:ring-green-600 ring-offset-2 dark:ring-offset-gray-900"
                             : "border-l-yellow-500"
@@ -388,10 +388,10 @@ const Payments = () => {
                         )}
                         <div className="flex justify-between items-start mb-4">
                           <div>
-                            <h3 className="text-lg font-bold text-gray-800 dark:text-white">
+                            <h3 className="text-lg font-bold text-stone-900 dark:text-stone-50">
                               {payment.course?.title || "Unknown Course"}
                             </h3>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                            <p className="text-sm text-stone-500 dark:text-stone-400">
                               Requested on{" "}
                               {new Date(payment.createdAt).toLocaleDateString()}
                             </p>
@@ -401,22 +401,22 @@ const Payments = () => {
                           </span>
                         </div>
 
-                        <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-4">
-                          <p className="text-gray-600 dark:text-gray-300 text-sm mb-1">
+                        <div className="bg-stone-50 dark:bg-stone-800 rounded-lg p-4 mb-4">
+                          <p className="text-stone-600 dark:text-stone-400 text-sm mb-1">
                             Amount Due
                           </p>
-                          <p className="text-3xl font-bold text-gray-800 dark:text-white">
+                          <p className="text-3xl font-bold text-stone-900 dark:text-stone-50">
                             {payment.amount}
                           </p>
                         </div>
 
                         <div className="space-y-2">
                           {showPaymentModal === payment._id ? (
-                            <div className="space-y-4 mb-4 p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg border border-blue-200 dark:border-blue-800">
+                            <div className="space-y-4 mb-4 p-4 bg-stone-100 dark:bg-orange-950/30 rounded-lg border border-stone-200 dark:border-blue-800">
                               {/* Payment Method Selection */}
                               {!selectedPaymentMethod ? (
                                 <div>
-                                  <h4 className="font-semibold text-gray-800 dark:text-white mb-3">
+                                  <h4 className="font-semibold text-stone-900 dark:text-stone-50 mb-3">
                                     Select Payment Method
                                   </h4>
                                   <div className="grid grid-cols-2 gap-3">
@@ -429,8 +429,8 @@ const Payments = () => {
                                         }}
                                         className={`p-3 rounded-lg border-2 transition-all text-center ${
                                           selectedPaymentMethod === method.id
-                                            ? `border-${method.id.includes("card") ? "blue" : "green"}-500 bg-blue-50 dark:bg-blue-900/50`
-                                            : "border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
+                                            ? `border-${method.id.includes("card") ? "blue" : "green"}-500 bg-stone-100 dark:bg-orange-950/50`
+                                            : "border-stone-300 dark:border-stone-700 hover:border-gray-400 dark:hover:border-gray-500"
                                         }`}
                                       >
                                         <div className="flex justify-center mb-2">
@@ -444,7 +444,7 @@ const Payments = () => {
                                             }}
                                           />
                                         </div>
-                                        <div className="text-xs font-semibold text-gray-800 dark:text-white">
+                                        <div className="text-xs font-semibold text-stone-900 dark:text-stone-50">
                                           {method.name}
                                         </div>
                                       </motion.button>
@@ -457,7 +457,7 @@ const Payments = () => {
                                   {(selectedPaymentMethod === "card_credit" ||
                                     selectedPaymentMethod === "card_debit") && (
                                     <div className="space-y-3">
-                                      <h4 className="font-semibold text-gray-800 dark:text-white flex items-center gap-2">
+                                      <h4 className="font-semibold text-stone-900 dark:text-stone-50 flex items-center gap-2">
                                         <button
                                           onClick={() =>
                                             setSelectedPaymentMethod(null)
@@ -480,7 +480,7 @@ const Payments = () => {
                                             cardholderName: e.target.value,
                                           })
                                         }
-                                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                        className="w-full px-3 py-2 border border-stone-300 dark:border-stone-700 rounded-lg dark:bg-stone-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
                                       />
                                       <input
                                         type="text"
@@ -497,7 +497,7 @@ const Payments = () => {
                                             cardNumber: val,
                                           });
                                         }}
-                                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                        className="w-full px-3 py-2 border border-stone-300 dark:border-stone-700 rounded-lg dark:bg-stone-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
                                       />
                                       <div className="grid grid-cols-2 gap-2">
                                         <input
@@ -520,7 +520,7 @@ const Payments = () => {
                                               expiryDate: val,
                                             });
                                           }}
-                                          className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                          className="px-3 py-2 border border-stone-300 dark:border-stone-700 rounded-lg dark:bg-stone-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
                                         />
                                         <input
                                           type="text"
@@ -537,7 +537,7 @@ const Payments = () => {
                                               cvv: val,
                                             });
                                           }}
-                                          className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                          className="px-3 py-2 border border-stone-300 dark:border-stone-700 rounded-lg dark:bg-stone-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
                                         />
                                       </div>
                                     </div>
@@ -546,7 +546,7 @@ const Payments = () => {
                                   {/* eSewa Form */}
                                   {selectedPaymentMethod === "esewa" && (
                                     <div className="space-y-3">
-                                      <h4 className="font-semibold text-gray-800 dark:text-white flex items-center gap-2">
+                                      <h4 className="font-semibold text-stone-900 dark:text-stone-50 flex items-center gap-2">
                                         <button
                                           onClick={() =>
                                             setSelectedPaymentMethod(null)
@@ -564,9 +564,9 @@ const Payments = () => {
                                         onChange={(e) =>
                                           setEsewaPhoneEmail(e.target.value)
                                         }
-                                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+                                        className="w-full px-3 py-2 border border-stone-300 dark:border-stone-700 rounded-lg dark:bg-stone-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
                                       />
-                                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                                      <p className="text-xs text-stone-500 dark:text-stone-400">
                                         You'll be redirected to eSewa to
                                         complete the payment
                                       </p>
@@ -576,7 +576,7 @@ const Payments = () => {
                                   {/* Khalti Form */}
                                   {selectedPaymentMethod === "khalti" && (
                                     <div className="space-y-3">
-                                      <h4 className="font-semibold text-gray-800 dark:text-white flex items-center gap-2">
+                                      <h4 className="font-semibold text-stone-900 dark:text-stone-50 flex items-center gap-2">
                                         <button
                                           onClick={() =>
                                             setSelectedPaymentMethod(null)
@@ -594,9 +594,9 @@ const Payments = () => {
                                         onChange={(e) =>
                                           setKhaltiPhoneEmail(e.target.value)
                                         }
-                                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+                                        className="w-full px-3 py-2 border border-stone-300 dark:border-stone-700 rounded-lg dark:bg-stone-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
                                       />
-                                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                                      <p className="text-xs text-stone-500 dark:text-stone-400">
                                         You'll be redirected to Khalti to
                                         complete the payment
                                       </p>
@@ -630,7 +630,7 @@ const Payments = () => {
                                     handleFailPayment(payment._id);
                                   }}
                                   disabled={processingId === payment._id}
-                                  className="flex-1 px-4 py-3 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 text-gray-800 dark:text-white rounded-lg font-semibold transition-all disabled:opacity-50"
+                                  className="flex-1 px-4 py-3 bg-stone-200 dark:bg-stone-700 hover:bg-stone-300 dark:hover:bg-gray-500 text-stone-900 dark:text-stone-50 rounded-lg font-semibold transition-all disabled:opacity-50"
                                 >
                                   Cancel
                                 </button>
@@ -641,7 +641,7 @@ const Payments = () => {
                                   setShowPaymentModal(payment._id);
                                   setSelectedPaymentMethod(null);
                                 }}
-                                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-all"
+                                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-semibold transition-all"
                               >
                                 <CreditCard className="w-4 h-4" />
                                 Proceed to Payment
@@ -659,7 +659,7 @@ const Payments = () => {
               {/* Completed Payments Section */}
               {completedPayments.length > 0 && (
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
+                  <h2 className="text-2xl font-bold text-stone-900 dark:text-stone-50 mb-4 flex items-center gap-2">
                     <CheckCircle className="w-6 h-6 text-green-500" />
                     Completed Payments
                   </h2>
@@ -669,14 +669,14 @@ const Payments = () => {
                         key={payment._id}
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-l-4 border-green-500"
+                        className="surface-card p-6 border-l-4 border-emerald-400"
                       >
                         <div className="flex justify-between items-start mb-4">
                           <div>
-                            <h3 className="text-lg font-bold text-gray-800 dark:text-white">
+                            <h3 className="text-lg font-bold text-stone-900 dark:text-stone-50">
                               {payment.course?.title || "Unknown Course"}
                             </h3>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                            <p className="text-sm text-stone-500 dark:text-stone-400">
                               Paid on{" "}
                               {new Date(
                                 payment.paymentDate,
@@ -688,11 +688,11 @@ const Payments = () => {
                           </span>
                         </div>
 
-                        <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-4">
-                          <p className="text-gray-600 dark:text-gray-300 text-sm mb-1">
+                        <div className="bg-stone-50 dark:bg-stone-800 rounded-lg p-4 mb-4">
+                          <p className="text-stone-600 dark:text-stone-400 text-sm mb-1">
                             Amount Paid
                           </p>
-                          <p className="text-3xl font-bold text-gray-800 dark:text-white">
+                          <p className="text-3xl font-bold text-stone-900 dark:text-stone-50">
                             {payment.amount}
                           </p>
                         </div>
@@ -701,7 +701,7 @@ const Payments = () => {
                           onClick={() =>
                             navigate(`/course/${payment.course._id}`)
                           }
-                          className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-all"
+                          className="w-full px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-semibold transition-all"
                         >
                           Go to Course
                         </button>
@@ -714,7 +714,7 @@ const Payments = () => {
               {/* Failed Payments Section */}
               {failedPayments.length > 0 && (
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
+                  <h2 className="text-2xl font-bold text-stone-900 dark:text-stone-50 mb-4 flex items-center gap-2">
                     <AlertCircle className="w-6 h-6 text-red-500" />
                     Failed Payments
                   </h2>
@@ -724,11 +724,11 @@ const Payments = () => {
                         key={payment._id}
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-l-4 border-red-500"
+                        className="bg-white dark:bg-stone-900 rounded-xl shadow-lg p-6 border-l-4 border-red-500"
                       >
                         <div className="flex justify-between items-start mb-4">
                           <div>
-                            <h3 className="text-lg font-bold text-gray-800 dark:text-white">
+                            <h3 className="text-lg font-bold text-stone-900 dark:text-stone-50">
                               {payment.course?.title || "Unknown Course"}
                             </h3>
                             <p className="text-sm text-red-600 dark:text-red-400">
@@ -740,11 +740,11 @@ const Payments = () => {
                           </span>
                         </div>
 
-                        <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-4">
-                          <p className="text-gray-600 dark:text-gray-300 text-sm mb-1">
+                        <div className="bg-stone-50 dark:bg-stone-800 rounded-lg p-4 mb-4">
+                          <p className="text-stone-600 dark:text-stone-400 text-sm mb-1">
                             Amount
                           </p>
-                          <p className="text-3xl font-bold text-gray-800 dark:text-white">
+                          <p className="text-3xl font-bold text-stone-900 dark:text-stone-50">
                             {payment.amount}
                           </p>
                         </div>
@@ -754,7 +754,7 @@ const Payments = () => {
                             setShowPaymentModal(payment._id);
                             setSelectedPaymentMethod(null);
                           }}
-                          className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-all"
+                          className="w-full px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-semibold transition-all"
                         >
                           Retry Payment
                         </button>
@@ -772,7 +772,7 @@ const Payments = () => {
                   className="text-center py-12"
                 >
                   <CreditCard className="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" />
-                  <p className="text-gray-600 dark:text-gray-400 text-lg">
+                  <p className="text-stone-500 dark:text-stone-500 text-lg">
                     No payments found. When your enrollment is approved, payment
                     details will appear here.
                   </p>

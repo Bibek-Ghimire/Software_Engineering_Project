@@ -1,4 +1,4 @@
-// src/components/TeacherSidebar.jsx
+﻿// src/components/TeacherSidebar.jsx
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
@@ -70,7 +70,7 @@ const TeacherSidebar = () => {
 
   return (
     <div
-      className={`flex flex-col justify-between h-screen artisan-card border-r border-slate-200/70 dark:border-slate-700/70 transition-all duration-300 ${
+      className={`flex flex-col justify-between h-screen artisan-card border-r border-stone-200/70 dark:border-stone-700/70 transition-all duration-300 ${
         collapsed ? "w-20" : "w-64"
       }`}
     >
@@ -90,7 +90,7 @@ const TeacherSidebar = () => {
           </h1>
         )}
         <button
-          className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition text-slate-700 dark:text-slate-300"
+          className="p-1.5 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors text-stone-700 dark:text-stone-300"
           onClick={() => setCollapsed(!collapsed)}
         >
           {collapsed ? (
@@ -111,7 +111,7 @@ const TeacherSidebar = () => {
               `flex items-center px-3 py-2.5 rounded-lg transition-all duration-300 text-sm font-medium ${
                 isActive
                   ? "bg-orange-100 text-orange-800 dark:bg-orange-500/20 dark:text-orange-300 shadow-md"
-                  : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-200"
+                  : "text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 hover:text-stone-800 dark:hover:text-stone-200"
               }`
             }
           >
@@ -122,10 +122,10 @@ const TeacherSidebar = () => {
       </nav>
 
       {/* Logout Button */}
-      <div className="border-t border-slate-200/70 dark:border-slate-700/70 pt-4 px-2">
+      <div className="border-t border-stone-200/70 dark:border-stone-700/70 pt-4 px-2">
         <button
           onClick={handleLogout}
-          className="flex items-center w-full px-3 py-2 rounded-lg transition-all duration-300 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-rose-50 dark:hover:bg-rose-500/10 hover:text-rose-700 dark:hover:text-rose-300 group"
+          className="flex items-center w-full px-3 py-2 rounded-lg transition-all duration-300 text-sm font-medium text-stone-700 dark:text-stone-300 hover:bg-rose-50 dark:hover:bg-rose-950/20 hover:text-rose-600 dark:hover:text-rose-400 group"
         >
           <LogOut className="mr-3 w-5 h-5 group-hover:scale-110 transition-transform" />
           {!collapsed && "Logout"}

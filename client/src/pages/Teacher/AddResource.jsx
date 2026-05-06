@@ -183,7 +183,7 @@ const AddResource = () => {
         return <FileText className="w-5 h-5 text-green-500" />;
       case "doc":
       case "docx":
-        return <FileText className="w-5 h-5 text-blue-500" />;
+        return <FileText className="w-5 h-5 text-orange-500" />;
       default:
         return <FileText className="w-5 h-5" />;
     }
@@ -201,9 +201,9 @@ const AddResource = () => {
           className="absolute top-8 right-8 p-4 rounded-2xl icon-action shadow-sm hover:shadow-md hover:scale-105 border border-stone-200 dark:border-stone-700 transition-all duration-200 z-10 group"
         >
           {darkMode ? (
-            <Sun className="w-6 h-6 group-hover:rotate-180 transition-transform duration-500" />
+            <Sun className="w-6 h-6" />
           ) : (
-            <Moon className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+            <Moon className="w-6 h-6" />
           )}
         </button>
         <ToastContainer
@@ -231,7 +231,7 @@ const AddResource = () => {
           {user?.role === "teacher" && (
             <div className="bg-white dark:bg-stone-900 p-8 rounded-3xl shadow-sm mb-10 border border-stone-200 dark:border-stone-700">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-2xl bg-blue-50 dark:bg-blue-950/30 flex items-center justify-center border border-blue-100 dark:border-blue-900/40 text-blue-600 dark:text-blue-300">
+                <div className="w-10 h-10 rounded-2xl bg-stone-100 dark:bg-orange-950/20 flex items-center justify-center border border-blue-100 dark:border-blue-900/40 text-orange-600 dark:text-orange-300">
                   {editingId ? (
                     <Edit2 className="w-5 h-5" />
                   ) : (
@@ -286,7 +286,7 @@ const AddResource = () => {
                       type="file"
                       name="file"
                       onChange={handleFileChange}
-                      className="w-full px-4 py-3 rounded-2xl border border-dashed border-stone-300 dark:border-stone-600 bg-stone-50 dark:bg-stone-950/50 text-stone-900 dark:text-stone-50 hover:border-sky-400 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-600 file:text-white dark:file:bg-orange-500 dark:file:text-white"
+                      className="w-full px-4 py-3 rounded-2xl border border-dashed border-stone-300 dark:border-stone-600 bg-stone-50 dark:bg-stone-950/50 text-stone-900 dark:text-stone-50 hover:border-orange-400 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-600 file:text-white dark:file:bg-orange-500 dark:file:text-white"
                     />
                     <Upload className="absolute right-3 top-3 w-5 h-5 text-stone-400 pointer-events-none" />
                   </div>
@@ -337,20 +337,20 @@ const AddResource = () => {
           {/* Resources List */}
           {loading ? (
             <div className="flex flex-col items-center justify-center py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
-              <p className="text-gray-600 dark:text-gray-300 text-lg">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mb-4"></div>
+              <p className="text-stone-600 dark:text-stone-400 text-lg">
                 Loading resources...
               </p>
             </div>
           ) : resources.length === 0 ? (
             <div className="text-center py-20">
-              <div className="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-6">
+              <div className="w-24 h-24 bg-stone-100 dark:bg-stone-800 rounded-full flex items-center justify-center mx-auto mb-6">
                 <BookOpen className="w-12 h-12 text-gray-400" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-300 mb-2">
+              <h3 className="text-xl font-semibold text-stone-600 dark:text-stone-400 mb-2">
                 No Resources Yet
               </h3>
-              <p className="text-gray-500 dark:text-gray-400">
+              <p className="text-stone-500 dark:text-stone-400">
                 {user?.role === "teacher"
                   ? "Start by adding your first resource above!"
                   : "No resources have been shared yet."}
@@ -363,7 +363,7 @@ const AddResource = () => {
                   key={res._id}
                   className="group bg-white dark:bg-stone-900 rounded-3xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-stone-200 dark:border-stone-700"
                 >
-                  <div className="h-1.5 bg-blue-500"></div>
+                  <div className="h-1.5 bg-orange-500"></div>
                   <div className="p-6">
                     <div className="flex items-start justify-between gap-4 mb-4">
                       <div className="flex-1">
@@ -428,12 +428,12 @@ const AddResource = () => {
 
           {/* Floating Stats Card */}
           {resources.length > 0 && (
-            <div className="fixed bottom-6 right-6 bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 border border-blue-100 dark:border-blue-800">
+            <div className="fixed bottom-6 right-6 bg-white dark:bg-stone-900 rounded-2xl shadow-xl p-4 border border-blue-100 dark:border-blue-800">
               <div className="text-center">
-                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">
                   {resources.length}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-300">
+                <div className="text-sm text-stone-600 dark:text-stone-400">
                   {resources.length === 1 ? "Resource" : "Resources"}
                 </div>
               </div>

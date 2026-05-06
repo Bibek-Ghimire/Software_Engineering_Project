@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -31,7 +31,7 @@ const Sidebar = () => {
         className="flex items-center gap-2.5 px-2 py-2 mb-6 hover:opacity-80 transition-opacity"
       >
         <img src={Logo} alt="Syncademy" className="h-8 w-8 rounded-lg" />
-        <span className="brand-title text-xl font-bold text-slate-900 dark:text-white">
+        <span className="brand-title text-xl font-bold text-stone-900 dark:text-white">
           Syncademy
         </span>
       </button>
@@ -61,10 +61,10 @@ const Sidebar = () => {
       </nav>
 
       {/* Logout */}
-      <div className="border-t border-slate-200/70 dark:border-slate-700/70 pt-3 mt-2">
+      <div className="border-t border-stone-200/70 dark:border-stone-700/70 pt-3 mt-2">
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-rose-700 dark:hover:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition-all duration-150"
+          className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-stone-700 dark:text-stone-300 hover:text-rose-700 dark:hover:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition-all duration-150"
         >
           <LogOut size={18} />
           Logout
@@ -81,7 +81,7 @@ const SidebarLink = ({ to, label, icon }) => (
       `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 ${
         isActive
           ? "bg-orange-50 text-orange-700 dark:bg-orange-950/20 dark:text-orange-300 border border-orange-200 dark:border-orange-900/40"
-          : "text-slate-700 dark:text-slate-300 hover:bg-white/70 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
+          : "text-stone-700 dark:text-stone-300 hover:bg-white/70 dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-white"
       }`
     }
   >

@@ -95,8 +95,8 @@ const ProfileEdit = () => {
 
   return (
     <div className="min-h-screen page-surface p-8">
-      <div className="max-w-3xl mx-auto bg-white/90 dark:bg-blue-900/20 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-blue-200/50 dark:border-blue-800/30">
-        <h2 className="text-3xl font-bold mb-6 text-blue-700">
+      <div className="max-w-3xl mx-auto bg-white/90 dark:bg-orange-950/20 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-stone-200/50 dark:border-blue-800/30">
+        <h2 className="text-3xl font-bold mb-6 text-orange-700">
            Edit Profile
         </h2>
         <form
@@ -117,7 +117,7 @@ const ProfileEdit = () => {
             name="email"
             value={profile.email}
             disabled
-            className="border p-2 w-full bg-gray-100 rounded"
+            className="border p-2 w-full bg-stone-100 rounded"
           />
           <input
             type="text"
@@ -148,7 +148,7 @@ const ProfileEdit = () => {
               <button
                 type="button"
                 onClick={handleAddSkill}
-                className="ml-2 px-3 py-1 bg-blue-500 text-white rounded"
+                className="ml-2 px-3 py-1 bg-orange-500 text-white rounded"
               >
                 Add
               </button>
@@ -157,7 +157,7 @@ const ProfileEdit = () => {
               {profile.skills.map((s, i) => (
                 <span
                   key={i}
-                  className="px-2 py-1 bg-gray-200 rounded flex items-center gap-1"
+                  className="px-2 py-1 bg-stone-200 rounded flex items-center gap-1"
                 >
                   {s}
                   <button
@@ -199,7 +199,7 @@ const ProfileEdit = () => {
               {profile.interests.map((i, idx) => (
                 <span
                   key={idx}
-                  className="px-2 py-1 bg-gray-200 rounded flex items-center gap-1"
+                  className="px-2 py-1 bg-stone-200 rounded flex items-center gap-1"
                 >
                   {i}
                   <button
@@ -222,7 +222,7 @@ const ProfileEdit = () => {
           </div>
 
           <div className="flex items-center border rounded p-2">
-            <Linkedin className="text-blue-600 w-5 h-5 mr-2" />
+            <Linkedin className="text-orange-600 w-5 h-5 mr-2" />
             <input
               type="text"
               name="linkedin"
@@ -264,7 +264,7 @@ const ProfileEdit = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded"
+            className="w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded"
           >
             {loading ? "Saving..." : "Save Changes"}
           </button>

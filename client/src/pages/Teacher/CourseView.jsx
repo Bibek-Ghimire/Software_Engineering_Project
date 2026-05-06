@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+﻿import { useEffect, useState, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 
@@ -27,8 +27,8 @@ const CourseView = () => {
   if (!course) return <div className="p-6">Loading...</div>;
 
   return (
-    <div className="p-6 max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
-      <h1 className="text-3xl font-bold mb-4 text-gray-800 dark:text-white">
+    <div className="p-6 max-w-3xl mx-auto bg-white dark:bg-stone-900 rounded-2xl shadow-lg">
+      <h1 className="text-3xl font-bold mb-4 text-stone-900 dark:text-stone-50">
         {course.title}
       </h1>
       <p className="text-gray-500 dark:text-gray-300 mb-2">
@@ -48,7 +48,7 @@ const CourseView = () => {
         <div className="flex gap-3 mt-6">
           <Link
             to={`/courses/edit/${course._id}`}
-            className="px-4 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition"
+            className="px-4 py-2 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition"
           >
             Edit Course
           </Link>
