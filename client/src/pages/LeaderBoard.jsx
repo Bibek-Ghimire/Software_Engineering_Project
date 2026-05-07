@@ -1,4 +1,4 @@
-﻿// src/pages/Leaderboard.jsx
+// src/pages/Leaderboard.jsx
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
@@ -75,29 +75,29 @@ const LeaderBoard = () => {
   // Tier config — stone-based, no rainbow gradients
   const batchConfig = {
     Diamond: {
-      border: "border-l-4 border-l-cyan-400",
-      badge: "bg-cyan-50 text-cyan-800 border border-cyan-200 dark:bg-cyan-950/20 dark:text-cyan-300 dark:border-cyan-900/40",
-      dot: "bg-cyan-400",
+      border: "border-l-4 border-l-stone-900 dark:border-l-stone-100",
+      badge: "bg-stone-900 text-stone-50 border border-stone-800 dark:bg-stone-100 dark:text-stone-900 dark:border-white",
+      dot: "bg-stone-900 dark:bg-stone-100",
     },
     Platinum: {
-      border: "border-l-4 border-l-stone-400",
+      border: "border-l-4 border-l-stone-600",
       badge: "bg-stone-100 text-stone-700 border border-stone-300 dark:bg-stone-800 dark:text-stone-300 dark:border-stone-600",
-      dot: "bg-stone-400",
+      dot: "bg-stone-600",
     },
     Gold: {
-      border: "border-l-4 border-l-amber-400",
-      badge: "bg-amber-50 text-amber-800 border border-amber-200 dark:bg-amber-950/20 dark:text-amber-300 dark:border-amber-900/40",
-      dot: "bg-amber-400",
+      border: "border-l-4 border-l-orange-500",
+      badge: "bg-orange-600 text-white border border-orange-500 shadow-sm shadow-orange-600/20",
+      dot: "bg-orange-500",
     },
     Silver: {
-      border: "border-l-4 border-l-stone-300",
-      badge: "bg-stone-50 text-stone-600 border border-stone-200 dark:bg-stone-800/60 dark:text-stone-400 dark:border-stone-700",
-      dot: "bg-stone-300",
+      border: "border-l-4 border-l-orange-400",
+      badge: "bg-orange-50 text-orange-700 border border-orange-200 dark:bg-orange-950/20 dark:text-orange-300 dark:border-orange-900/40",
+      dot: "bg-orange-400",
     },
     Bronze: {
-      border: "border-l-4 border-l-orange-400",
-      badge: "bg-orange-50 text-orange-800 border border-orange-200 dark:bg-orange-950/20 dark:text-orange-300 dark:border-orange-900/40",
-      dot: "bg-orange-400",
+      border: "border-l-4 border-l-stone-400",
+      badge: "bg-stone-50 text-stone-600 border border-stone-200 dark:bg-stone-800/60 dark:text-stone-400 dark:border-stone-700",
+      dot: "bg-stone-400",
     },
     Basic: {
       border: "border-l-4 border-l-stone-200",
@@ -108,24 +108,24 @@ const LeaderBoard = () => {
 
   const courseLevelConfig = {
     Beginner: {
-      badge: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/20 dark:text-emerald-300 dark:border-emerald-900/40",
+      badge: "bg-stone-100 text-stone-700 border-stone-200 dark:bg-stone-800 dark:text-stone-300 dark:border-stone-700",
     },
     Intermediate: {
-      badge: "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/20 dark:text-amber-300 dark:border-amber-900/40",
+      badge: "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950/20 dark:text-orange-300 dark:border-orange-900/40",
     },
     Expert: {
-      badge: "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/20 dark:text-rose-300 dark:border-rose-900/40",
+      badge: "bg-stone-900 text-stone-50 border-stone-800 dark:bg-stone-100 dark:text-stone-900 dark:border-white",
     },
   };
 
   const getRankIcon = (index) => {
     switch (index) {
       case 0:
-        return <Trophy className="w-6 h-6 text-amber-500" />;
+        return <Trophy className="w-6 h-6 text-orange-500" />;
       case 1:
         return <Award className="w-6 h-6 text-stone-400" />;
       case 2:
-        return <Award className="w-6 h-6 text-orange-500" />;
+        return <Award className="w-6 h-6 text-orange-400" />;
       default:
         return (
           <div className="w-6 h-6 rounded-full bg-stone-200 dark:bg-stone-700 flex items-center justify-center text-stone-600 dark:text-stone-300 font-bold text-xs">
@@ -148,10 +148,7 @@ const LeaderBoard = () => {
             <div>
               <span className="section-kicker" />
               <h1 className="section-title">Leaderboard</h1>
-              <p className="body-copy mt-2">
-                Celebrating our top-performing educators and their outstanding
-                contributions to learning
-              </p>
+
             </div>
             <button
               onClick={() => setDarkMode(!darkMode)}
@@ -190,7 +187,7 @@ const LeaderBoard = () => {
                 label: "Avg Engagement",
                 value: (
                   teachers.reduce((acc, t) => acc + t.engagementScore, 0) /
-                    teachers.length || 0
+                  teachers.length || 0
                 ).toFixed(1),
               },
               {
@@ -257,12 +254,12 @@ const LeaderBoard = () => {
                           <h3 className="text-lg font-bold text-stone-900 dark:text-stone-50 leading-tight mb-1">
                             {teacher.name}
                           </h3>
-                          <span
+                          {/* <span
                             className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${config.badge}`}
-                          >
-                            <span className={`w-1.5 h-1.5 rounded-full ${config.dot}`} />
+                          > */}
+                          {/* <span className={`w-1.5 h-1.5 rounded-full ${config.dot}`} />
                             {teacher.batch} Tier
-                          </span>
+                          </span> */}
                         </div>
                       </div>
 
@@ -367,9 +364,8 @@ const LeaderBoard = () => {
                                       <Clock className="w-3 h-3" />
                                       {course.duration}
                                     </div>
-                                    <div className="flex items-center gap-1 text-xs font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/20 px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-900/40">
-                                      <DollarSign className="w-3 h-3" />
-                                      {course.price}
+                                    <div className="flex items-center gap-1 text-xs font-semibold text-stone-700 dark:text-stone-400 bg-stone-50 dark:bg-stone-950/20 px-2.5 py-1 rounded-full border border-stone-200 dark:border-stone-900/40">
+                                      RS.{course.price}
                                     </div>
                                   </div>
                                 </motion.div>

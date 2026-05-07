@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MessageSquare,
   Award,
@@ -31,11 +31,11 @@ const RecommendedTeachers = ({ limit = 6 }) => {
   // Tier badge — stone-based, no rainbow
   const getTierBadge = (batch) => {
     const map = {
+      Diamond:  "bg-stone-900 text-stone-50 border-white dark:bg-stone-100 dark:text-stone-900 dark:border-white shadow-md",
       Platinum: "bg-stone-100 text-stone-700 border-stone-300 dark:bg-stone-800 dark:text-stone-300 dark:border-stone-600",
-      Diamond:  "bg-cyan-50 text-cyan-800 border-cyan-200 dark:bg-cyan-950/20 dark:text-cyan-300 dark:border-cyan-900/40",
-      Gold:     "bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/20 dark:text-amber-300 dark:border-amber-900/40",
-      Silver:   "bg-stone-50 text-stone-600 border-stone-200 dark:bg-stone-800/60 dark:text-stone-400 dark:border-stone-700",
-      Bronze:   "bg-orange-50 text-orange-800 border-orange-200 dark:bg-orange-950/20 dark:text-orange-300 dark:border-orange-900/40",
+      Gold:     "bg-orange-600 text-white border-orange-500 shadow-sm shadow-orange-600/20",
+      Silver:   "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950/20 dark:text-orange-300 dark:border-orange-900/40",
+      Bronze:   "bg-stone-50 text-stone-600 border-stone-200 dark:bg-stone-800/60 dark:text-stone-400 dark:border-stone-700",
       Basic:    "bg-stone-50 text-stone-500 border-stone-200 dark:bg-stone-800/40 dark:text-stone-500 dark:border-stone-700",
     };
     return map[batch] || map.Basic;
@@ -133,14 +133,14 @@ const RecommendedTeachers = ({ limit = 6 }) => {
             {teacher.achievements && teacher.achievements.length > 0 && (
               <div className="mb-3">
                 <div className="text-xs font-semibold body-copy mb-1.5 flex items-center gap-1">
-                  <Star className="w-3 h-3 text-amber-500" />
+                  <Star className="w-3 h-3 text-orange-500" />
                   Achievements
                 </div>
                 <div className="flex flex-wrap gap-1">
                   {teacher.achievements.slice(0, 3).map((achievement, idx) => (
                     <span
                       key={idx}
-                      className="px-2 py-0.5 rounded-full text-xs font-medium border border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-900/40 dark:bg-amber-950/20 dark:text-amber-300"
+                      className="px-2 py-0.5 rounded-full text-xs font-medium border border-orange-200 bg-orange-50 text-orange-700 dark:border-orange-900/40 dark:bg-orange-950/20 dark:text-orange-300"
                     >
                       {achievement}
                     </span>

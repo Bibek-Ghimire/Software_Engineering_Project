@@ -1,4 +1,4 @@
-﻿// src/pages/CourseEdit.jsx
+// src/pages/CourseEdit.jsx
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { BookOpen, Sun, Moon } from "lucide-react";
@@ -143,7 +143,7 @@ const CourseEdit = () => {
           <input
             name="price"
             type="number"
-            placeholder="Price $"
+            placeholder="Price Rs."
             value={formData.price}
             onChange={handleChange}
             className="input px-3 py-2 rounded-lg border border-stone-300 dark:border-stone-700 dark:bg-stone-800 dark:text-white"

@@ -98,9 +98,10 @@ router.put("/:id/complete", protect, async (req, res) => {
     }
 
     // Check if payment is already completed
-    if (payment.status !== "pending") {
+    console.log(`DEBUG: Payment ${id} status is: "${payment.status}"`);
+    if (payment.status === "completed") {
       return res.status(400).json({
-        message: `Cannot process payment with status: ${payment.status}`,
+        message: "This payment has already been completed.",
       });
     }
 
@@ -188,9 +189,9 @@ router.put("/:id/fail", protect, async (req, res) => {
         .json({ message: "Not authorized to process this payment" });
     }
 
-    if (payment.status !== "pending") {
+    if (payment.status === "completed") {
       return res.status(400).json({
-        message: `Cannot fail payment with status: ${payment.status}`,
+        message: `Cannot fail a payment that is already completed.`,
       });
     }
 
@@ -310,6 +311,38 @@ router.get("/teacher/course/:courseId", protect, async (req, res) => {
       message: "Error fetching students",
       error: error.message,
     });
+  }
+});
+
+// @desc    Retry a failed payment
+// @route   PUT /api/payments/:id/retry
+// @access  Private (student)
+router.put("/:id/retry", protect, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const studentId = req.user.id || req.user._id;
+
+    const payment = await Payment.findById(id);
+
+    if (!payment) {
+      return res.status(404).json({ message: "Payment not found" });
+    }
+
+    if (payment.student.toString() !== studentId.toString()) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    payment.status = "pending";
+    payment.failureReason = "";
+    await payment.save();
+
+    res.status(200).json({
+      message: "Payment reset to pending",
+      payment,
+    });
+  } catch (err) {
+    console.error("Error retrying payment:", err);
+    res.status(500).json({ message: "Server error" });
   }
 });
 

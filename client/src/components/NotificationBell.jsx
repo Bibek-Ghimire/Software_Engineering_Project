@@ -1,4 +1,4 @@
-﻿import React, { useContext } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Bell } from "lucide-react";
 import { NotificationContext } from "../context/NotificationContext";
@@ -10,7 +10,7 @@ const NotificationBell = () => {
   return (
     <Link
       to="/notifications"
-      className="relative flex items-center text-orange-700 dark:text-orange-300 hover:text-stone-700 dark:hover:text-blue-200 transition"
+      className="relative flex items-center text-orange-700 dark:text-orange-300 hover:text-stone-700 dark:hover:text-orange-200 transition"
       title="Notifications"
     >
       <Bell className="w-5 h-5" />

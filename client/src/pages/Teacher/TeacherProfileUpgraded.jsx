@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
@@ -242,12 +242,12 @@ const TeacherProfileUpgraded = () => {
         >
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
+            <h1 className="section-title">
               Instructor Profile
             </h1>
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => {
                 if (isEditing) {
                   setFormData(profile);
@@ -255,7 +255,7 @@ const TeacherProfileUpgraded = () => {
                 }
                 setIsEditing(!isEditing);
               }}
-              className="flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold transition-all duration-300 shadow-lg hover:shadow-xl"
+              className={isEditing ? "secondary-action" : "primary-action"}
             >
               {isEditing ? (
                 <>
@@ -274,10 +274,12 @@ const TeacherProfileUpgraded = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="bg-white dark:bg-stone-900 rounded-2xl shadow-xl overflow-hidden border border-stone-200/50 dark:border-blue-800/30"
+            className="surface-card overflow-hidden"
           >
             {/* Profile Picture Section */}
-            <div className="bg-gradient-to-r from-blue-500 to-indigo-600 h-40"></div>
+            <div className="bg-stone-800 dark:bg-stone-950 h-40 relative">
+               <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+            </div>
 
             <div className="px-8 py-6 relative">
               {/* Profile Picture */}
@@ -290,16 +292,16 @@ const TeacherProfileUpgraded = () => {
                         `http://localhost:5000${profile.profilePicture}`
                       }
                       alt="Profile"
-                      className="w-32 h-32 rounded-full border-4 border-white dark:border-stone-700 shadow-lg object-cover"
+                      className="w-32 h-32 rounded-2xl border-4 border-white dark:border-stone-900 shadow-xl object-cover"
                     />
                   ) : (
-                    <div className="w-32 h-32 rounded-full border-4 border-white dark:border-stone-700 shadow-lg bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center text-white text-4xl font-bold">
+                    <div className="w-32 h-32 rounded-2xl border-4 border-white dark:border-stone-900 shadow-xl bg-stone-100 dark:bg-stone-800 flex items-center justify-center text-stone-900 dark:text-stone-50 text-4xl font-bold brand-title">
                       {profile.name?.[0]?.toUpperCase()}
                     </div>
                   )}
 
                   {isEditing && (
-                    <label className="absolute bottom-0 right-0 bg-orange-600 hover:bg-orange-700 text-white p-3 rounded-full cursor-pointer shadow-lg transition-all hover:scale-110">
+                    <label className="absolute -bottom-2 -right-2 bg-orange-600 hover:bg-orange-700 text-white p-3 rounded-xl cursor-pointer shadow-lg transition-all hover:scale-110">
                       <Upload className="w-5 h-5" />
                       <input
                         type="file"
@@ -317,7 +319,7 @@ const TeacherProfileUpgraded = () => {
                 {/* Name and Email */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">
+                    <label className="block text-xs font-black body-copy uppercase tracking-widest mb-2">
                       Full Name
                     </label>
                     {isEditing ? (
@@ -326,20 +328,20 @@ const TeacherProfileUpgraded = () => {
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                        className="form-input"
                       />
                     ) : (
-                      <p className="text-lg font-semibold text-gray-900 dark:text-white">
+                      <p className="text-lg font-bold text-stone-900 dark:text-white">
                         {profile.name}
                       </p>
                     )}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2 flex items-center gap-2">
-                      <Mail className="w-4 h-4" /> Email (Non-editable)
+                    <label className="block text-xs font-black body-copy uppercase tracking-widest mb-2 flex items-center gap-2">
+                      <Mail className="w-4 h-4 text-orange-500" /> Email
                     </label>
-                    <p className="text-lg font-semibold text-gray-900 dark:text-white bg-stone-100 dark:bg-stone-800 px-4 py-3 rounded-lg">
+                    <p className="text-lg font-medium text-stone-600 dark:text-stone-400 surface-panel px-4 py-3">
                       {profile.email}
                     </p>
                   </div>
@@ -348,8 +350,8 @@ const TeacherProfileUpgraded = () => {
                 {/* Department and Qualification */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2 flex items-center gap-2">
-                      <BookOpen className="w-4 h-4" /> Department
+                    <label className="block text-xs font-black body-copy uppercase tracking-widest mb-2 flex items-center gap-2">
+                      <BookOpen className="w-4 h-4 text-orange-500" /> Department
                     </label>
                     {isEditing ? (
                       <input
@@ -358,18 +360,18 @@ const TeacherProfileUpgraded = () => {
                         value={formData.department}
                         onChange={handleInputChange}
                         placeholder="Enter department"
-                        className="w-full px-4 py-3 border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                        className="form-input"
                       />
                     ) : (
-                      <p className="text-stone-500 dark:text-stone-500">
+                      <p className="text-stone-700 dark:text-stone-300 font-medium">
                         {profile.department || "Not specified"}
                       </p>
                     )}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2 flex items-center gap-2">
-                      <GraduationCap className="w-4 h-4" /> Qualification
+                    <label className="block text-xs font-black body-copy uppercase tracking-widest mb-2 flex items-center gap-2">
+                      <GraduationCap className="w-4 h-4 text-orange-500" /> Qualification
                     </label>
                     {isEditing ? (
                       <input
@@ -378,10 +380,10 @@ const TeacherProfileUpgraded = () => {
                         value={formData.qualification}
                         onChange={handleInputChange}
                         placeholder="e.g., M.Sc, Ph.D"
-                        className="w-full px-4 py-3 border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                        className="form-input"
                       />
                     ) : (
-                      <p className="text-stone-500 dark:text-stone-500">
+                      <p className="text-stone-700 dark:text-stone-300 font-medium">
                         {profile.qualification || "Not specified"}
                       </p>
                     )}
@@ -390,7 +392,7 @@ const TeacherProfileUpgraded = () => {
 
                 {/* Subject */}
                 <div>
-                  <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">
+                  <label className="block text-xs font-black body-copy uppercase tracking-widest mb-2">
                     Subject / Specialization
                   </label>
                   {isEditing ? (
@@ -400,10 +402,10 @@ const TeacherProfileUpgraded = () => {
                       value={formData.subject}
                       onChange={handleInputChange}
                       placeholder="Enter your subject/specialization"
-                      className="w-full px-4 py-3 border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="form-input"
                     />
                   ) : (
-                    <p className="text-stone-500 dark:text-stone-500">
+                    <p className="text-stone-700 dark:text-stone-300 font-medium">
                       {profile.subject || "Not specified"}
                     </p>
                   )}
@@ -411,7 +413,7 @@ const TeacherProfileUpgraded = () => {
 
                 {/* Bio */}
                 <div>
-                  <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">
+                  <label className="block text-xs font-black body-copy uppercase tracking-widest mb-2">
                     Bio / About Me
                   </label>
                   {isEditing ? (
@@ -421,10 +423,10 @@ const TeacherProfileUpgraded = () => {
                       onChange={handleInputChange}
                       placeholder="Tell us about your teaching experience and expertise..."
                       rows="4"
-                      className="w-full px-4 py-3 border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
+                      className="form-input resize-none"
                     />
                   ) : (
-                    <p className="text-stone-500 dark:text-stone-500">
+                    <p className="body-copy leading-relaxed">
                       {profile.bio || "No bio added yet"}
                     </p>
                   )}
@@ -432,7 +434,7 @@ const TeacherProfileUpgraded = () => {
 
                 {/* Skills */}
                 <div>
-                  <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-3">
+                  <label className="block text-xs font-black body-copy uppercase tracking-widest mb-3">
                     Teaching Skills
                   </label>
                   {isEditing ? (
@@ -448,11 +450,11 @@ const TeacherProfileUpgraded = () => {
                             }
                           }}
                           placeholder="Add a skill..."
-                          className="flex-1 px-4 py-3 border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                          className="form-input"
                         />
                         <button
                           onClick={handleAddSkill}
-                          className="px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors flex items-center gap-2"
+                          className="primary-action whitespace-nowrap"
                         >
                           <Plus className="w-4 h-4" /> Add
                         </button>
@@ -465,14 +467,14 @@ const TeacherProfileUpgraded = () => {
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.8 }}
-                            className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-2 rounded-full flex items-center gap-2 text-sm font-semibold"
+                            className="bg-stone-800 dark:bg-stone-700 text-stone-100 px-4 py-2 rounded-xl flex items-center gap-2 text-sm font-semibold shadow-sm"
                           >
                             {skill}
                             <button
                               onClick={() => handleRemoveSkill(index)}
-                              className="hover:bg-white/20 rounded-full p-1 transition-colors"
+                              className="hover:bg-white/20 rounded-lg p-1 transition-colors"
                             >
-                              <X className="w-4 h-4" />
+                              <X className="w-3 h-3" />
                             </button>
                           </motion.div>
                         ))}
@@ -484,15 +486,13 @@ const TeacherProfileUpgraded = () => {
                         formData.skills.map((skill, index) => (
                           <span
                             key={index}
-                            className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-2 rounded-full text-sm font-semibold"
+                            className="bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 px-4 py-2 rounded-xl text-sm font-semibold shadow-sm"
                           >
                             {skill}
                           </span>
                         ))
                       ) : (
-                        <p className="text-stone-500 dark:text-stone-400">
-                          No skills added yet
-                        </p>
+                        <p className="body-copy text-sm">No skills added yet</p>
                       )}
                     </div>
                   )}
@@ -500,8 +500,8 @@ const TeacherProfileUpgraded = () => {
 
                 {/* Achievements */}
                 <div>
-                  <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-3 flex items-center gap-2">
-                    <Award className="w-4 h-4" /> Achievements & Awards
+                  <label className="block text-xs font-black body-copy uppercase tracking-widest mb-3 flex items-center gap-2">
+                    <Award className="w-4 h-4 text-orange-500" /> Achievements & Awards
                   </label>
                   {isEditing ? (
                     <div className="space-y-3">
@@ -516,11 +516,11 @@ const TeacherProfileUpgraded = () => {
                             }
                           }}
                           placeholder="Add an achievement..."
-                          className="flex-1 px-4 py-3 border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                          className="form-input"
                         />
                         <button
                           onClick={handleAddAchievement}
-                          className="px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors flex items-center gap-2"
+                          className="primary-action whitespace-nowrap"
                         >
                           <Plus className="w-4 h-4" /> Add
                         </button>
@@ -533,14 +533,14 @@ const TeacherProfileUpgraded = () => {
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.8 }}
-                            className="bg-gradient-to-r from-yellow-500 to-orange-600 text-white px-4 py-2 rounded-full flex items-center gap-2 text-sm font-semibold"
+                            className="bg-orange-600 text-white px-4 py-2 rounded-xl flex items-center gap-2 text-sm font-bold shadow-md shadow-orange-600/20"
                           >
                             {achievement}
                             <button
                               onClick={() => handleRemoveAchievement(index)}
-                              className="hover:bg-white/20 rounded-full p-1 transition-colors"
+                              className="hover:bg-white/20 rounded-lg p-1 transition-colors"
                             >
-                              <X className="w-4 h-4" />
+                              <X className="w-3 h-3" />
                             </button>
                           </motion.div>
                         ))}
@@ -552,15 +552,13 @@ const TeacherProfileUpgraded = () => {
                         formData.achievements.map((achievement, index) => (
                           <span
                             key={index}
-                            className="bg-gradient-to-r from-yellow-500 to-orange-600 text-white px-4 py-2 rounded-full text-sm font-semibold"
+                            className="bg-orange-50 dark:bg-orange-950/20 text-orange-700 dark:text-orange-400 border border-orange-200 dark:border-orange-900/40 px-4 py-2 rounded-xl text-sm font-bold"
                           >
                             {achievement}
                           </span>
                         ))
                       ) : (
-                        <p className="text-stone-500 dark:text-stone-400">
-                          No achievements added yet
-                        </p>
+                        <p className="body-copy text-sm">No achievements added yet</p>
                       )}
                     </div>
                   )}
@@ -568,7 +566,7 @@ const TeacherProfileUpgraded = () => {
 
                 {/* Interests */}
                 <div>
-                  <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-3">
+                  <label className="block text-xs font-black body-copy uppercase tracking-widest mb-3">
                     Interests
                   </label>
                   {isEditing ? (
@@ -584,11 +582,11 @@ const TeacherProfileUpgraded = () => {
                             }
                           }}
                           placeholder="Add an interest..."
-                          className="flex-1 px-4 py-3 border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                          className="form-input"
                         />
                         <button
                           onClick={handleAddInterest}
-                          className="px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors flex items-center gap-2"
+                          className="primary-action whitespace-nowrap"
                         >
                           <Plus className="w-4 h-4" /> Add
                         </button>
@@ -601,14 +599,14 @@ const TeacherProfileUpgraded = () => {
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.8 }}
-                            className="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-4 py-2 rounded-full flex items-center gap-2 text-sm font-semibold"
+                            className="bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 px-4 py-2 rounded-xl flex items-center gap-2 text-sm font-semibold border border-stone-300 dark:border-stone-700"
                           >
                             {interest}
                             <button
                               onClick={() => handleRemoveInterest(index)}
-                              className="hover:bg-white/20 rounded-full p-1 transition-colors"
+                              className="hover:bg-stone-300 dark:hover:bg-stone-700 rounded-lg p-1 transition-colors"
                             >
-                              <X className="w-4 h-4" />
+                              <X className="w-3 h-3" />
                             </button>
                           </motion.div>
                         ))}
@@ -620,15 +618,13 @@ const TeacherProfileUpgraded = () => {
                         formData.interests.map((interest, index) => (
                           <span
                             key={index}
-                            className="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-4 py-2 rounded-full text-sm font-semibold"
+                            className="bg-stone-50 dark:bg-stone-900/50 text-stone-600 dark:text-stone-400 border border-stone-200 dark:border-stone-800 px-4 py-2 rounded-xl text-sm font-medium"
                           >
                             {interest}
                           </span>
                         ))
                       ) : (
-                        <p className="text-stone-500 dark:text-stone-400">
-                          No interests added yet
-                        </p>
+                        <p className="body-copy text-sm">No interests added yet</p>
                       )}
                     </div>
                   )}
@@ -637,8 +633,8 @@ const TeacherProfileUpgraded = () => {
                 {/* Social Links */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2 flex items-center gap-2">
-                      <Github className="w-4 h-4" /> GitHub URL
+                    <label className="block text-xs font-black body-copy uppercase tracking-widest mb-2 flex items-center gap-2">
+                      <Github className="w-4 h-4 text-stone-400" /> GitHub URL
                     </label>
                     {isEditing ? (
                       <input
@@ -647,7 +643,7 @@ const TeacherProfileUpgraded = () => {
                         value={formData.github}
                         onChange={handleInputChange}
                         placeholder="https://github.com/username"
-                        className="w-full px-4 py-3 border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                        className="form-input"
                       />
                     ) : (
                       <>
@@ -656,22 +652,20 @@ const TeacherProfileUpgraded = () => {
                             href={profile.github}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-orange-600 dark:text-orange-400 hover:underline break-all"
+                            className="text-orange-600 dark:text-orange-400 hover:underline font-semibold break-all"
                           >
                             {profile.github}
                           </a>
                         ) : (
-                          <p className="text-stone-500 dark:text-stone-400">
-                            Not provided
-                          </p>
+                          <p className="body-copy text-sm">Not provided</p>
                         )}
                       </>
                     )}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2 flex items-center gap-2">
-                      <Linkedin className="w-4 h-4" /> LinkedIn URL
+                    <label className="block text-xs font-black body-copy uppercase tracking-widest mb-2 flex items-center gap-2">
+                      <Linkedin className="w-4 h-4 text-stone-400" /> LinkedIn URL
                     </label>
                     {isEditing ? (
                       <input
@@ -680,7 +674,7 @@ const TeacherProfileUpgraded = () => {
                         value={formData.linkedin}
                         onChange={handleInputChange}
                         placeholder="https://linkedin.com/in/username"
-                        className="w-full px-4 py-3 border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                        className="form-input"
                       />
                     ) : (
                       <>
@@ -689,14 +683,12 @@ const TeacherProfileUpgraded = () => {
                             href={profile.linkedin}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-orange-600 dark:text-orange-400 hover:underline break-all"
+                            className="text-orange-600 dark:text-orange-400 hover:underline font-semibold break-all"
                           >
                             {profile.linkedin}
                           </a>
                         ) : (
-                          <p className="text-stone-500 dark:text-stone-400">
-                            Not provided
-                          </p>
+                          <p className="body-copy text-sm">Not provided</p>
                         )}
                       </>
                     )}
@@ -706,20 +698,20 @@ const TeacherProfileUpgraded = () => {
                 {/* Save Button */}
                 {isEditing && (
                   <motion.button
-                    whileHover={{ scale: 1.02 }}
+                    whileHover={{ y: -2 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={handleSaveProfile}
                     disabled={saving}
-                    className="w-full mt-8 px-6 py-4 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 disabled:from-gray-500 disabled:to-gray-500 text-white font-bold transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                    className="w-full mt-8 primary-action py-4 text-lg font-bold shadow-lg shadow-orange-600/20"
                   >
                     {saving ? (
                       <>
                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                        Saving...
+                        Saving Changes...
                       </>
                     ) : (
                       <>
-                        <Save className="w-5 h-5" /> Save Changes
+                        <Save className="w-5 h-5" /> Save Profile
                       </>
                     )}
                   </motion.button>

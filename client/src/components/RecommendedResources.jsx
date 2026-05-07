@@ -1,5 +1,5 @@
 ﻿import React, { useEffect, useState } from "react";
-import { FileText, Download, TrendingUp } from "lucide-react";
+import { FileText, Download, Eye, TrendingUp } from "lucide-react";
 import HumanoidAvatar from "./HumanoidAvatar";
 import recommendationService from "../services/recommendationService";
 
@@ -39,11 +39,19 @@ const RecommendedResources = ({ limit = 6 }) => {
     return icons[fileType?.toLowerCase()] || icons.default;
   };
 
+  const handleView = (url) => {
+    if (!url) return;
+    window.open(`http://localhost:5000${url}`, "_blank", "noopener,noreferrer");
+  };
+
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {[...Array(3)].map((_, i) => (
-          <div key={i} className="surface-card h-56 " />
+          <div
+            key={i}
+            className="surface-card h-56 "
+          />
         ))}
       </div>
     );
@@ -122,14 +130,24 @@ const RecommendedResources = ({ limit = 6 }) => {
               </div>
             )}
 
-            <a
-              href={resource.fileUrl}
-              download
-              className="primary-action w-full py-2.5 gap-2 text-sm mt-auto"
-            >
-              <Download className="w-4 h-4" />
-              Download Resource
-            </a>
+            <div className="grid grid-cols-2 gap-3 mt-auto">
+              <button
+                type="button"
+                onClick={() => handleView(resource.fileUrl)}
+                className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-2.5 gap-2 text-sm rounded-xl flex items-center justify-center"
+              >
+                <Eye className="w-4 h-4" />
+                View
+              </button>
+              <a
+                href={`http://localhost:5000${resource.fileUrl}`}
+                download
+                className="primary-action py-2.5 gap-2 text-sm rounded-xl flex items-center justify-center"
+              >
+                <Download className="w-4 h-4" />
+                Download
+              </a>
+            </div>
           </div>
         </div>
       ))}

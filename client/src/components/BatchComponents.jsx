@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { useBatchContext } from "../context/BatchContext.jsx";
 import { useBatchStats } from "../hooks/useBatch.js";
 
@@ -43,7 +43,7 @@ export const BatchStatistics = () => {
           <p className="text-stone-500 dark:text-stone-400 text-sm">
             Total Students
           </p>
-          <p className="text-3xl font-bold text-green-600">
+          <p className="text-3xl font-bold text-orange-400">
             {batchStats.totalStudents}
           </p>
         </div>
@@ -52,7 +52,7 @@ export const BatchStatistics = () => {
           <p className="text-stone-500 dark:text-stone-400 text-sm">
             Avg Batch Size
           </p>
-          <p className="text-3xl font-bold text-purple-600">
+          <p className="text-3xl font-bold text-orange-300">
             {batchStats.avgBatchSize}
           </p>
         </div>
@@ -98,7 +98,7 @@ export const BatchStatistics = () => {
                     <div className="flex items-center justify-center gap-2">
                       <div className="w-20 h-2 bg-stone-200 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-green-500"
+                          className="h-full bg-orange-500"
                           style={{ width: `${batch.fillPercentage}%` }}
                         />
                       </div>
@@ -153,7 +153,7 @@ export const AutoAllocateBatchesButton = ({ onSuccess, onError }) => {
       </button>
 
       {result && (
-        <div className="surface-panel border-emerald-200 p-4 text-emerald-700 dark:border-emerald-800/50 dark:text-emerald-300">
+        <div className="surface-panel border-orange-200 p-4 text-orange-700 dark:border-orange-800/50 dark:text-orange-300">
           <p className="font-semibold">{result.message}</p>
           <p className="text-sm mt-2">
             Created {result.data.totalBatches} batches for{" "}
@@ -304,7 +304,7 @@ export const CompactBatchInfoCard = ({ batchData }) => {
       </p>
       <div className="w-full bg-stone-200 rounded-full h-2 overflow-hidden mb-2 dark:bg-stone-700">
         <div
-          className="bg-gradient-to-r from-orange-500 to-amber-500 h-full"
+          className="bg-orange-500 h-full shadow-[0_0_12px_rgba(249,115,22,0.3)]"
           style={{ width: `${batchData.fillPercentage}%` }}
         ></div>
       </div>
@@ -347,7 +347,7 @@ export const BatchQuickStats = ({ members = [] }) => {
         {members.slice(0, 5).map((member) => (
           <div
             key={member._id}
-            className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center text-white text-xs font-bold border-2 border-white"
+            className="w-8 h-8 rounded-full bg-stone-900 dark:bg-stone-100 flex items-center justify-center text-white dark:text-stone-900 text-xs font-bold border-2 border-white dark:border-stone-800"
             title={member.name}
           >
             {member.name

@@ -53,7 +53,7 @@ function CreateGroup() {
 
       await axios.post("http://localhost:5000/api/groups", newGroup);
 
-      navigate("/groups"); // redirect to groups list
+      navigate("/dashboard/student"); // redirect to dashboard after creation
     } catch (error) {
       console.error("Error creating group:", error);
     }

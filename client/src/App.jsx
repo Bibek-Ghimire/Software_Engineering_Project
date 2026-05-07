@@ -1,4 +1,4 @@
-﻿import { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -14,11 +14,9 @@ import LeaderBoard from "./pages/LeaderBoard";
 import StudentDashboard from "./pages/StudentDashboard";
 import AllCourses from "./pages/AllCourses";
 import CourseDetail from "./pages/CourseDetail";
-import Groups from "./pages/Groups";
 import Discussion from "./pages/Discussion";
 import CoursesPage from "./pages/Teacher/CoursesPage";
 import AddResource from "./pages/Teacher/AddResource";
-import CoursesView from "./pages/Teacher/CoursesPage";
 import CourseEdit from "./pages/Teacher/CoursesPage";
 import StudyGroupsPage from "./pages/Teacher/StudyGroupsPage";
 import Leaderboard from "./pages/Teacher/Leaderboard";
@@ -109,10 +107,6 @@ function AppContent() {
           element={<LeaderBoard />}
         />
         <Route
-          path="/groups"
-          element={<Groups />}
-        />
-        <Route
           path="/teacher/resources"
           element={<AddResource />}
         />
@@ -146,7 +140,7 @@ function AppContent() {
         />
         <Route
           path="/courses/view/:id"
-          element={<CoursesView />}
+          element={<CourseDetail />}
         />
         <Route
           path="/courses/edit/:id"

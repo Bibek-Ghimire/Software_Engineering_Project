@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, CheckCircle, CreditCard } from "lucide-react";
 
@@ -81,7 +81,7 @@ const NotificationPopup = ({
                       <span className="text-sm text-stone-500 dark:text-stone-400">
                         Payment Amount:
                       </span>
-                      <span className="text-2xl font-bold text-green-600 dark:text-green-400">
+                      <span className="text-2xl font-bold text-orange-600 dark:text-orange-400">
                         {notification.course.price}
                       </span>
                     </div>
@@ -105,7 +105,7 @@ const NotificationPopup = ({
               </button>
               <button
                 onClick={handleActionClick}
-                className="flex-1 rounded-full bg-gradient-to-r from-stone-500 to-stone-600 px-4 py-2 font-medium text-white transition flex items-center justify-center gap-2 hover:from-emerald-600 hover:to-teal-600"
+                className="flex-1 rounded-full bg-stone-900 dark:bg-stone-100 px-4 py-2 font-medium text-white dark:text-stone-900 transition flex items-center justify-center gap-2 hover:bg-black dark:hover:bg-white"
               >
                 <CreditCard className="w-4 h-4" />
                 Pay Now
@@ -117,7 +117,7 @@ const NotificationPopup = ({
               initial={{ scaleX: 1 }}
               animate={{ scaleX: 0 }}
               transition={{ duration: 15, ease: "linear" }}
-              className="h-1 bg-gradient-to-r from-green-500 to-blue-500 origin-left"
+              className="h-1 bg-orange-500 origin-left"
               style={{ transformOrigin: "left" }}
             />
           </motion.div>

@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { User } from "lucide-react";
 
 const HumanoidAvatar = ({ src, name, size = 40, className = "" }) => {
@@ -19,7 +19,7 @@ const HumanoidAvatar = ({ src, name, size = 40, className = "" }) => {
   return (
     <div
       style={{ width: px, height: px }}
-      className={`rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white overflow-hidden ${className}`}
+      className={`rounded-full bg-stone-900 dark:bg-stone-100 flex items-center justify-center text-white dark:text-stone-900 overflow-hidden ${className}`}
     >
       <User style={{ width: iconSize, height: iconSize }} />
     </div>

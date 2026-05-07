@@ -1,4 +1,4 @@
-﻿import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 
@@ -38,7 +38,7 @@ const CourseView = () => {
         <span className="font-semibold">Duration:</span> {course.duration}
       </p>
       <p className="text-gray-500 dark:text-gray-300 mb-2">
-        <span className="font-semibold">Price:</span> ${course.price}
+        <span className="font-semibold">Price:</span> Rs. {course.price}
       </p>
       <p className="text-gray-600 dark:text-gray-200 mt-4">
         {course.description}

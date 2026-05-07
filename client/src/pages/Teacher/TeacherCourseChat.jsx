@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -340,7 +340,7 @@ const TeacherCourseChat = () => {
                           maxWidth: "300px",
                           borderRadius: "8px",
                           padding: "8px 16px",
-                          backgroundColor: isSentByMe ? "#3b82f6" : "#e5e7eb",
+                          backgroundColor: isSentByMe ? "#f0860dff" : "#b8c4ddff",
                           color: isSentByMe ? "white" : "#1f2937",
                         }}
                       >

@@ -1,4 +1,4 @@
-﻿// src/pages/CoursesPage.jsx
+// src/pages/CoursesPage.jsx
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import {
@@ -10,7 +10,6 @@ import {
   Plus,
   Eye,
   Clock,
-  DollarSign,
   GraduationCap,
   Save,
   X,
@@ -330,7 +329,7 @@ const CoursesPage = () => {
 
                 <div>
                   <label className="block text-sm font-medium body-copy mb-2">
-                    Price (USD) *
+                    Price (Rs.) *
                   </label>
                   <input
                     name="price"
@@ -542,9 +541,9 @@ const CoursesPage = () => {
                         </span>
                       </div>
                       <div className="flex items-center gap-2 p-3 surface-panel rounded-xl">
-                        <DollarSign className="w-4 h-4 text-stone-500 dark:text-stone-400" />
+                        <span className="text-xs font-bold text-stone-500 dark:text-stone-400">Rs.</span>
                         <span className="text-sm font-medium text-stone-700 dark:text-stone-300">
-                          ${course.price}
+                          {course.price}
                         </span>
                       </div>
                     </div>
@@ -552,7 +551,7 @@ const CoursesPage = () => {
                     {/* Action Buttons */}
                     <div className="flex flex-wrap gap-3">
                       <Link
-                        to={`/courses/view/${course._id}`}
+                        to={`/course/${course._id}`}
                         className="flex-1 min-w-0 primary-action py-3 px-4"
                       >
                         <Eye className="w-4 h-4" /> View

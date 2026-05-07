@@ -39,6 +39,15 @@ const userSchema = new mongoose.Schema(
     interestedCourses: [
       { type: mongoose.Schema.Types.ObjectId, ref: "Course" },
     ],
+    savedCourses: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Course" },
+    ],
+    completedCourses: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Course" },
+    ],
+    savedResources: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Resource" },
+    ],
     college: { type: String, default: "" },
   },
   { timestamps: true },

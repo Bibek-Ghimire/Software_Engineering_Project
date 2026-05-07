@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 import toast from "react-hot-toast";
@@ -22,7 +22,7 @@ const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("student"); // default role
+  const [role, setRole] = useState(""); // default to Select Role
   const [interests, setInterests] = useState([]);
   const [interestInput, setInterestInput] = useState("");
 
@@ -243,13 +243,12 @@ const Register = () => {
                     disabled={
                       interests.includes(topic) || interests.length >= 5
                     }
-                    className={`px-3 py-1 text-xs rounded-full transition-all ${
-                      interests.includes(topic)
+                    className={`px-3 py-1 text-xs rounded-full transition-all ${interests.includes(topic)
+                      ? "bg-stone-200 dark:bg-stone-700 text-stone-500 dark:text-stone-500 opacity-50"
+                      : interests.length >= 5
                         ? "bg-stone-200 dark:bg-stone-700 text-stone-500 dark:text-stone-500 opacity-50"
-                        : interests.length >= 5
-                          ? "bg-stone-200 dark:bg-stone-700 text-stone-500 dark:text-stone-500 opacity-50"
-                          : "bg-orange-100 dark:bg-orange-500/20 text-stone-900 dark:text-stone-50 hover:bg-orange-200 dark:hover:bg-orange-500/30 cursor-pointer border border-orange-200 dark:border-orange-500/40"
-                    }`}
+                        : "bg-orange-100 dark:bg-orange-500/20 text-stone-900 dark:text-stone-50 hover:bg-orange-200 dark:hover:bg-orange-500/30 cursor-pointer border border-orange-200 dark:border-orange-500/40"
+                      }`}
                   >
                     {topic}
                   </button>

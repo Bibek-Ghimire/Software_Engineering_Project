@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import { Link } from "react-router-dom";
-import { BookOpen, Users, User, LogOut, Users2 } from "lucide-react";
+import { BookOpen, User, LogOut, Users2 } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import Logo from "../assets/images/Logo.png";
 
@@ -28,12 +28,6 @@ const Navbar = () => {
             className="nav-chip flex items-center rounded-full px-3 py-2 text-sm font-medium text-stone-700 dark:text-stone-300"
           >
             <BookOpen className="w-4 h-4 mr-1" /> Courses
-          </Link>
-          <Link
-            to="/dashboard/student/groups"
-            className="nav-chip flex items-center rounded-full px-3 py-2 text-sm font-medium text-stone-700 dark:text-stone-300"
-          >
-            <Users className="w-4 h-4 mr-1" /> Study Groups
           </Link>
           <Link
             to="/study-batch"

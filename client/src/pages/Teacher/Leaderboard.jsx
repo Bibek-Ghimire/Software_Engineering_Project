@@ -1,4 +1,4 @@
-﻿// src/pages/Leaderboard.jsx
+// src/pages/Leaderboard.jsx
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
@@ -6,21 +6,20 @@ import {
   ChevronUp,
   User,
   Trophy,
-  Star,
   Users,
   TrendingUp,
   BookOpen,
   Clock,
-  DollarSign,
   Award,
   Sun,
   Moon,
+  Star,
 } from "lucide-react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import TeacherSidebar from "../../components/TeacherSidebar";
+import Sidebar from "../../components/TeacherSidebar";
 
-const Leaderboard = () => {
+const LeaderBoard = () => {
   const navigate = useNavigate();
   const [teachers, setTeachers] = useState([]);
   const [expanded, setExpanded] = useState({});
@@ -72,83 +71,63 @@ const Leaderboard = () => {
     }
   };
 
+  // Tier config — stone-based, no rainbow gradients
   const batchConfig = {
     Diamond: {
-      gradient: "from-cyan-400 via-blue-500 to-purple-600",
-      shadow: "shadow-blue-500/20",
-      badge: "from-cyan-200 to-blue-200",
-      icon: "",
-      glow: "shadow-cyan-500/30",
+      border: "border-l-4 border-l-stone-900 dark:border-l-stone-100",
+      badge: "bg-stone-900 text-stone-50 border border-stone-800 dark:bg-stone-100 dark:text-stone-900 dark:border-white",
+      dot: "bg-stone-900 dark:bg-stone-100",
     },
     Platinum: {
-      gradient: "from-stone-400 via-stone-500 to-stone-600",
-      shadow: "shadow-stone-500/20",
-      badge: "from-stone-200 to-stone-300",
-      icon: "",
-      glow: "shadow-stone-500/30",
+      border: "border-l-4 border-l-stone-600",
+      badge: "bg-stone-100 text-stone-700 border border-stone-300 dark:bg-stone-800 dark:text-stone-300 dark:border-stone-600",
+      dot: "bg-stone-600",
     },
     Gold: {
-      gradient: "from-yellow-400 via-amber-500 to-orange-500",
-      shadow: "shadow-yellow-500/20",
-      badge: "from-yellow-200 to-amber-200",
-      icon: "",
-      glow: "shadow-yellow-500/30",
+      border: "border-l-4 border-l-orange-500",
+      badge: "bg-orange-600 text-white border border-orange-500 shadow-sm shadow-orange-600/20",
+      dot: "bg-orange-500",
     },
     Silver: {
-      gradient: "from-gray-300 via-gray-400 to-gray-500",
-      shadow: "shadow-gray-500/20",
-      badge: "from-gray-200 to-gray-300",
-      icon: "",
-      glow: "shadow-gray-500/30",
+      border: "border-l-4 border-l-orange-400",
+      badge: "bg-orange-50 text-orange-700 border border-orange-200 dark:bg-orange-950/20 dark:text-orange-300 dark:border-orange-900/40",
+      dot: "bg-orange-400",
     },
     Bronze: {
-      gradient: "from-orange-400 via-amber-600 to-yellow-600",
-      shadow: "shadow-orange-500/20",
-      badge: "from-orange-200 to-yellow-200",
-      icon: "",
-      glow: "shadow-orange-500/30",
+      border: "border-l-4 border-l-stone-400",
+      badge: "bg-stone-50 text-stone-600 border border-stone-200 dark:bg-stone-800/60 dark:text-stone-400 dark:border-stone-700",
+      dot: "bg-stone-400",
     },
     Basic: {
-      gradient: "from-green-400 via-emerald-500 to-teal-500",
-      shadow: "shadow-green-500/20",
-      badge: "from-green-200 to-emerald-200",
-      icon: "",
-      glow: "shadow-green-500/30",
+      border: "border-l-4 border-l-stone-200",
+      badge: "bg-stone-50 text-stone-500 border border-stone-200 dark:bg-stone-800/40 dark:text-stone-500 dark:border-stone-700",
+      dot: "bg-stone-200",
     },
   };
 
   const courseLevelConfig = {
     Beginner: {
-      bg: "bg-gradient-to-r from-green-100 to-emerald-100",
-      text: "text-green-700",
-      border: "border-green-200",
-      icon: "",
+      badge: "bg-stone-100 text-stone-700 border-stone-200 dark:bg-stone-800 dark:text-stone-300 dark:border-stone-700",
     },
     Intermediate: {
-      bg: "bg-gradient-to-r from-yellow-100 to-amber-100",
-      text: "text-amber-700",
-      border: "border-yellow-200",
-      icon: "",
+      badge: "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950/20 dark:text-orange-300 dark:border-orange-900/40",
     },
     Expert: {
-      bg: "bg-gradient-to-r from-red-100 to-pink-100",
-      text: "text-red-700",
-      border: "border-red-200",
-      icon: "",
+      badge: "bg-stone-900 text-stone-50 border-stone-800 dark:bg-stone-100 dark:text-stone-900 dark:border-white",
     },
   };
 
   const getRankIcon = (index) => {
     switch (index) {
       case 0:
-        return <Trophy className="w-8 h-8 text-yellow-500" />;
+        return <Trophy className="w-6 h-6 text-orange-500" />;
       case 1:
-        return <Award className="w-8 h-8 text-gray-400" />;
+        return <Award className="w-6 h-6 text-stone-400" />;
       case 2:
-        return <Award className="w-8 h-8 text-orange-500" />;
+        return <Award className="w-6 h-6 text-orange-400" />;
       default:
         return (
-          <div className="w-8 h-8 rounded-full bg-gradient-to-r from-gray-300 to-gray-400 flex items-center justify-center text-white font-bold text-sm">
+          <div className="w-6 h-6 rounded-full bg-stone-200 dark:bg-stone-700 flex items-center justify-center text-stone-600 dark:text-stone-300 font-bold text-xs">
             {index + 1}
           </div>
         );
@@ -159,92 +138,76 @@ const Leaderboard = () => {
     <div className="flex min-h-screen page-surface transition-all duration-700">
       {/* Sidebar */}
       <div className="w-64 fixed top-0 left-0 h-full z-30">
-        <TeacherSidebar />
+        <Sidebar />
       </div>
-      <div className="ml-64 min-h-screen page-surface w-full relative">
-        <button
-          onClick={() => setDarkMode(!darkMode)}
-          className="absolute top-8 right-8 icon-action absolute top-8 right-8 z-10"
-        >
-          {darkMode ? (
-            <Sun className="w-6 h-6" />
-          ) : (
-            <Moon className="w-6 h-6" />
-          )}
-        </button>
-        {/* Header Section */}
-        <div className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-pink-600/10"></div>
-          <div className="relative z-10 pt-16 pb-12 px-6">
-            <motion.div
-              className="max-w-4xl mx-auto text-center"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-gray-800 via-blue-700 to-purple-700 bg-clip-text text-transparent mb-4">
-                Leaderboard
-              </h1>
-              <p className="text-lg text-stone-600 dark:text-stone-400 max-w-2xl mx-auto">
+      <div className="ml-64 min-h-screen page-surface w-full">
+        {/* Header */}
+        <div className="px-8 pt-10 pb-8 border-b border-stone-200 dark:border-stone-800">
+          <div className="flex items-center justify-between mb-1">
+            <div>
+              <span className="section-kicker" />
+              <h1 className="section-title">Leaderboard</h1>
+              <p className="body-copy mt-2">
                 Celebrating our top-performing educators and their outstanding
                 contributions to learning
               </p>
-            </motion.div>
+            </div>
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className="icon-action"
+            >
+              {darkMode ? (
+                <Sun className="w-5 h-5" />
+              ) : (
+                <Moon className="w-5 h-5" />
+              )}
+            </button>
           </div>
         </div>
 
         {/* Stats Bar */}
-        <div className="max-w-6xl mx-auto px-6 mb-8">
+        <div className="px-8 py-6 border-b border-stone-200 dark:border-stone-800">
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-4 gap-4"
-            initial={{ opacity: 0, y: 20 }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-4"
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
           >
             {[
               {
                 icon: Users,
                 label: "Active Teachers",
                 value: teachers.length,
-                color: "text-orange-600",
               },
               {
                 icon: BookOpen,
                 label: "Total Courses",
                 value: teachers.reduce((acc, t) => acc + t.coursesCreated, 0),
-                color: "text-green-600",
               },
               {
                 icon: TrendingUp,
                 label: "Avg Engagement",
                 value: (
                   teachers.reduce((acc, t) => acc + t.engagementScore, 0) /
-                    teachers.length || 0
+                  teachers.length || 0
                 ).toFixed(1),
-                color: "text-purple-600",
               },
               {
                 icon: Star,
                 label: "Top Score",
                 value: Math.max(...teachers.map((t) => t.totalScore), 0),
-                color: "text-yellow-600",
               },
             ].map((stat, index) => (
-              <div
-                key={index}
-                className="bg-white/70 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-white/20"
-              >
+              <div key={index} className="surface-panel p-4">
                 <div className="flex items-center gap-3">
-                  <div
-                    className={`p-2 rounded-lg bg-gradient-to-r from-stone-100 to-stone-200`}
-                  >
-                    <stat.icon className={`w-5 h-5 ${stat.color}`} />
+                  <div className="p-2 rounded-lg bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
+                    <stat.icon className="w-4 h-4 text-stone-500 dark:text-stone-400" />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600 font-medium">
+                    <p className="text-xs text-stone-500 dark:text-stone-400 font-medium">
                       {stat.label}
                     </p>
-                    <p className="text-xl font-bold text-gray-800">
+                    <p className="text-xl font-bold text-stone-900 dark:text-stone-50">
                       {stat.value}
                     </p>
                   </div>
@@ -254,143 +217,106 @@ const Leaderboard = () => {
           </motion.div>
         </div>
 
-        {/* Leaderboard */}
-        <div className="max-w-6xl mx-auto px-6 pb-16">
-          <div className="space-y-6">
+        {/* Leaderboard List */}
+        <div className="px-8 py-8">
+          <div className="space-y-4">
             {teachers.map((teacher, index) => {
               const config = batchConfig[teacher.batch] || batchConfig.Basic;
               return (
                 <motion.div
                   key={teacher._id}
-                  className={`group relative overflow-hidden rounded-3xl transition-all duration-300 hover:scale-[1.01] cursor-pointer`}
-                  initial={{ opacity: 0, y: 50 }}
+                  className={`surface-card ${config.border} overflow-hidden transition-all duration-200 hover:shadow-md cursor-pointer`}
+                  initial={{ opacity: 0, y: 24 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  transition={{ duration: 0.4, delay: index * 0.07 }}
                 >
-                  {/* Enhanced background with layered effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r ${config.gradient} opacity-95"></div>
-                  <div className="absolute inset-0 backdrop-blur-0 group-hover:backdrop-blur-[1px] transition-all duration-300"></div>
-
-                  {/* Premium border effect */}
-                  <div
-                    className={`absolute inset-0 rounded-3xl border-2 border-white/30 pointer-events-none group-hover:border-white/50 transition-all duration-300`}
-                  ></div>
-
-                  {/* Enhanced shadow */}
-                  <div
-                    className={`absolute -inset-1 bg-gradient-to-r ${config.gradient} opacity-0 group-hover:opacity-30 blur-2xl transition-all duration-300 -z-10`}
-                  ></div>
-
-                  {/* Inner glow effect */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none rounded-3xl"></div>
-
-                  {/* Content */}
-                  <div className="relative z-10 p-6 sm:p-7">
-                    <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
-                      {/* Left side - Teacher info */}
+                  <div className="p-6">
+                    <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-5">
+                      {/* Left — Teacher info */}
                       <div
-                        className="flex items-center gap-5 cursor-pointer group-hover:scale-105 transition-transform duration-300"
+                        className="flex items-center gap-4"
                         onClick={() => navigateToTeacher(teacher._id)}
                       >
                         <div
-                          className="flex items-center gap-4 cursor-pointer"
+                          className="flex items-center gap-3 cursor-pointer"
                           onClick={() => navigate(`/teacher/${teacher._id}`)}
                         >
                           <motion.div
-                            whileHover={{ scale: 1.1, rotate: 5 }}
+                            whileHover={{ scale: 1.1 }}
                             transition={{ type: "spring", stiffness: 400 }}
                           >
                             {getRankIcon(index)}
                           </motion.div>
-                          <div className="w-16 h-16 rounded-full bg-white/30 backdrop-blur-md flex items-center justify-center shadow-2xl border-2 border-white/40 group-hover:border-white/60 transition-all duration-300">
-                            <User className="w-8 h-8 text-white" />
+                          <div className="w-12 h-12 rounded-full bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 flex items-center justify-center">
+                            <User className="w-6 h-6 text-stone-500 dark:text-stone-400" />
                           </div>
                         </div>
 
                         <div>
-                          <div className="flex items-center gap-2 mb-2">
-                            <h3 className="text-xl lg:text-2xl font-bold text-orange-600 leading-tight">
-                              {teacher.name}
-                            </h3>
-                            <motion.span
-                              className="text-2xl"
-                              animate={{ scale: [1, 1.1, 1] }}
-                              transition={{ duration: 2, repeat: Infinity }}
-                            >
-                              {config.icon}
-                            </motion.span>
-                          </div>
-                          <div
-                            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r ${config.badge} shadow-lg border border-white/50 backdrop-blur-sm group-hover:shadow-xl transition-all duration-300`}
+                          <h3 className="text-lg font-bold text-stone-900 dark:text-stone-50 leading-tight mb-1">
+                            {teacher.name}
+                          </h3>
+                          <span
+                            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${config.badge}`}
                           >
-                            <span className="text-xs font-semibold text-gray-700">
-                              {teacher.batch} Tier
-                            </span>
-                          </div>
+                            <span className={`w-1.5 h-1.5 rounded-full ${config.dot}`} />
+                            {teacher.batch} Tier
+                          </span>
                         </div>
                       </div>
 
-                      {/* Right side - Stats */}
-                      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5 w-full lg:w-auto">
-                        <motion.div
-                          className="text-center p-3 rounded-xl bg-white/15 backdrop-blur-md border border-white/25 hover:border-white/40 group-hover:bg-white/20 transition-all duration-300"
-                          whileHover={{ y: -3 }}
-                        >
-                          <div className="w-11 h-11 mx-auto mb-2 rounded-lg bg-white/25 backdrop-blur-sm flex items-center justify-center shadow-lg border border-white/30">
-                            <BookOpen className="w-6 h-6 text-white" />
-                          </div>
-                          <p className="text-2xl font-bold text-orange-600 leading-none">
-                            {teacher.coursesCreated}
-                          </p>
-                          <p className="text-xs text-orange-700 font-semibold mt-1 uppercase tracking-wide">
-                            Courses
-                          </p>
-                        </motion.div>
-                        <motion.div
-                          className="text-center p-3 rounded-xl bg-white/15 backdrop-blur-md border border-white/25 hover:border-white/40 group-hover:bg-white/20 transition-all duration-300"
-                          whileHover={{ y: -3 }}
-                        >
-                          <div className="w-11 h-11 mx-auto mb-2 rounded-lg bg-white/25 backdrop-blur-sm flex items-center justify-center shadow-lg border border-white/30">
-                            <TrendingUp className="w-6 h-6 text-white" />
-                          </div>
-                          <p className="text-2xl font-bold text-orange-600 leading-none">
-                            {teacher.engagementScore}
-                          </p>
-                          <p className="text-xs text-orange-700 font-semibold mt-1 uppercase tracking-wide">
-                            Engagement
-                          </p>
-                        </motion.div>
-                        <motion.div
-                          className="text-center p-3 rounded-xl bg-white/15 backdrop-blur-md border border-white/25 hover:border-white/40 group-hover:bg-white/20 transition-all duration-300 col-span-2 lg:col-span-1"
-                          whileHover={{ y: -3 }}
-                        >
-                          <div className="w-11 h-11 mx-auto mb-2 rounded-lg bg-white/25 backdrop-blur-sm flex items-center justify-center shadow-lg border border-white/30">
-                            <Star className="w-6 h-6 text-white" />
-                          </div>
-                          <p className="text-2xl font-bold text-orange-600 leading-none">
-                            {teacher.totalScore}
-                          </p>
-                          <p className="text-xs text-orange-700 font-semibold mt-1 uppercase tracking-wide">
-                            Total Score
-                          </p>
-                        </motion.div>
+                      {/* Right — Stats */}
+                      <div className="grid grid-cols-3 gap-3 w-full lg:w-auto">
+                        {[
+                          {
+                            icon: BookOpen,
+                            label: "Courses",
+                            value: teacher.coursesCreated,
+                          },
+                          {
+                            icon: TrendingUp,
+                            label: "Engagement",
+                            value: teacher.engagementScore,
+                          },
+                          {
+                            icon: Star,
+                            label: "Score",
+                            value: teacher.totalScore,
+                          },
+                        ].map((stat) => (
+                          <motion.div
+                            key={stat.label}
+                            className="surface-panel p-3 text-center"
+                            whileHover={{ y: -2 }}
+                          >
+                            <div className="w-8 h-8 mx-auto mb-1.5 rounded-lg bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 flex items-center justify-center">
+                              <stat.icon className="w-4 h-4 text-stone-500 dark:text-stone-400" />
+                            </div>
+                            <p className="text-xl font-bold text-stone-900 dark:text-stone-50 leading-none">
+                              {stat.value}
+                            </p>
+                            <p className="text-xs text-stone-500 dark:text-stone-400 font-medium mt-0.5 uppercase tracking-wide">
+                              {stat.label}
+                            </p>
+                          </motion.div>
+                        ))}
                       </div>
                     </div>
 
                     {/* Courses Section */}
                     {teacher.courses && teacher.courses.length > 0 && (
-                      <div className="mt-8">
+                      <div className="mt-5 pt-5 border-t border-stone-100 dark:border-stone-800">
                         <motion.button
                           onClick={() => toggleExpand(teacher._id)}
-                          className="flex items-center gap-2 text-orange-600 hover:text-orange-700 transition-colors duration-200 font-medium"
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
+                          className="flex items-center gap-2 text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors"
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
                         >
-                          <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                          <div className="w-6 h-6 rounded-full bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 flex items-center justify-center">
                             {expanded[teacher._id] ? (
-                              <ChevronUp size={16} />
+                              <ChevronUp size={12} />
                             ) : (
-                              <ChevronDown size={16} />
+                              <ChevronDown size={12} />
                             )}
                           </div>
                           <span>
@@ -402,7 +328,7 @@ const Leaderboard = () => {
 
                         {expanded[teacher._id] && (
                           <motion.div
-                            className="mt-6 grid gap-4 md:grid-cols-2"
+                            className="mt-4 grid gap-3 md:grid-cols-2"
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
                             exit={{ opacity: 0, height: 0 }}
@@ -415,50 +341,34 @@ const Leaderboard = () => {
                               return (
                                 <motion.div
                                   key={course._id}
-                                  className="group/card relative bg-white/98 backdrop-blur-md rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 border border-white/40 hover:border-white/60 overflow-hidden"
-                                  initial={{ opacity: 0, y: 20 }}
+                                  className="surface-panel rounded-xl p-5 transition-all duration-200 hover:shadow-sm"
+                                  initial={{ opacity: 0, y: 12 }}
                                   animate={{ opacity: 1, y: 0 }}
-                                  transition={{ duration: 0.3 }}
-                                  whileHover={{ y: -4 }}
+                                  transition={{ duration: 0.25 }}
+                                  whileHover={{ y: -2 }}
                                 >
-                                  {/* Card background effect */}
-                                  <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 to-purple-50/30 pointer-events-none rounded-2xl"></div>
-                                  <div className="absolute top-0 right-0 w-32 h-32 bg-stone-400/10 rounded-full blur-3xl pointer-events-none"></div>
+                                  <div className="flex justify-between items-start mb-3">
+                                    <h4 className="font-semibold text-stone-900 dark:text-stone-50 text-sm leading-snug pr-2">
+                                      {course.title}
+                                    </h4>
+                                  </div>
+                                  <p className="text-stone-500 dark:text-stone-400 text-xs mb-4 line-clamp-2 leading-relaxed">
+                                    {course.description}
+                                  </p>
 
-                                  <div className="relative z-10">
-                                    <div className="flex justify-between items-start mb-4">
-                                      <h4 className="font-bold text-gray-800 text-lg group-hover/card:text-orange-600 transition-colors pr-2">
-                                        {course.title}
-                                      </h4>
-                                      <motion.span
-                                        className="text-2xl flex-shrink-0"
-                                        whileHover={{ scale: 1.2, rotate: 10 }}
-                                        transition={{
-                                          type: "spring",
-                                          stiffness: 400,
-                                        }}
-                                      >
-                                        {levelConfig.icon}
-                                      </motion.span>
+                                  <div className="flex flex-wrap items-center gap-2">
+                                    <span
+                                      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold border ${levelConfig.badge}`}
+                                    >
+                                      {course.level}
+                                    </span>
+                                    <div className="flex items-center gap-1 text-xs text-stone-500 dark:text-stone-400 bg-stone-100 dark:bg-stone-800 px-2.5 py-1 rounded-full border border-stone-200 dark:border-stone-700">
+                                      <Clock className="w-3 h-3" />
+                                      {course.duration}
                                     </div>
-                                    <p className="text-gray-600 text-sm mb-5 line-clamp-2 leading-relaxed">
-                                      {course.description}
-                                    </p>
-
-                                    <div className="flex flex-wrap items-center gap-2.5">
-                                      <span
-                                        className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold ${levelConfig.bg} ${levelConfig.text} border ${levelConfig.border} shadow-sm`}
-                                      >
-                                        {course.level}
-                                      </span>
-                                      <div className="flex items-center gap-1.5 text-xs text-gray-500 bg-stone-100/50 px-3 py-1.5 rounded-full">
-                                        <Clock className="w-3.5 h-3.5" />
-                                        {course.duration}
-                                      </div>
-                                      <div className="flex items-center gap-1.5 text-xs font-semibold text-green-700 bg-green-100/50 px-3 py-1.5 rounded-full">
-                                        <DollarSign className="w-3.5 h-3.5" />
-                                        {course.price}
-                                      </div>
+                                    <div className="flex items-center gap-1 text-xs text-stone-500 dark:text-stone-400 bg-stone-100 dark:bg-stone-800 px-2.5 py-1 rounded-full border border-stone-200 dark:border-stone-700">
+                                      <span className="text-[10px] font-bold">Rs.</span>
+                                      {course.price}
                                     </div>
                                   </div>
                                 </motion.div>
@@ -479,6 +389,4 @@ const Leaderboard = () => {
   );
 };
 
-export default Leaderboard;
-
-
+export default LeaderBoard;

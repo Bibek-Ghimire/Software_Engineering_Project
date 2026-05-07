@@ -2,7 +2,6 @@
 import Dashboard from "../pages/Dashboard";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
-import Groups from "../pages/Groups";
 import Resources from "../pages/Resources";
 import CreateGroup from "../pages/CreateGroup";
 import Profile from "../pages/Profile";
@@ -24,10 +23,6 @@ const AppRoutes = () => {
         <Route
           path="/dashboard"
           element={<Dashboard />}
-        />
-        <Route
-          path="/groups"
-          element={<Groups />}
         />
         <Route
           path="/resources"

@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Heart,
@@ -81,20 +81,20 @@ const RecommendedCourses = ({ limit = 6 }) => {
     if (levelLower === "beginner")
       return {
         badge:
-          "border-emerald-200 dark:border-emerald-900/40 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300",
-        bar: "bg-emerald-400",
+          "border-stone-200 dark:border-stone-700 bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300",
+        bar: "bg-stone-400",
       };
     if (levelLower === "intermediate")
       return {
         badge:
-          "border-amber-200 dark:border-amber-900/40 bg-amber-50 dark:bg-amber-950/20 text-amber-700 dark:text-amber-300",
-        bar: "bg-amber-400",
+          "border-orange-200 dark:border-orange-900/40 bg-orange-50 dark:bg-orange-950/20 text-orange-700 dark:text-orange-300",
+        bar: "bg-orange-400",
       };
-    if (levelLower === "advanced")
+    if (levelLower === "advanced" || levelLower === "expert")
       return {
         badge:
-          "border-rose-200 dark:border-rose-900/40 bg-rose-50 dark:bg-rose-950/20 text-rose-700 dark:text-rose-300",
-        bar: "bg-rose-400",
+          "border-stone-800 dark:border-white bg-stone-900 dark:bg-stone-100 text-stone-50 dark:text-stone-900",
+        bar: "bg-stone-900 dark:bg-stone-100",
       };
     return {
       badge:
@@ -184,7 +184,7 @@ const RecommendedCourses = ({ limit = 6 }) => {
                   onClick={() => handleInterestedClick(course._id)}
                   className={`flex-1 py-2.5 gap-2 text-sm btn-base border rounded-lg px-4 transition-all ${
                     interestedCourses.has(course._id)
-                      ? "bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700"
+                      ? "bg-orange-600 text-white border-orange-600 hover:bg-orange-700 shadow-md shadow-orange-600/20"
                       : "bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 border-stone-300 dark:border-stone-700 hover:bg-stone-50 dark:hover:bg-stone-800"
                   }`}
                 >

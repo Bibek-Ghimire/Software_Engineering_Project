@@ -1,11 +1,10 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
   ArrowLeft,
   BookOpen,
   Clock,
-  DollarSign,
   User,
   Star,
   BarChart3,
@@ -16,6 +15,8 @@ import {
   Loader,
   Sun,
   Moon,
+  Bookmark,
+  BookmarkCheck,
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import { motion } from "framer-motion";
@@ -33,6 +34,10 @@ const CourseDetail = () => {
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [enrollmentRequestStatus, setEnrollmentRequestStatus] = useState(null);
   const [paymentStatus, setPaymentStatus] = useState(null);
+  const [isSaved, setIsSaved] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const user = JSON.parse(sessionStorage.getItem("user") || "{}");
+  const isStudent = user.role === "student";
 
   useEffect(() => {
     const fetchCourseDetail = async () => {
@@ -93,10 +98,96 @@ const CourseDetail = () => {
       }
     };
 
+    const fetchSavedStatus = async () => {
+      try {
+        const token = sessionStorage.getItem("token");
+        if (!token || !isStudent) return;
+
+        const res = await fetch("http://localhost:5000/api/profile/saved-items", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        const saved = (data.savedCourses || []).some((c) => c._id === id || c === id);
+        setIsSaved(saved);
+
+        const completed = (data.completedCourses || []).some((c) => c._id === id || c === id);
+        setIsCompleted(completed);
+      } catch (err) {
+        console.error("Error fetching saved status:", err);
+      }
+    };
+
     if (id) {
       fetchCourseDetail();
+      fetchSavedStatus();
     }
-  }, [id]);
+  }, [id, isStudent]);
+
+  const handleToggleSave = async () => {
+    try {
+      const token = sessionStorage.getItem("token");
+      const method = isSaved ? "DELETE" : "POST";
+
+      const response = await fetch(
+        `http://localhost:5000/api/profile/save-course/${id}`,
+        {
+          method,
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      if (response.ok) {
+        setIsSaved(!isSaved);
+        toast.success(
+          isSaved ? "Removed from saved" : "Course saved for later!",
+          {
+            style: {
+              borderRadius: "15px",
+              background: darkMode ? "#1c1917" : "#fff",
+              color: darkMode ? "#fff" : "#1c1917",
+              border: "1px solid #e76f51",
+            },
+          },
+        );
+      }
+    } catch (err) {
+      console.error("Error toggling save:", err);
+      toast.error("Failed to update saved status");
+    }
+  };
+
+  const handleToggleComplete = async () => {
+    try {
+      const token = sessionStorage.getItem("token");
+      const method = isCompleted ? "DELETE" : "POST";
+
+      const response = await fetch(
+        `http://localhost:5000/api/profile/complete-course/${id}`,
+        {
+          method,
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      if (response.ok) {
+        setIsCompleted(!isCompleted);
+        toast.success(
+          isCompleted ? "Course marked as in-progress" : "Course Completed! 🎉",
+          {
+            style: {
+              borderRadius: "15px",
+              background: darkMode ? "#1c1917" : "#fff",
+              color: darkMode ? "#fff" : "#1c1917",
+              border: "1px solid #10b981",
+            },
+          },
+        );
+      }
+    } catch (err) {
+      console.error("Error toggling complete:", err);
+      toast.error("Failed to update completion status");
+    }
+  };
 
   // Dark mode toggle
   useEffect(() => {
@@ -180,7 +271,7 @@ const CourseDetail = () => {
       } else {
         toast.error(
           data.message ||
-            "Failed to send enrollment request. Please try again.",
+          "Failed to send enrollment request. Please try again.",
           {
             duration: 4000,
             position: "top-center",
@@ -201,26 +292,26 @@ const CourseDetail = () => {
   const getLevelColor = (level) => {
     switch (level) {
       case "Beginner":
-        return "from-green-500 to-emerald-500";
+        return "from-stone-700 to-stone-800";
       case "Intermediate":
-        return "from-orange-500 to-amber-500";
+        return "from-orange-500 to-orange-600";
       case "Expert":
-        return "from-red-500 to-pink-500";
+        return "from-stone-900 to-black";
       default:
-        return "from-blue-500 to-indigo-500";
+        return "from-stone-500 to-stone-600";
     }
   };
 
   const getLevelBgColor = (level) => {
     switch (level) {
       case "Beginner":
-        return "bg-green-100 text-green-800";
+        return "bg-stone-100 text-stone-700 border-stone-200";
       case "Intermediate":
-        return "bg-orange-100 text-orange-800";
+        return "bg-orange-50 text-orange-800 border-orange-200";
       case "Expert":
-        return "bg-red-100 text-red-800";
+        return "bg-stone-900 text-stone-50 border-stone-800";
       default:
-        return "bg-orange-50 text-stone-700";
+        return "bg-stone-50 text-stone-700 border-stone-200";
     }
   };
 
@@ -234,7 +325,7 @@ const CourseDetail = () => {
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="w-12 h-12 border-4 border-orange-400 border-t-blue-600 rounded-full"
+            className="w-12 h-12 border-4 border-stone-200 border-t-orange-600 rounded-full"
           />
         </div>
       </div>
@@ -358,7 +449,7 @@ const CourseDetail = () => {
                       Price
                     </p>
                     <p className="text-4xl font-bold text-orange-600 dark:text-orange-400 flex items-center gap-1 justify-end">
-                      <DollarSign className="w-8 h-8" />
+                      <span className="text-2xl font-semibold">Rs.</span>
                       {course.price}
                     </p>
                   </div>
@@ -375,17 +466,16 @@ const CourseDetail = () => {
                       enrollmentRequestStatus === "pending" ||
                       enrolling
                     }
-                    className={`px-8 py-3 rounded-xl font-bold text-white transition-all duration-300 flex items-center gap-2 ${
-                      isEnrolled
-                        ? "bg-emerald-500 cursor-not-allowed"
-                        : enrollmentRequestStatus === "pending"
-                          ? "bg-amber-400 cursor-not-allowed text-stone-900"
-                          : paymentStatus === "pending"
-                            ? "bg-orange-500 hover:bg-orange-600"
-                            : enrolling
-                              ? "primary-action cursor-wait"
-                              : "primary-action hover:shadow-xl"
-                    }`}
+                    className={`px-8 py-3 rounded-xl font-bold text-white transition-all duration-300 flex items-center gap-2 ${isEnrolled
+                      ? "bg-emerald-500 cursor-not-allowed"
+                      : enrollmentRequestStatus === "pending"
+                        ? "bg-amber-400 cursor-not-allowed text-stone-900"
+                        : paymentStatus === "pending"
+                          ? "bg-orange-500 hover:bg-orange-600"
+                          : enrolling
+                            ? "primary-action cursor-wait"
+                            : "primary-action hover:shadow-xl"
+                      }`}
                   >
                     {isEnrolled ? (
                       <>
@@ -399,7 +489,7 @@ const CourseDetail = () => {
                       </>
                     ) : paymentStatus === "pending" ? (
                       <>
-                        <DollarSign className="w-5 h-5" />
+                        <span className="text-sm font-bold">Rs.</span>
                         Complete Payment
                       </>
                     ) : enrolling ? (
@@ -414,6 +504,38 @@ const CourseDetail = () => {
                       </>
                     )}
                   </button>
+                  {isStudent && (
+                    <button
+                      onClick={handleToggleSave}
+                      className={`px-4 py-3 rounded-xl font-bold border transition-all duration-300 flex items-center justify-center gap-2 ${isSaved
+                        ? "border-orange-500 text-orange-500 bg-orange-50 dark:bg-orange-950/20"
+                        : "border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800"
+                        }`}
+                    >
+                      {isSaved ? (
+                        <BookmarkCheck className="w-5 h-5" />
+                      ) : (
+                        <Bookmark className="w-5 h-5" />
+                      )}
+                      <span>{isSaved ? "Saved" : "Save for Later"}</span>
+                    </button>
+                  )}
+                  {isEnrolled && isStudent && (
+                    <button
+                      onClick={handleToggleComplete}
+                      className={`px-4 py-3 rounded-xl font-bold border transition-all duration-300 flex items-center justify-center gap-2 ${isCompleted
+                        ? "border-emerald-500 text-emerald-500 bg-emerald-50 dark:bg-emerald-950/20"
+                        : "border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800"
+                        }`}
+                    >
+                      {isCompleted ? (
+                        <CheckCircle className="w-5 h-5" />
+                      ) : (
+                        <CheckCircle className="w-5 h-5 opacity-50" />
+                      )}
+                      <span>{isCompleted ? "Completed" : "Mark as Completed"}</span>
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

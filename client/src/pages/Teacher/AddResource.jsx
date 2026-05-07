@@ -5,6 +5,7 @@ import {
   FileText,
   Trash2,
   Edit2,
+  Eye,
   Download,
   PlusCircle,
   XCircle,
@@ -32,7 +33,9 @@ const AddResource = () => {
   );
 
   const token = sessionStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user"));
+  const storedUser =
+    sessionStorage.getItem("user") || localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
   const currentUserId = user?._id || user?.id;
 
   if (!token) toast.error("User not logged in");
@@ -157,6 +160,16 @@ const AddResource = () => {
     link.download = title;
     link.click();
   };
+
+  const handleView = (url) => {
+    if (!url) return;
+    window.open(`http://localhost:5000${url}`, "_blank", "noopener,noreferrer");
+  };
+
+  const isResourceOwner = (res) =>
+    user?.role === "teacher" &&
+    (res.teacher?._id?.toString() || res.teacher?.id?.toString()) ===
+      currentUserId?.toString();
 
   // Edit resource
   const handleEdit = (res) => {
@@ -389,6 +402,15 @@ const AddResource = () => {
                     <div className="flex flex-wrap gap-2">
                       {res.fileUrl && (
                         <button
+                          onClick={() => handleView(res.fileUrl)}
+                          className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 py-2 rounded-xl flex items-center gap-2 font-medium shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105"
+                        >
+                          <Eye className="w-4 h-4" /> View
+                        </button>
+                      )}
+
+                      {res.fileUrl && (
+                        <button
                           onClick={() => handleDownload(res.fileUrl, res.title)}
                           className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-4 py-2 rounded-xl flex items-center gap-2 font-medium shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105"
                         >
@@ -397,25 +419,22 @@ const AddResource = () => {
                       )}
 
                       {/* Show Edit/Delete only if logged-in teacher is the creator */}
-                      {user?.role === "teacher" &&
-                        (res.teacher?._id?.toString() ||
-                          res.teacher?.id?.toString()) ===
-                          currentUserId?.toString() && (
-                          <>
-                            <button
-                              onClick={() => handleEdit(res)}
-                              className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white px-4 py-2 rounded-xl flex items-center gap-2 font-medium shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105"
-                            >
-                              <Edit2 className="w-4 h-4" /> Edit
-                            </button>
-                            <button
-                              onClick={() => handleDelete(res._id)}
-                              className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 rounded-xl flex items-center gap-2 font-medium shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105"
-                            >
-                              <Trash2 className="w-4 h-4" /> Delete
-                            </button>
-                          </>
-                        )}
+                      {isResourceOwner(res) && (
+                        <>
+                          <button
+                            onClick={() => handleEdit(res)}
+                            className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white px-4 py-2 rounded-xl flex items-center gap-2 font-medium shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105"
+                          >
+                            <Edit2 className="w-4 h-4" /> Edit
+                          </button>
+                          <button
+                            onClick={() => handleDelete(res._id)}
+                            className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 rounded-xl flex items-center gap-2 font-medium shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105"
+                          >
+                            <Trash2 className="w-4 h-4" /> Delete
+                          </button>
+                        </>
+                      )}
                     </div>
                   </div>
 
@@ -446,5 +465,3 @@ const AddResource = () => {
 };
 
 export default AddResource;
-
-
