@@ -563,5 +563,68 @@ const Home = () => {
           </div>
         </section>
 
+        {/* ─── Contact Section ─── */}
+        <section ref={contactRef} className="mt-32">
+          <div className="text-center mb-16">
+            <h2 className="section-title text-4xl">Ready to <span className="text-orange-600">Connect?</span></h2>
+            <p className="body-copy mt-3">We welcome contributions from passionate educators and developers.</p>
+          </div>
 
-        export default Home;
+          <div className="grid md:grid-cols-3 gap-6">
+            {channels.map((channel) => (
+              <a
+                key={channel.title}
+                href={channel.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="surface-card group p-8 hover:border-orange-500/40 transition-all"
+              >
+                <div className="w-14 h-14 bg-stone-50 dark:bg-stone-800 rounded-2xl flex items-center justify-center p-3 mb-6 group-hover:scale-110 transition-transform">
+                  <img src={channel.icon} alt={channel.title} className="w-full h-full object-contain" />
+                </div>
+                <h3 className="text-xl font-bold mb-1">{channel.title}</h3>
+                <p className="text-orange-600 dark:text-orange-400 text-sm font-bold uppercase tracking-wider mb-4">{channel.subtitle}</p>
+                <p className="body-copy text-sm leading-relaxed mb-6">
+                  Stay updated with our latest features, join discussions, and connect with our team members.
+                </p>
+                <div className="flex items-center gap-2 text-stone-400 group-hover:text-stone-900 dark:group-hover:text-stone-100 transition-colors">
+                  <span className="text-xs font-mono">{channel.display}</span>
+                  <ArrowRight size={14} />
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        {/* ─── CTA Section ─── */}
+        <section className="mt-32 relative overflow-hidden rounded-[3rem] bg-orange-600 dark:bg-orange-600 px-8 py-20 md:py-28 text-center text-white">
+
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="relative z-10 max-w-4xl mx-auto"
+          >
+            <h2 className="brand-title text-5xl md:text-7xl font-black mb-8 leading-tight">
+              Your Academic Success <br /> <span className="text-orange-200">Starts Today.</span>
+            </h2>
+            <p className="text-orange-50 text-xl max-w-2xl mx-auto mb-12 opacity-90">
+              Join over 50,000 students who have already transformed their learning experience.
+              Start collaborating, start achieving, start succeeding.
+            </p>
+            <button
+              onClick={() => handleNavigation("/register")}
+              className="bg-white text-orange-600 hover:bg-orange-50 active:scale-95 px-10 py-5 rounded-2xl font-black text-lg transition-all shadow-2xl shadow-orange-950/20"
+            >
+              Create Your Squad Now
+            </button>
+          </motion.div>
+        </section>
+      </main>
+
+    </div>
+  );
+};
+
+export default Home;
