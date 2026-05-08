@@ -1202,7 +1202,6 @@ const StudentDashboard = () => {
           </motion.div>
         )}
 
-        {/* Enhanced Teachers Leaderboard */}
         <motion.div
           className="surface-card-strong p-8"
           initial={{ opacity: 0, y: 30 }}
@@ -1295,7 +1294,6 @@ const StudentDashboard = () => {
           )}
         </motion.div>
 
-        {/* Recommended Courses Section */}
         <motion.div
           className="space-y-8"
           initial={{ opacity: 0, y: 30 }}
