@@ -372,16 +372,13 @@ const CoursesPage = () => {
         {/* Courses List Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl flex items-center justify-center">
-              <BookOpen className="w-5 h-5 text-white" />
-            </div>
+
             <h2 className="text-3xl font-bold text-stone-700 dark:text-stone-300">
               All Courses
             </h2>
           </div>
           <div className="flex items-center gap-4 text-stone-600 dark:text-stone-400">
             <div className="flex items-center gap-2 surface-panel px-4 py-2">
-              <Users className="w-4 h-4" />
               <span className="font-medium">{courses.length} courses</span>
             </div>
           </div>
@@ -509,7 +506,7 @@ const CoursesPage = () => {
               ) : (
                 <>
                   {/* Course Header */}
-                  <div className="bg-gradient-to-r from-stone-700 to-stone-900 p-6 text-white relative overflow-hidden">
+                  <div className="bg-stone-500 p-6 text-white relative overflow-hidden">
                     <div className="hidden"></div>
                     <div className="relative z-10">
                       <h3 className="text-xl font-bold mb-2 line-clamp-2 text-stone-900 dark:text-stone-50">
@@ -519,7 +516,6 @@ const CoursesPage = () => {
                         <span
                           className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 border bg-stone-100 text-stone-700 dark:bg-stone-800 dark:text-stone-300`}
                         >
-                          {getLevelIcon(course.level)}
                           {course.level}
                         </span>
                       </div>

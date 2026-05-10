@@ -31,12 +31,12 @@ const RecommendedTeachers = ({ limit = 6 }) => {
   // Tier badge — stone-based, no rainbow
   const getTierBadge = (batch) => {
     const map = {
-      Diamond:  "bg-stone-900 text-stone-50 border-white dark:bg-stone-100 dark:text-stone-900 dark:border-white shadow-md",
+      Diamond: "bg-stone-900 text-stone-50 border-white dark:bg-stone-100 dark:text-stone-900 dark:border-white shadow-md",
       Platinum: "bg-stone-100 text-stone-700 border-stone-300 dark:bg-stone-800 dark:text-stone-300 dark:border-stone-600",
-      Gold:     "bg-orange-600 text-white border-orange-500 shadow-sm shadow-orange-600/20",
-      Silver:   "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950/20 dark:text-orange-300 dark:border-orange-900/40",
-      Bronze:   "bg-stone-50 text-stone-600 border-stone-200 dark:bg-stone-800/60 dark:text-stone-400 dark:border-stone-700",
-      Basic:    "bg-stone-50 text-stone-500 border-stone-200 dark:bg-stone-800/40 dark:text-stone-500 dark:border-stone-700",
+      Gold: "bg-orange-600 text-white border-orange-500 shadow-sm shadow-orange-600/20",
+      Silver: "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950/20 dark:text-orange-300 dark:border-orange-900/40",
+      Bronze: "bg-stone-50 text-stone-600 border-stone-200 dark:bg-stone-800/60 dark:text-stone-400 dark:border-stone-700",
+      Basic: "bg-stone-50 text-stone-500 border-stone-200 dark:bg-stone-800/40 dark:text-stone-500 dark:border-stone-700",
     };
     return map[batch] || map.Basic;
   };
@@ -84,11 +84,7 @@ const RecommendedTeachers = ({ limit = 6 }) => {
                 size={52}
                 className="border border-stone-200 dark:border-stone-700 shadow-sm"
               />
-              <span
-                className={`flex-shrink-0 px-2.5 py-1 rounded-full text-xs font-semibold border ${getTierBadge(teacher.batch)}`}
-              >
-                {teacher.batch || "Basic"}
-              </span>
+
             </div>
 
             <h3 className="text-sm font-semibold text-stone-900 dark:text-stone-50 mb-1 line-clamp-2">
@@ -160,11 +156,6 @@ const RecommendedTeachers = ({ limit = 6 }) => {
                 </span>
               </div>
             )}
-
-            <button className="primary-action w-full py-2.5 gap-2 text-sm mt-auto">
-              <MessageSquare className="w-4 h-4" />
-              Contact Teacher
-            </button>
           </div>
         </div>
       ))}
