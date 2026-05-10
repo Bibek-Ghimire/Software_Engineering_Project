@@ -215,119 +215,200 @@ const AllCourses = () => {
             Transform your skills with our premium learning programs
           </p>
         </div>
+
+        {/* Feature Highlights */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
+          {[
+            {
+              icon: <TrendingUp className="w-4 h-4 text-stone-500 dark:text-stone-400" />,
+              title: "Expert-Led",
+              desc: "Learn from industry professionals",
+            },
+            {
+              icon: <Award className="w-4 h-4 text-stone-500 dark:text-stone-400" />,
+              title: "Certified",
+              desc: "Earn recognized certificates",
+            },
+            {
+              icon: <Filter className="w-4 h-4 text-stone-500 dark:text-stone-400" />,
+              title: "Flexible",
+              desc: "Learn at your own pace",
+            },
+          ].map((item) => (
+            <div key={item.title} className="surface-card p-5">
+              <div className="flex items-center gap-2.5 mb-1.5">
+                <div className="p-1.5 rounded-lg bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
+                  {item.icon}
+                </div>
+                <h3 className="font-semibold text-stone-900 dark:text-stone-50 text-sm">
+                  {item.title}
+                </h3>
+              </div>
+              <p className="body-copy text-sm">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        {courses.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20">
+            <div className="surface-card-strong p-14 text-center max-w-md">
+              <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
+                <BookOpen className="w-8 h-8 text-stone-500 dark:text-stone-400" />
+              </div>
+              <h3 className="text-2xl font-bold text-stone-900 dark:text-stone-50 mb-3">
+                Courses Coming Soon
+              </h3>
+              <p className="body-copy text-sm leading-relaxed">
+                We're curating exceptional learning experiences just for you.
+                Check back soon!
+              </p>
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Stats Section */}
+            <div className="mb-10 surface-card-strong p-7">
+              <div className="mb-5">
+                <h2 className="text-xl font-bold text-stone-900 dark:text-stone-50">
+                  Course Overview
+                </h2>
+                <p className="body-copy text-sm mt-1">
+                  Your learning journey at a glance
+                </p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {[
+                  {
+                    label: "Total Courses",
+                    sub: "Available to explore",
+                    value: courses.length,
+                  },
+                  {
+                    label: "Skill Levels",
+                    sub: "From beginner to expert",
+                    value: new Set(courses.map((course) => course.level)).size,
+                  },
+                  {
+                    label: "Instructors",
+                    sub: "Ready to guide you",
+                    value: new Set(
+                      courses
+                        .map((course) => course.teacher?.name)
+                        .filter(Boolean),
+                    ).size,
                   },
                 ].map((stat) => (
-        <div key={stat.label} className="surface-panel p-5">
-          <p className="text-3xl font-black text-stone-900 dark:text-stone-50">
-            {stat.value}
-          </p>
-          <p className="font-semibold text-stone-800 dark:text-stone-200 mt-1">
-            {stat.label}
-          </p>
-          <p className="body-copy text-xs mt-0.5">{stat.sub}</p>
-        </div>
+                  <div key={stat.label} className="surface-panel p-5">
+                    <p className="text-3xl font-black text-stone-900 dark:text-stone-50">
+                      {stat.value}
+                    </p>
+                    <p className="font-semibold text-stone-800 dark:text-stone-200 mt-1">
+                      {stat.label}
+                    </p>
+                    <p className="body-copy text-xs mt-0.5">{stat.sub}</p>
+                  </div>
                 ))}
-      </div>
-    </div>
-
-            {/* Courses Grid */ }
-  <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-    {courses.map((course, index) => {
-      const levelInfo = getLevelStyling(course.level);
-      return (
-        <div
-          key={course._id}
-          className="surface-card overflow-hidden transition-all duration-200 hover:shadow-md flex flex-col"
-          style={{ animationDelay: `${index * 100}ms` }}
-        >
-          {/* Level accent bar */}
-          <div className={`h-1 ${levelInfo.bar}`} />
-
-          <div className="p-6 border-b border-stone-100 dark:border-stone-800">
-            <div className="flex items-start justify-between gap-4 mb-3">
-              <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-50 leading-snug">
-                {course.title}
-              </h2>
-              <BookOpen className="w-4 h-4 text-stone-400 flex-shrink-0 mt-0.5" />
-            </div>
-            <span
-              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${levelInfo.badge}`}
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-current opacity-80" />
-              {course.level} Level
-            </span>
-            {isStudent && (
-              <button
-                onClick={() => handleToggleSaveCourse(course._id)}
-                className={`p-2 rounded-lg transition-all ${savedCourseIds.includes(course._id)
-                  ? "text-orange-500 bg-orange-50 dark:bg-orange-950/20"
-                  : "text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800"
-                  }`}
-                title={savedCourseIds.includes(course._id) ? "Unsave" : "Save for Later"}
-              >
-                {savedCourseIds.includes(course._id) ? (
-                  <BookmarkCheck className="w-5 h-5" />
-                ) : (
-                  <Bookmark className="w-5 h-5" />
-                )}
-              </button>
-            )}
-          </div>
-
-          {/* Course Content */}
-          <div className="p-6 flex-grow flex flex-col">
-            {/* Course Details */}
-            <div className="space-y-3 mb-6">
-              <div className="flex items-center gap-3 p-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900/50">
-                <div className="p-1.5 rounded-lg bg-white dark:bg-stone-800 shadow-sm">
-                  <Clock className="w-4 h-4 text-stone-500 dark:text-stone-400" />
-                </div>
-                <div>
-                  <span className="font-semibold text-stone-900 dark:text-stone-100 text-sm block">
-                    Duration
-                  </span>
-                  <p className="body-copy text-xs">
-                    {course.duration}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 p-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900/50">
-                <div className="p-1.5 rounded-lg bg-white dark:bg-stone-800 shadow-sm">
-                  <User className="w-4 h-4 text-stone-500 dark:text-stone-400" />
-                </div>
-                <div>
-                  <span className="font-semibold text-stone-900 dark:text-stone-100 text-sm block">
-                    Instructor
-                  </span>
-                  <p className="body-copy text-xs">
-                    {course.teacher?.name || "Expert Instructor"}
-                  </p>
-                </div>
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 mt-auto">
-              <Link
-                to={`/course/${course._id}`}
-                className="flex-1 primary-action py-3 gap-2"
-              >
-                <BookOpen className="w-4 h-4" />
-                <span>Explore Course</span>
-              </Link>
+            {/* Courses Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+              {courses.map((course, index) => {
+                const levelInfo = getLevelStyling(course.level);
+                return (
+                  <div
+                    key={course._id}
+                    className="surface-card overflow-hidden transition-all duration-200 hover:shadow-md flex flex-col"
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
+                    {/* Level accent bar */}
+                    <div className={`h-1 ${levelInfo.bar}`} />
+
+                    <div className="p-6 border-b border-stone-100 dark:border-stone-800">
+                      <div className="flex items-start justify-between gap-4 mb-3">
+                        <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-50 leading-snug">
+                          {course.title}
+                        </h2>
+                        <BookOpen className="w-4 h-4 text-stone-400 flex-shrink-0 mt-0.5" />
+                      </div>
+                      <span
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${levelInfo.badge}`}
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-current opacity-80" />
+                        {course.level} Level
+                      </span>
+                      {isStudent && (
+                        <button
+                          onClick={() => handleToggleSaveCourse(course._id)}
+                          className={`p-2 rounded-lg transition-all ${savedCourseIds.includes(course._id)
+                              ? "text-orange-500 bg-orange-50 dark:bg-orange-950/20"
+                              : "text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800"
+                            }`}
+                          title={savedCourseIds.includes(course._id) ? "Unsave" : "Save for Later"}
+                        >
+                          {savedCourseIds.includes(course._id) ? (
+                            <BookmarkCheck className="w-5 h-5" />
+                          ) : (
+                            <Bookmark className="w-5 h-5" />
+                          )}
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Course Content */}
+                    <div className="p-6 flex-grow flex flex-col">
+                      {/* Course Details */}
+                      <div className="space-y-3 mb-6">
+                        <div className="flex items-center gap-3 p-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900/50">
+                          <div className="p-1.5 rounded-lg bg-white dark:bg-stone-800 shadow-sm">
+                            <Clock className="w-4 h-4 text-stone-500 dark:text-stone-400" />
+                          </div>
+                          <div>
+                            <span className="font-semibold text-stone-900 dark:text-stone-100 text-sm block">
+                              Duration
+                            </span>
+                            <p className="body-copy text-xs">
+                              {course.duration}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3 p-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900/50">
+                          <div className="p-1.5 rounded-lg bg-white dark:bg-stone-800 shadow-sm">
+                            <User className="w-4 h-4 text-stone-500 dark:text-stone-400" />
+                          </div>
+                          <div>
+                            <span className="font-semibold text-stone-900 dark:text-stone-100 text-sm block">
+                              Instructor
+                            </span>
+                            <p className="body-copy text-xs">
+                              {course.teacher?.name || "Expert Instructor"}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="flex flex-col sm:flex-row gap-3 mt-auto">
+                        <Link
+                          to={`/course/${course._id}`}
+                          className="flex-1 primary-action py-3 gap-2"
+                        >
+                          <BookOpen className="w-4 h-4" />
+                          <span>Explore Course</span>
+                        </Link>
 
 
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-          </div>
-        </div>
-      );
-    })}
-  </div>
           </>
         )}
-      </div >
-    </div >
+      </div>
+    </div>
   );
 };
 
