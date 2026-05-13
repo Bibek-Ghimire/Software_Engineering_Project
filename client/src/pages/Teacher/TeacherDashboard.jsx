@@ -16,7 +16,6 @@ import {
   Clock,
   Star,
   ArrowUpRight,
-  Sparkles,
   Target,
   BookMarked,
   Flame,
@@ -53,11 +52,17 @@ const StatCard = ({ title, value, icon, trend, subtitle }) => (
   >
     <div className="flex justify-between items-start">
       <div className="space-y-1">
-        <p className="text-stone-500 dark:text-stone-400 text-sm font-medium">{title}</p>
+        <p className="text-stone-500 dark:text-stone-400 text-sm font-medium">
+          {title}
+        </p>
         <div className="flex items-baseline gap-2">
-          <h3 className="text-3xl font-bold text-stone-900 dark:text-stone-50">{value}</h3>
+          <h3 className="text-3xl font-bold text-stone-900 dark:text-stone-50">
+            {value}
+          </h3>
           {trend && (
-            <span className="text-orange-600 dark:text-orange-400 text-xs font-semibold">{trend}</span>
+            <span className="text-orange-600 dark:text-orange-400 text-xs font-semibold">
+              {trend}
+            </span>
           )}
         </div>
         <p className="text-stone-400 dark:text-stone-500 text-xs">{subtitle}</p>
@@ -80,8 +85,12 @@ const ActionCard = ({ title, description, icon, onClick }) => (
         {icon}
       </div>
       <div className="flex-1">
-        <h3 className="text-base font-bold text-stone-900 dark:text-stone-50">{title}</h3>
-        <p className="text-stone-500 dark:text-stone-400 text-sm mt-1">{description}</p>
+        <h3 className="text-base font-bold text-stone-900 dark:text-stone-50">
+          {title}
+        </h3>
+        <p className="text-stone-500 dark:text-stone-400 text-sm mt-1">
+          {description}
+        </p>
       </div>
     </div>
   </motion.div>
@@ -108,29 +117,24 @@ const TeacherDashboard = () => {
   // Function to fetch dashboard data
   const fetchDashboardData = async (token) => {
     try {
-      const [
-        coursesRes,
-        groupsRes,
-        leaderboardRes,
-        enrollmentRes,
-        profileRes,
-      ] = await Promise.all([
-        axios.get("http://localhost:5000/api/teachers/courses", {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        axios.get("http://localhost:5000/api/groups", {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        axios.get("http://localhost:5000/api/leaderboard", {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        axios.get("http://localhost:5000/api/enrollment-requests", {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        axios.get("http://localhost:5000/api/profile", {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-      ]);
+      const [coursesRes, groupsRes, leaderboardRes, enrollmentRes, profileRes] =
+        await Promise.all([
+          axios.get("http://localhost:5000/api/teachers/courses", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get("http://localhost:5000/api/groups", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get("http://localhost:5000/api/leaderboard", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get("http://localhost:5000/api/enrollment-requests", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get("http://localhost:5000/api/profile", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
 
       const allCourses = coursesRes.data.courses || coursesRes.data || [];
       setCourses(allCourses);
@@ -146,17 +150,18 @@ const TeacherDashboard = () => {
             `http://localhost:5000/api/payments/teacher/course/${course._id}`,
             {
               headers: { Authorization: `Bearer ${token}` },
-            }
+            },
           );
 
           const enrolledStudents = paymentRes.data.enrolled || [];
           totalEnrolled += enrolledStudents.length;
-          totalPending += (paymentRes.data.pending?.length || 0);
+          totalPending += paymentRes.data.pending?.length || 0;
 
           for (const student of enrolledStudents) {
             if (student.completedCourses) {
               const isCompleted = student.completedCourses.some((c) => {
-                const cId = typeof c === "object" && c !== null ? c._id || c.id || c : c;
+                const cId =
+                  typeof c === "object" && c !== null ? c._id || c.id || c : c;
                 return String(cId) === String(course._id);
               });
               if (isCompleted) {
@@ -165,7 +170,10 @@ const TeacherDashboard = () => {
             }
           }
         } catch (err) {
-          console.error(`Error fetching students for course ${course._id}:`, err);
+          console.error(
+            `Error fetching students for course ${course._id}:`,
+            err,
+          );
         }
       }
       setStudentsCount(totalEnrolled);
@@ -175,7 +183,11 @@ const TeacherDashboard = () => {
       setLeaderboard(leaderboardRes.data.teachers || leaderboardRes.data || []);
       setTeacherProfile(profileRes.data);
 
-      const pendingRequests = (enrollmentRes.data.requests || enrollmentRes.data || []).filter(req => req.status === "pending");
+      const pendingRequests = (
+        enrollmentRes.data.requests ||
+        enrollmentRes.data ||
+        []
+      ).filter((req) => req.status === "pending");
       setEnrollmentRequestsCount(pendingRequests.length);
     } catch (err) {
       console.error("Error fetching dashboard data:", err);
@@ -288,20 +300,29 @@ const TeacherDashboard = () => {
   const performanceData = [
     { name: "Total Courses", value: courses.length, color: "#44403c" },
     { name: "Completed", value: completedCount, color: "#c2651a" },
-    { name: "Pending", value: Math.max(0, studentsCount - completedCount), color: "#78716c" },
+    {
+      name: "Pending",
+      value: Math.max(0, studentsCount - completedCount),
+      color: "#78716c",
+    },
   ];
 
   const barChartData = [
     { name: "Completed", value: completedCount, color: "#c2651a" },
-    { name: "Pending", value: Math.max(0, studentsCount - completedCount), color: "#78716c" },
+    {
+      name: "Pending",
+      value: Math.max(0, studentsCount - completedCount),
+      color: "#78716c",
+    },
   ];
 
-  const displayPieData = (completedCount === 0 && studentsCount === 0)
-    ? [
-      { name: "Completed", value: 0, color: "#c2651a" },
-      { name: "Pending", value: 1, color: "#78716c" },
-    ]
-    : barChartData;
+  const displayPieData =
+    completedCount === 0 && studentsCount === 0
+      ? [
+          { name: "Completed", value: 0, color: "#c2651a" },
+          { name: "Pending", value: 1, color: "#78716c" },
+        ]
+      : barChartData;
 
   return (
     <div className="flex min-h-screen page-surface transition-all duration-700">
@@ -374,9 +395,7 @@ const TeacherDashboard = () => {
               <button
                 onClick={() => setShowNotifications(false)}
                 className="text-stone-500 hover:text-stone-700 dark:hover:text-stone-300"
-              >
-
-              </button>
+              ></button>
             </div>
 
             {notifications.length === 0 ? (
@@ -389,10 +408,11 @@ const TeacherDashboard = () => {
                 {notifications.slice(0, 10).map((notification) => (
                   <motion.div
                     key={notification._id}
-                    className={`p-4 hover:bg-stone-50 dark:hover:bg-stone-800/60 transition-colors cursor-pointer ${!notification.isRead
-                      ? "bg-orange-50 dark:bg-orange-950/10 border-l-4 border-l-orange-500"
-                      : ""
-                      }`}
+                    className={`p-4 hover:bg-stone-50 dark:hover:bg-stone-800/60 transition-colors cursor-pointer ${
+                      !notification.isRead
+                        ? "bg-orange-50 dark:bg-orange-950/10 border-l-4 border-l-orange-500"
+                        : ""
+                    }`}
                     onClick={() =>
                       !notification.isRead &&
                       markNotificationAsRead(notification._id)
@@ -451,8 +471,6 @@ const TeacherDashboard = () => {
           <div className="absolute inset-0 bg-stone-50 dark:bg-[#0c0a09]">
             <div className="absolute top-0 right-0 w-2/3 h-full bg-gradient-to-l from-orange-100/40 via-transparent to-transparent dark:from-orange-950/20"></div>
             <div className="absolute bottom-0 left-0 w-1/2 h-full bg-gradient-to-tr from-stone-200/30 via-transparent to-transparent dark:from-stone-900/40"></div>
-
-
           </div>
 
           <div className="relative z-10 h-full flex flex-col md:flex-row items-center justify-between px-10 py-12 md:py-16">
@@ -463,7 +481,6 @@ const TeacherDashboard = () => {
                 transition={{ delay: 0.3, duration: 0.7 }}
               >
                 <div className="flex items-center gap-3 mb-6">
-
                   <span className="text-orange-600 dark:text-orange-400 font-bold text-sm tracking-widest uppercase">
                     Instructor Dashboard
                   </span>
@@ -476,16 +493,25 @@ const TeacherDashboard = () => {
                     if (hour >= 12 && hour < 17) greeting = "Good Afternoon";
                     else if (hour >= 17) greeting = "Good Evening";
                     return greeting;
-                  })()}, <br />
+                  })()}
+                  , <br />
                   <span className="bg-orange-600 bg-clip-text text-transparent">
-                    Prof. {(teacherProfile?.name || user.name).split(' ')[0]}
+                    Prof. {(teacherProfile?.name || user.name).split(" ")[0]}
                   </span>
                 </h1>
 
                 <div className="space-y-4 max-w-xl">
                   <p className="text-2xl font-medium text-stone-700 dark:text-stone-300 leading-relaxed">
-                    You have <span className="text-orange-600 dark:text-orange-500 font-bold">{enrollmentRequestsCount} enrollment requests</span> today <br />
-                    and <span className="text-stone-900 dark:text-orange-500 font-bold">{studentsCount} active students</span> learning.
+                    You have{" "}
+                    <span className="text-orange-600 dark:text-orange-500 font-bold">
+                      {enrollmentRequestsCount} enrollment requests
+                    </span>{" "}
+                    today <br />
+                    and{" "}
+                    <span className="text-stone-900 dark:text-orange-500 font-bold">
+                      {studentsCount} active students
+                    </span>{" "}
+                    learning.
                   </p>
                 </div>
               </motion.div>
@@ -501,9 +527,6 @@ const TeacherDashboard = () => {
                   className="group relative flex items-center gap-3 bg-stone-900 dark:bg-stone-50 text-white dark:text-stone-900 px-8 py-4 rounded-2xl font-bold transition-all hover:scale-105 active:scale-95 shadow-xl hover:shadow-orange-500/20"
                 >
                   View Requests
-                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center text-[10px] border-2 border-white dark:border-stone-900">
-                    {enrollmentRequestsCount}
-                  </div>
                   <ArrowUpRight className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 </button>
 
@@ -552,28 +575,36 @@ const TeacherDashboard = () => {
           <StatCard
             title="Active Courses"
             value={courses.length}
-            icon={<BookMarked className="w-5 h-5 text-orange-600 dark:text-orange-400" />}
+            icon={
+              <BookMarked className="w-5 h-5 text-orange-600 dark:text-orange-400" />
+            }
             trend="+12%"
             subtitle="This month"
           />
           <StatCard
             title="Study Groups"
             value={groups.length}
-            icon={<Users className="w-5 h-5 text-orange-600 dark:text-orange-400" />}
+            icon={
+              <Users className="w-5 h-5 text-orange-600 dark:text-orange-400" />
+            }
             trend="+8%"
             subtitle="Active groups"
           />
           <StatCard
             title="Total Students"
             value={studentsCount}
-            icon={<User className="w-5 h-5 text-orange-600 dark:text-orange-400" />}
+            icon={
+              <User className="w-5 h-5 text-orange-600 dark:text-orange-400" />
+            }
             trend="+24%"
             subtitle="Enrolled"
           />
           <StatCard
             title="Engagements"
             value={engagements}
-            icon={<TrendingUp className="w-5 h-5 text-orange-600 dark:text-orange-400" />}
+            icon={
+              <TrendingUp className="w-5 h-5 text-orange-600 dark:text-orange-400" />
+            }
             trend="+18%"
             subtitle="This week"
           />
@@ -598,20 +629,52 @@ const TeacherDashboard = () => {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <ResponsiveContainer width="100%" height={280}>
-                <BarChart data={barChartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: darkMode ? '#a8a29e' : '#78716c' }} />
-                  <YAxis axisLine={false} tickLine={false} tick={{ fill: darkMode ? '#a8a29e' : '#78716c' }} />
-                  <Tooltip cursor={{ fill: 'transparent' }} contentStyle={{ backgroundColor: darkMode ? '#1c1917' : 'white', borderRadius: '12px', border: '1px solid #e7e5e4' }} />
-                  <Bar dataKey="value" radius={[6, 6, 0, 0]} barSize={80}>
+              <ResponsiveContainer
+                width="100%"
+                height={280}
+              >
+                <BarChart
+                  data={barChartData}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                >
+                  <XAxis
+                    dataKey="name"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: darkMode ? "#a8a29e" : "#78716c" }}
+                  />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: darkMode ? "#a8a29e" : "#78716c" }}
+                  />
+                  <Tooltip
+                    cursor={{ fill: "transparent" }}
+                    contentStyle={{
+                      backgroundColor: darkMode ? "#1c1917" : "white",
+                      borderRadius: "12px",
+                      border: "1px solid #e7e5e4",
+                    }}
+                  />
+                  <Bar
+                    dataKey="value"
+                    radius={[6, 6, 0, 0]}
+                    barSize={80}
+                  >
                     {barChartData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={entry.color}
+                      />
                     ))}
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
 
-              <ResponsiveContainer width="100%" height={280}>
+              <ResponsiveContainer
+                width="100%"
+                height={280}
+              >
                 <PieChart>
                   <Pie
                     data={displayPieData}
@@ -623,10 +686,19 @@ const TeacherDashboard = () => {
                     dataKey="value"
                   >
                     {displayPieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={entry.color}
+                      />
                     ))}
                   </Pie>
-                  <Tooltip contentStyle={{ backgroundColor: darkMode ? '#1c1917' : 'white', borderRadius: '12px', border: '1px solid #e7e5e4' }} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: darkMode ? "#1c1917" : "white",
+                      borderRadius: "12px",
+                      border: "1px solid #e7e5e4",
+                    }}
+                  />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -662,7 +734,6 @@ const TeacherDashboard = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
         >
           <div className="flex items-center gap-3 mb-6">
-            <Target className="w-6 h-6 text-orange-600" />
             <h2 className="text-2xl font-bold text-stone-900 dark:text-stone-50">
               Quick Actions
             </h2>
@@ -672,19 +743,25 @@ const TeacherDashboard = () => {
             <ActionCard
               title="Create New Course"
               description="Design and launch your next course"
-              icon={<PlusCircle className="w-6 h-6 text-orange-600 dark:text-orange-400" />}
+              icon={
+                <PlusCircle className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+              }
               onClick={() => navigate("/teacher/course")}
             />
             <ActionCard
               title="Manage Students"
               description="View and organise your enrolled students"
-              icon={<Users className="w-6 h-6 text-orange-600 dark:text-orange-400" />}
+              icon={
+                <Users className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+              }
               onClick={() => navigate("/teacher/approved-students")}
             />
             <ActionCard
               title="View Leaderboard"
               description="Check rankings among educators"
-              icon={<Award className="w-6 h-6 text-orange-600 dark:text-orange-400" />}
+              icon={
+                <Award className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+              }
               onClick={() => navigate("/teacher/leaderboard")}
             />
           </div>
@@ -740,12 +817,9 @@ const TeacherDashboard = () => {
                     whileHover={{ y: -5 }}
                   >
                     <div className="relative surface-card rounded-2xl p-8 border border-stone-200 dark:border-stone-800 shadow-lg hover:shadow-2xl transition-all duration-300 mt-2">
-                      <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 flex items-center justify-center text-white font-bold text-sm shadow-lg">
+                      <div className="absolute top-2 -left-1 w-8 h-8  flex items-center justify-center text-orange-500 font-bold text-sm shadow-lg">
                         {idx + 1}
                       </div>
-
-
-
                       <div className="mt-6">
                         <h4 className="font-bold text-lg text-stone-900 dark:text-stone-50 mb-2 group-hover:text-orange-600 dark:text-orange-400 transition-colors">
                           {getTeacherName(teacher)}

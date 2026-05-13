@@ -79,70 +79,43 @@ const getTrendingFallback = async (Model, limit = 3) => {
 // ============================================
 export const getRecommendedCourses = async (userId, limit = 5) => {
   try {
-    console.log("🔍 Getting recommendations for user:", userId);
     const user = await User.findById(userId);
-    console.log("👤 User found:", user ? user.name : "NOT FOUND");
-    console.log("📋 User interests:", user?.interests || []);
-
-    // Fallback: If user has no interests, return all courses
     if (!user || !user.interests || user.interests.length === 0) {
-      console.log("⚠️ User has no interests, returning trending");
-      const allCourses = await Course.find()
-        .sort({ enrollmentCount: -1, rating: -1 })
-        .limit(3)
-        .populate("teacher", "name profilePicture")
-        .lean();
-      return allCourses.map((course) => ({
-        ...course,
-        recommendationScore: "0.00",
-        reason: "Trending (no interests set)",
-      }));
-    }
-
-    // Get all courses
-    const allCourses = await Course.find()
-      .populate("teacher", "name profilePicture")
-      .lean();
-    console.log("📚 Found courses:", allCourses.length);
-
-    if (allCourses.length === 0) {
-      console.log("❌ No courses in database");
       return [];
     }
 
-    // Score ALL courses
-    const scoredCourses = allCourses
-      .map((course) => ({
-        ...course,
-        recommendationScore: calculateScore(
-          user.interests,
-          course.title,
-          course.description,
-          course.keywords || [],
-        ),
-      }))
-      .sort((a, b) => b.recommendationScore - a.recommendationScore);
+    const allCourses = await Course.find()
+      .populate("teacher", "name profilePicture")
+      .lean();
 
-    console.log(
-      "⭐ Top 3 scored courses:",
-      scoredCourses
-        .slice(0, 3)
-        .map((c) => ({ title: c.title, score: c.recommendationScore })),
-    );
+    if (!allCourses || allCourses.length === 0) {
+      return [];
+    }
 
-    // Return TOP 3 courses with any score >= 0
-    const recommendations = scoredCourses.slice(0, 3).map((course) => ({
-      ...course,
-      recommendationScore: course.recommendationScore,
-    }));
+    // Step 1: Calculate scores
+    const result = [];
+    for (let i = 0; i < allCourses.length; i++) {
+      const course = allCourses[i];
+      const score = calculateScore(
+        user.interests,
+        course.title,
+        course.description,
+        course.keywords || [],
+      );
 
-    console.log("✅ Returning recommendations:", recommendations.length);
-    return recommendations.length > 0
-      ? recommendations
-      : scoredCourses.slice(0, 3);
+      // Step 2: ONLY add if score is strictly greater than 0
+      if (score > 0) {
+        result.push({ ...course, recommendationScore: score });
+      }
+    }
+
+    // Step 3: Sort by score
+    result.sort((a, b) => b.recommendationScore - a.recommendationScore);
+
+    // Step 4: Return ONLY matched courses
+    return result;
   } catch (err) {
-    console.error("❌ Error in getRecommendedCourses:", err.message);
-    console.error("   Stack:", err.stack);
+    console.error("Error in getRecommendedCourses:", err);
     return [];
   }
 };
@@ -153,51 +126,40 @@ export const getRecommendedCourses = async (userId, limit = 5) => {
 export const getRecommendedResources = async (userId, limit = 5) => {
   try {
     const user = await User.findById(userId);
-
-    // Fallback: If user has no interests, return all resources
     if (!user || !user.interests || user.interests.length === 0) {
-      const allResources = await Resource.find()
-        .sort({ createdAt: -1, enrollmentCount: -1 })
-        .limit(3)
-        .populate("teacher", "name profilePicture")
-        .lean();
-      return allResources.map((resource) => ({
-        ...resource,
-        recommendationScore: "0.00",
-        reason: "Trending (no interests set)",
-      }));
+      return [];
     }
 
     const allResources = await Resource.find()
       .populate("teacher", "name profilePicture")
       .lean();
 
-    if (allResources.length === 0) {
+    if (!allResources || allResources.length === 0) {
       return [];
     }
 
-    // Score ALL resources
-    const scoredResources = allResources
-      .map((resource) => ({
-        ...resource,
-        recommendationScore: calculateScore(
-          user.interests,
-          resource.title,
-          resource.description,
-          resource.keywords || [],
-        ),
-      }))
-      .sort((a, b) => b.recommendationScore - a.recommendationScore);
+    // Step 1: Calculate scores
+    const result = [];
+    for (let i = 0; i < allResources.length; i++) {
+      const resource = allResources[i];
+      const score = calculateScore(
+        user.interests,
+        resource.title,
+        resource.description,
+        resource.keywords || [],
+      );
 
-    // Return TOP 3 resources with any score >= 0
-    const recommendations = scoredResources.slice(0, 3).map((resource) => ({
-      ...resource,
-      recommendationScore: resource.recommendationScore,
-    }));
+      // Step 2: ONLY add if score > 0
+      if (score > 0) {
+        result.push({ ...resource, recommendationScore: score });
+      }
+    }
 
-    return recommendations.length > 0
-      ? recommendations
-      : scoredResources.slice(0, 3);
+    // Step 3: Sort by score
+    result.sort((a, b) => b.recommendationScore - a.recommendationScore);
+
+    // Step 4: Return ONLY matched resources
+    return result;
   } catch (err) {
     console.error("Error in getRecommendedResources:", err);
     return [];
@@ -211,18 +173,10 @@ export const getRecommendedGroups = async (userId, limit = 5) => {
   try {
     const user = await User.findById(userId);
 
-    // Fallback: If user has no interests, return all groups
+    // STRICT: No interests = empty results
     if (!user || !user.interests || user.interests.length === 0) {
-      const allGroups = await Group.find()
-        .sort({ createdAt: -1, memberCount: -1 })
-        .limit(3)
-        .populate("members", "name profilePicture")
-        .lean();
-      return allGroups.map((group) => ({
-        ...group,
-        recommendationScore: "0.00",
-        reason: "Trending (no interests set)",
-      }));
+      console.log("❌ No user interests - returning empty array");
+      return [];
     }
 
     const allGroups = await Group.find()
@@ -233,28 +187,28 @@ export const getRecommendedGroups = async (userId, limit = 5) => {
       return [];
     }
 
-    // Score ALL groups
-    const scoredGroups = allGroups
-      .map((group) => ({
-        ...group,
-        recommendationScore: calculateScore(
-          user.interests,
-          group.name,
-          group.description,
-          group.keywords || [],
-        ),
-      }))
-      .sort((a, b) => b.recommendationScore - a.recommendationScore);
-
-    // Return TOP 3 groups with any score >= 0
-    const recommendations = scoredGroups.slice(0, 3).map((group) => ({
+    // Calculate scores
+    const scoredGroups = allGroups.map((group) => ({
       ...group,
-      recommendationScore: group.recommendationScore,
+      recommendationScore: calculateScore(
+        user.interests,
+        group.name,
+        group.description,
+        group.keywords || [],
+      ),
     }));
 
-    return recommendations.length > 0
-      ? recommendations
-      : scoredGroups.slice(0, 3);
+    scoredGroups.sort((a, b) => b.recommendationScore - a.recommendationScore);
+
+    // ABSOLUTELY STRICT: ONLY groups with score > 0
+    const matchedGroups = [];
+    for (const group of scoredGroups) {
+      if (group.recommendationScore > 0) {
+        matchedGroups.push(group);
+      }
+    }
+
+    return matchedGroups;
   } catch (err) {
     console.error("Error in getRecommendedGroups:", err);
     return [];
@@ -268,32 +222,18 @@ export const getRecommendedTeachers = async (userId, limit = 5) => {
   try {
     const user = await User.findById(userId);
 
-    // Fallback: If user has no interests, return all teachers
+    // STRICT: No interests = empty results
     if (!user || !user.interests || user.interests.length === 0) {
-      const allTeachers = await User.find({
-        role: "teacher",
-        _id: { $ne: userId },
-      })
-        .sort({ engagementScore: -1, coursesCreated: -1 })
-        .select(
-          "name bio department subject profilePicture engagementScore coursesCreated batch achievements",
-        )
-        .limit(3)
-        .lean();
-      return allTeachers.map((teacher) => ({
-        ...teacher,
-        recommendationScore: "0.00",
-        reason: "Popular (no interests set)",
-      }));
+      console.log("❌ No user interests - returning empty array");
+      return [];
     }
 
-    // Get all teachers
     const allTeachers = await User.find({
       role: "teacher",
       _id: { $ne: userId },
     })
       .select(
-        "name bio department subject profilePicture engagementScore coursesCreated batch achievements",
+        "name bio department subject profilePicture engagementScore coursesCreated batch achievements interests",
       )
       .lean();
 
@@ -301,28 +241,30 @@ export const getRecommendedTeachers = async (userId, limit = 5) => {
       return [];
     }
 
-    // Score ALL teachers
-    const scoredTeachers = allTeachers
-      .map((teacher) => ({
-        ...teacher,
-        recommendationScore: calculateScore(
-          user.interests,
-          teacher.subject || "",
-          teacher.bio || "",
-          [],
-        ),
-      }))
-      .sort((a, b) => b.recommendationScore - a.recommendationScore);
+    // Calculate scores - check subject, bio, department, AND teacher interests
+    const result = [];
+    for (let i = 0; i < allTeachers.length; i++) {
+      const teacher = allTeachers[i];
 
-    // Return TOP 3 teachers with any score >= 0
-    const recommendations = scoredTeachers.slice(0, 3).map((teacher) => ({
-      ...teacher,
-      recommendationScore: teacher.recommendationScore,
-    }));
+      // Combine all teacher info for matching: subject + bio + department + interests
+      const teacherInfo = `${teacher.subject || ""} ${teacher.bio || ""} ${teacher.department || ""} ${(teacher.interests || []).join(" ")}`;
 
-    return recommendations.length > 0
-      ? recommendations
-      : scoredTeachers.slice(0, 3);
+      const score = calculateScore(
+        user.interests,
+        teacher.name || "",
+        teacherInfo,
+        [],
+      );
+
+      if (score > 0) {
+        result.push({ ...teacher, recommendationScore: score });
+      }
+    }
+
+    result.sort((a, b) => b.recommendationScore - a.recommendationScore);
+
+    result.sort((a, b) => b.recommendationScore - a.recommendationScore);
+    return result;
   } catch (err) {
     console.error("Error in getRecommendedTeachers:", err);
     return [];

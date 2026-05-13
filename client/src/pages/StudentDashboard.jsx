@@ -12,7 +12,6 @@ import {
   Users,
   Award,
   TrendingUp,
-  Sparkles,
   Target,
   Clock,
   Star,
@@ -31,12 +30,12 @@ import {
 } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import recommendationService from "../services/recommendationService";
-import RecommendedTeachers from "../components/RecommendedTeachers";
-import RecommendedResources from "../components/RecommendedResources";
 import { useNotification } from "../hooks/useNotification";
 import HumanoidAvatar from "../components/HumanoidAvatar";
 import Sidebar from "../components/Sidebar";
+import RecommendedCourses from "../components/RecommendedCourses";
+import RecommendedResources from "../components/RecommendedResources";
+import RecommendedTeachers from "../components/RecommendedTeachers";
 
 const user = JSON.parse(sessionStorage.getItem("user"));
 
@@ -72,7 +71,6 @@ const EnhancedStatCard = ({ title, value, iconColor, icon, subtitle }) => (
 
 const StudentDashboard = () => {
   const navigate = useNavigate();
-  const [courses, setCourses] = useState([]);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [badgesCount, setBadgesCount] = useState(0);
   const [darkMode, setDarkMode] = useState(
@@ -95,18 +93,6 @@ const StudentDashboard = () => {
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
-
-    const fetchCourses = async () => {
-      try {
-        // Fetch recommended courses instead of all courses
-        const recommendedCourses =
-          await recommendationService.getRecommendedCourses(12);
-        setCourses(recommendedCourses);
-      } catch (err) {
-        console.error("Error fetching recommended courses:", err);
-        setCourses([]);
-      }
-    };
 
     const fetchBadges = async () => {
       try {
@@ -240,7 +226,6 @@ const StudentDashboard = () => {
       }
     };
 
-    fetchCourses();
     fetchBadges();
     fetchTeachers();
     fetchBatchData();
@@ -578,10 +563,11 @@ const StudentDashboard = () => {
                 {notifications.slice(0, 10).map((notification) => (
                   <motion.div
                     key={notification._id}
-                    className={`p-4 hover:bg-stone-50 dark:hover:bg-stone-800/60 transition-colors cursor-pointer ${!notification.isRead
-                      ? "bg-orange-50 dark:bg-orange-950/10 border-l-4 border-l-orange-500"
-                      : ""
-                      }`}
+                    className={`p-4 hover:bg-stone-50 dark:hover:bg-stone-800/60 transition-colors cursor-pointer ${
+                      !notification.isRead
+                        ? "bg-orange-50 dark:bg-orange-950/10 border-l-4 border-l-orange-500"
+                        : ""
+                    }`}
                     onClick={() =>
                       !notification.isRead &&
                       markNotificationAsRead(notification._id)
@@ -680,9 +666,7 @@ const StudentDashboard = () => {
               initial={{ opacity: 0, scale: 0.5, rotate: -15 }}
               animate={{ opacity: 1, scale: 1, rotate: 0 }}
               transition={{ delay: 0.4, duration: 1 }}
-            >
-
-            </motion.div>
+            ></motion.div>
           </div>
         </motion.div>
 
@@ -704,7 +688,10 @@ const StudentDashboard = () => {
           />
           <EnhancedStatCard
             title="Saved Items"
-            value={savedItems.savedCourses?.length + savedItems.savedResources?.length || 0}
+            value={
+              savedItems.savedCourses?.length +
+                savedItems.savedResources?.length || 0
+            }
             iconColor="bg-orange-50 dark:bg-orange-950/40 text-orange-600 dark:text-orange-400"
             icon={<Bookmark className="w-5 h-5" />}
             subtitle="Saves"
@@ -750,7 +737,7 @@ const StudentDashboard = () => {
             </div>
 
             {savedItems.savedCourses.length === 0 &&
-              savedItems.savedResources.length === 0 ? (
+            savedItems.savedResources.length === 0 ? (
               <div className="py-12 px-6 text-center surface-card border-dashed border-2 border-stone-200 dark:border-stone-800 rounded-3xl">
                 <div className="w-16 h-16 rounded-full bg-stone-50 dark:bg-stone-900 flex items-center justify-center mx-auto mb-4 border border-stone-100 dark:border-stone-800">
                   <Package className="w-8 h-8 text-stone-300 dark:text-stone-600" />
@@ -992,10 +979,11 @@ const StudentDashboard = () => {
                             e.stopPropagation();
                             handleToggleCompleteCourse(course._id);
                           }}
-                          className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors flex items-center gap-1.5 ${isCompleted
-                            ? "bg-emerald-50 text-emerald-600 border-emerald-200 hover:bg-emerald-100 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-800 dark:hover:bg-emerald-900/50"
-                            : "bg-white text-stone-600 border-stone-200 hover:bg-stone-50 dark:bg-stone-900 dark:text-stone-400 dark:border-stone-700 dark:hover:bg-stone-800"
-                            }`}
+                          className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors flex items-center gap-1.5 ${
+                            isCompleted
+                              ? "bg-emerald-50 text-emerald-600 border-emerald-200 hover:bg-emerald-100 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-800 dark:hover:bg-emerald-900/50"
+                              : "bg-white text-stone-600 border-stone-200 hover:bg-stone-50 dark:bg-stone-900 dark:text-stone-400 dark:border-stone-700 dark:hover:bg-stone-800"
+                          }`}
                         >
                           <CheckCircle
                             className={`w-3.5 h-3.5 ${isCompleted ? "opacity-100" : "opacity-50"}`}
@@ -1182,7 +1170,6 @@ const StudentDashboard = () => {
                           </div>
                         </div>
                       )}
-
                     </motion.div>
                   ))}
                 </div>
@@ -1239,8 +1226,6 @@ const StudentDashboard = () => {
                     <div className="absolute -top-3 -left-3 w-9 h-9 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-black text-sm z-10 shadow-lg border-2 border-white dark:border-stone-900">
                       {idx + 1}
                     </div>
-
-
 
                     <div className="flex flex-col items-center text-center mt-4">
                       {/* Avatar Section */}
@@ -1299,194 +1284,80 @@ const StudentDashboard = () => {
 
         {/* Recommended Courses Section */}
         <motion.div
-          className="space-y-8"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-        >
-          <div className="surface-card p-6">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h3 className="text-base font-semibold text-stone-900 dark:text-stone-50">
-                  Recommended Courses
-                </h3>
-                <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
-                  Personalized picks for you
-                </p>
-              </div>
-              <button
-                onClick={() => navigate("/courses")}
-                className="secondary-action text-sm gap-1.5"
-              >
-                View All <ArrowUpRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-
-            {courses.length === 0 ? (
-              <div className="text-center py-12">
-                <div className="w-10 h-10 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 flex items-center justify-center mx-auto mb-3">
-                  <BookOpen className="w-5 h-5 text-stone-400" />
-                </div>
-                <p className="body-copy text-sm">No recommended courses yet</p>
-                <p className="body-copy text-xs mt-1">
-                  Complete a few courses first to see personalized
-                  recommendations!
-                </p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-                {courses.slice(0, 6).map((course, index) => {
-                  const levelLower = course.level?.toLowerCase();
-                  let levelInfo = {
-                    badge:
-                      "bg-stone-50 text-stone-700 border-stone-200 dark:bg-stone-800 dark:text-stone-200 dark:border-stone-700",
-                  };
-
-                  if (levelLower === "beginner") {
-                    levelInfo = {
-                      badge:
-                        "bg-stone-100 text-stone-700 border-stone-200 dark:bg-stone-800 dark:text-stone-300 dark:border-stone-700",
-                    };
-                  } else if (levelLower === "intermediate") {
-                    levelInfo = {
-                      badge:
-                        "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950/20 dark:text-orange-300 dark:border-orange-900/40",
-                    };
-                  } else if (levelLower === "advanced") {
-                    levelInfo = {
-                      badge:
-                        "bg-stone-900 text-stone-50 border-stone-800 dark:bg-stone-100 dark:text-stone-900 dark:border-white",
-                    };
-                  }
-
-                  return (
-                    <motion.div
-                      key={course._id || course.id}
-                      className="surface-card overflow-hidden flex flex-col hover:shadow-md transition-all duration-200 cursor-pointer"
-                      onClick={() =>
-                        navigate(`/course/${course._id || course.id}`)
-                      }
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.08, duration: 0.4 }}
-                      whileHover={{ y: -3 }}
-                    >
-                      <div className="p-5 border-b border-stone-100 dark:border-stone-800">
-                        <div className="flex items-start justify-between gap-3 mb-3">
-                          <h2 className="text-base font-semibold text-stone-900 dark:text-stone-50 leading-snug">
-                            {course.title}
-                          </h2>
-                          <div className="flex items-center gap-1">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleToggleSaveCourse(course._id || course.id);
-                              }}
-                              className={`p-1.5 rounded-lg transition-all ${savedItems.savedCourses.some(
-                                (c) => c._id === (course._id || course.id),
-                              )
-                                ? "text-orange-500 bg-orange-50 dark:bg-orange-950/20"
-                                : "text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800"
-                                }`}
-                            >
-                              {savedItems.savedCourses.some(
-                                (c) => c._id === (course._id || course.id),
-                              ) ? (
-                                <BookmarkCheck className="w-4 h-4" />
-                              ) : (
-                                <Bookmark className="w-4 h-4" />
-                              )}
-                            </button>
-                            <BookOpen className="w-4 h-4 text-stone-400 flex-shrink-0" />
-                          </div>
-                        </div>
-                        <span
-                          className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border ${levelInfo.badge}`}
-                        >
-                          {course.level || "Beginner"}
-                        </span>
-                      </div>
-
-                      <div className="p-5 flex-grow flex flex-col">
-                        <p className="body-copy text-sm leading-relaxed mb-4 flex-grow line-clamp-3">
-                          {course.description}
-                        </p>
-                        <div className="space-y-2 mb-4">
-                          <div className="flex items-center gap-2 text-sm body-copy">
-                            <Clock className="w-3.5 h-3.5" />
-                            <span>{course.duration || "Self-paced"}</span>
-                          </div>
-                          <div className="flex items-center gap-2 text-sm body-copy">
-                            <User className="w-3.5 h-3.5" />
-                            <span>
-                              {course.teacher?.name || "Expert Instructor"}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() =>
-                              navigate(`/course/${course._id || course.id}`)
-                            }
-                            className="flex-1 primary-action text-sm py-3"
-                          >
-                            <BookOpen className="w-4 h-4" /> Explore Course
-                          </button>
-                        </div>
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        </motion.div>
-
-        {/* Learning Insights */}
-        <motion.div
-          className="space-y-8"
+          className="space-y-6"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
         >
-          {/* Recommended Teachers Section */}
-          <div className="surface-card p-6">
-            <div className="flex items-center justify-between mb-5">
-              <div>
-                <h3 className="text-base font-semibold text-stone-900 dark:text-stone-50">
-                  Recommended Teachers
-                </h3>
-                <p className="text-xs body-copy mt-0.5">
-                  Matched to your interests
-                </p>
+          <div className="surface-card-strong p-8">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
+                  <BookOpen className="w-5 h-5 text-stone-500 dark:text-stone-400" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-stone-900 dark:text-stone-50">
+                    Recommended For You
+                  </h3>
+                  <p className="text-xs body-copy mt-1">
+                    Personalized courses based on your interests
+                  </p>
+                </div>
               </div>
-              <button
-                onClick={() => navigate("/teachers")}
-                className="secondary-action text-sm gap-1.5"
-              >
-                View All <ArrowUpRight className="w-3.5 h-3.5" />
-              </button>
+            </div>
+            <RecommendedCourses limit={6} />
+          </div>
+        </motion.div>
+
+        {/* Recommended Teachers Section */}
+        <motion.div
+          className="space-y-6"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+        >
+          <div className="surface-card-strong p-8">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
+                  <Users className="w-5 h-5 text-stone-500 dark:text-stone-400" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-stone-900 dark:text-stone-50">
+                    Recommended Teachers
+                  </h3>
+                  <p className="text-xs body-copy mt-1">
+                    Expert instructors matching your learning style
+                  </p>
+                </div>
+              </div>
             </div>
             <RecommendedTeachers limit={6} />
           </div>
+        </motion.div>
 
-          {/* Recommended Resources Section */}
-          <div className="surface-card p-6">
-            <div className="flex items-center justify-between mb-5">
-              <div>
-                <h3 className="text-base font-semibold text-stone-900 dark:text-stone-50">
-                  Recommended Resources
-                </h3>
-                <p className="text-xs body-copy mt-0.5">
-                  Curated study materials for you
-                </p>
+        {/* Recommended Resources Section */}
+        <motion.div
+          className="space-y-6"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.7 }}
+        >
+          <div className="surface-card-strong p-8">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
+                  <FileText className="w-5 h-5 text-stone-500 dark:text-stone-400" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-stone-900 dark:text-stone-50">
+                    Recommended Resources
+                  </h3>
+                  <p className="text-xs body-copy mt-1">
+                    Curated learning materials for your courses
+                  </p>
+                </div>
               </div>
-              <button
-                onClick={() => navigate("/resources")}
-                className="secondary-action text-sm gap-1.5"
-              >
-                View All <ArrowUpRight className="w-3.5 h-3.5" />
-              </button>
             </div>
             <RecommendedResources limit={6} />
           </div>
