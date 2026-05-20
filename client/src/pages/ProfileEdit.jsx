@@ -97,7 +97,7 @@ const ProfileEdit = () => {
     <div className="min-h-screen page-surface p-8">
       <div className="max-w-3xl mx-auto bg-white/90 dark:bg-orange-950/20 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-stone-200/50 dark:border-blue-800/30">
         <h2 className="text-3xl font-bold mb-6 text-orange-700">
-           Edit Profile
+          Edit Profile
         </h2>
         <form
           onSubmit={handleSubmit}
@@ -169,9 +169,7 @@ const ProfileEdit = () => {
                       })
                     }
                     className="text-red-500 font-bold ml-1"
-                  >
-                    
-                  </button>
+                  ></button>
                 </span>
               ))}
             </div>
@@ -213,9 +211,7 @@ const ProfileEdit = () => {
                       })
                     }
                     className="text-red-500 font-bold ml-1"
-                  >
-                    
-                  </button>
+                  ></button>
                 </span>
               ))}
             </div>
@@ -275,5 +271,3 @@ const ProfileEdit = () => {
 };
 
 export default ProfileEdit;
-
-

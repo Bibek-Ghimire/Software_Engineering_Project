@@ -210,10 +210,7 @@ const ApprovedStudentsGroups = () => {
             <h1 className="text-4xl font-bold text-stone-900 dark:text-stone-50 mb-2">
               Manage Students
             </h1>
-            <p className="text-stone-500 dark:text-stone-500">
-              View enrolled students and those awaiting payment. Groups are
-              organized with a maximum capacity of 10 students per group.
-            </p>
+         
           </motion.div>
 
           {/* Statistics */}
@@ -233,7 +230,6 @@ const ApprovedStudentsGroups = () => {
                     {totalCourses}
                   </h3>
                 </div>
-                <BookOpen className="w-12 h-12 text-stone-300 dark:text-stone-700" />
               </div>
             </motion.div>
 
@@ -248,11 +244,10 @@ const ApprovedStudentsGroups = () => {
                   <p className="text-stone-500 dark:text-stone-500 text-sm font-semibold mb-1">
                     Enrolled Students
                   </p>
-                  <h3 className="text-3xl font-bold text-green-600 dark:text-green-400">
+                  <h3 className="text-3xl font-bold text-orange-600 dark:text-orange-400">
                     {totalEnrolledStudents}
                   </h3>
                 </div>
-                <CheckCircle className="w-12 h-12 text-green-200 dark:text-green-900" />
               </div>
             </motion.div>
 
@@ -271,7 +266,6 @@ const ApprovedStudentsGroups = () => {
                     {totalPendingStudents}
                   </h3>
                 </div>
-                <Clock className="w-12 h-12 text-orange-200 dark:text-orange-900" />
               </div>
             </motion.div>
           </div>
@@ -315,15 +309,13 @@ const ApprovedStudentsGroups = () => {
                     <div className="surface-card p-6 border-l-4 border-orange-400 mb-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                          <div className="p-3 bg-orange-50 dark:bg-orange-950/20 rounded-lg border border-orange-100 dark:border-orange-900/40">
-                            <BookOpen className="w-6 h-6 text-orange-600 dark:text-orange-400" />
-                          </div>
+                         
                           <div>
                             <h2 className="text-2xl font-bold text-stone-900 dark:text-stone-50">
                               {course.title}
                             </h2>
                             <p className="text-stone-500 dark:text-stone-500 text-sm">
-                              {totalEnrolledInCourse} enrolled {" "}
+                              {totalEnrolledInCourse} enrolled{" "}        
                               {totalPendingInCourse} pending payment
                             </p>
                           </div>
@@ -334,8 +326,7 @@ const ApprovedStudentsGroups = () => {
                     {/* Enrolled Students Section */}
                     {enrolled.length > 0 && (
                       <div className="space-y-4 mb-8">
-                        <h3 className="text-xl font-bold text-green-600 dark:text-green-400 flex items-center gap-2">
-                          <CheckCircle className="w-5 h-5" />
+                        <h3 className="text-xl font-bold text-stone-900 dark:text-stone-200 flex items-center gap-2">
                           Enrolled Students ({totalEnrolledInCourse})
                         </h3>
                         <div className="space-y-4 ml-0">
@@ -353,8 +344,8 @@ const ApprovedStudentsGroups = () => {
                                   className="w-full p-6 flex items-center justify-between hover:bg-stone-50 dark:hover:bg-stone-800/60 transition-colors"
                                 >
                                   <div className="flex items-center gap-4 flex-1">
-                                    <div className="p-3 bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 rounded-lg">
-                                      <Users className="w-5 h-5 text-green-600 dark:text-green-400" />
+                                    <div className="p-3 bg-stone-100 dark:bg-atone-900/30 rounded-lg">
+                                      <Users className="w-5 h-5 text-stone-600 dark:text-stone-400" />
                                     </div>
                                     <div className="text-left">
                                       <h3 className="text-lg font-bold text-stone-900 dark:text-stone-50">
@@ -447,7 +438,6 @@ const ApprovedStudentsGroups = () => {
                                               className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-orange-50 dark:bg-orange-950/20 text-orange-700 dark:text-orange-400 border border-orange-200 dark:border-orange-900/40 hover:bg-orange-100 transition-colors"
                                               title="View student profile"
                                             >
-                                              <Eye className="w-3 h-3" />
                                               Profile
                                             </button>
                                             <span className="ml-2 px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-semibold rounded-full">
@@ -488,7 +478,7 @@ const ApprovedStudentsGroups = () => {
                                   className="w-full p-6 flex items-center justify-between hover:bg-stone-50 dark:hover:bg-stone-800/60 transition-colors"
                                 >
                                   <div className="flex items-center gap-4 flex-1">
-                                    <div className="p-3 bg-gradient-to-br from-orange-100 to-yellow-100 dark:from-orange-900/30 dark:to-yellow-900/30 rounded-lg">
+                                    <div className="p-3 bg-orange-100 dark:bg-orange-900/30 rounded-lg">
                                       <Users className="w-5 h-5 text-orange-600 dark:text-orange-400" />
                                     </div>
                                     <div className="text-left">
@@ -596,5 +586,3 @@ const ApprovedStudentsGroups = () => {
 };
 
 export default ApprovedStudentsGroups;
-
-

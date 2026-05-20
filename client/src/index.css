@@ -47,7 +47,7 @@
 
   /* ─── Layout ─────────────────────────────────────── */
   .page-surface {
-    @apply min-h-screen bg-stone-200 dark:bg-stone-950;
+    @apply min-h-screen bg-stone-300 dark:bg-stone-950;
   }
 
   .section-shell {
@@ -80,11 +80,11 @@
   }
 
   .surface-card {
-    @apply bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl shadow-sm;
+    @apply bg-stone-200 dark:bg-stone-900 border border-stone-400 dark:border-stone-800 rounded-2xl shadow-sm;
   }
 
   .surface-card-strong {
-    @apply bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl shadow-md;
+    @apply bg-stone-200 dark:bg-stone-900 border border-stone-400 dark:border-stone-800 rounded-2xl shadow-md;
   }
 
   .artisan-card {
@@ -96,7 +96,7 @@
   }
 
   .surface-panel {
-    @apply bg-stone-50 dark:bg-stone-800/50 border border-stone-200 dark:border-stone-700 rounded-xl;
+    @apply bg-stone-100 dark:bg-stone-800/50 border border-stone-200 dark:border-stone-700 rounded-xl;
   }
 
   /* ─── Buttons ────────────────────────────────────── */

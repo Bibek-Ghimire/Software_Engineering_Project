@@ -99,9 +99,7 @@ const StudentChatList = () => {
             <h1 className="text-4xl font-bold text-stone-900 dark:text-stone-50 mb-2">
               Course Chat
             </h1>
-            <p className="text-stone-500 dark:text-stone-500">
-              Connect with your instructors in course-specific chat rooms
-            </p>
+           
           </motion.div>
 
           {/* Enrolled Courses */}
@@ -146,7 +144,7 @@ const StudentChatList = () => {
 
                   {/* Instructor Info */}
                   <div className="flex items-center gap-3 pt-4 border-t border-stone-100 dark:border-stone-800">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-sm font-semibold">
+                    <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-semibold">
                       {course.teacher?.name?.[0]?.toUpperCase() || "T"}
                     </div>
                     <div>
@@ -175,4 +173,3 @@ const StudentChatList = () => {
 };
 
 export default StudentChatList;
-

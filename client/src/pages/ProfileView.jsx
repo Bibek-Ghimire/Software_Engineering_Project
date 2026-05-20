@@ -139,7 +139,7 @@ const ProfileView = () => {
 
   if (!user) {
     return (
-        <div className="flex items-center justify-center min-h-screen page-surface">
+      <div className="flex items-center justify-center min-h-screen page-surface">
         <div className="text-center">
           <div className="w-10 h-10 rounded-full border-2 border-stone-200 dark:border-stone-700 border-t-orange-500 animate-spin mx-auto mb-4" />
           <p className="text-base font-semibold body-copy ">
@@ -231,9 +231,6 @@ const ProfileView = () => {
             {/* Basic Info */}
             <div className="surface-card p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
-                  <Star className="w-4 h-4 text-stone-500 dark:text-stone-400" />
-                </div>
                 <h3 className="font-bold text-lg text-stone-900 dark:text-stone-50">
                   Basic Information
                 </h3>
@@ -261,7 +258,9 @@ const ProfileView = () => {
                 <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
                   <Edit2 className="w-4 h-4 text-stone-500 dark:text-stone-400" />
                 </div>
-                <h3 className="font-bold text-lg text-stone-900 dark:text-stone-50">Bio</h3>
+                <h3 className="font-bold text-lg text-stone-900 dark:text-stone-50">
+                  Bio
+                </h3>
               </div>
               <div className="surface-panel p-5 border-l-4 border-l-orange-400">
                 <p className="body-copy leading-relaxed">
@@ -276,7 +275,9 @@ const ProfileView = () => {
                 <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
                   <Star className="w-4 h-4 text-stone-500 dark:text-stone-400" />
                 </div>
-                <h3 className="font-bold text-lg text-stone-900 dark:text-stone-50">Skills</h3>
+                <h3 className="font-bold text-lg text-stone-900 dark:text-stone-50">
+                  Skills
+                </h3>
               </div>
               <div className="flex flex-wrap gap-3">
                 {user.skills?.length ? (
@@ -305,7 +306,9 @@ const ProfileView = () => {
                 <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
                   <Star className="w-4 h-4 text-stone-500 dark:text-stone-400" />
                 </div>
-                <h3 className="font-bold text-lg text-stone-900 dark:text-stone-50">Interests</h3>
+                <h3 className="font-bold text-lg text-stone-900 dark:text-stone-50">
+                  Interests
+                </h3>
               </div>
               <div className="flex flex-wrap gap-3">
                 {user.interests?.length ? (
@@ -331,12 +334,14 @@ const ProfileView = () => {
             {/* Resume */}
             {user.resume && (
               <div className="surface-card p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
-                  <Download className="w-4 h-4 text-stone-500 dark:text-stone-400" />
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
+                    <Download className="w-4 h-4 text-stone-500 dark:text-stone-400" />
+                  </div>
+                  <h3 className="font-bold text-lg text-stone-900 dark:text-stone-50">
+                    Resume
+                  </h3>
                 </div>
-                <h3 className="font-bold text-lg text-stone-900 dark:text-stone-50">Resume</h3>
-              </div>
                 <div className="surface-panel p-6">
                   <a
                     href={`http://localhost:5000${user.resume}`}
@@ -344,9 +349,9 @@ const ProfileView = () => {
                     rel="noreferrer"
                     className="group flex items-center gap-3 body-copy font-semibold transition-all duration-300"
                   >
-                  <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-orange-600 text-white shadow-sm group-hover:scale-105 transition-transform duration-200">
-                    <Download className="w-4 h-4" />
-                  </div>
+                    <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-orange-600 text-white shadow-sm group-hover:scale-105 transition-transform duration-200">
+                      <Download className="w-4 h-4" />
+                    </div>
                     <span className="group-hover:underline">View Resume</span>
                   </a>
                 </div>
@@ -361,7 +366,9 @@ const ProfileView = () => {
                 <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
                   <Mail className="w-4 h-4 text-stone-500 dark:text-stone-400" />
                 </div>
-                <h3 className="font-bold text-lg text-stone-900 dark:text-stone-50">Links &amp; Contact</h3>
+                <h3 className="font-bold text-lg text-stone-900 dark:text-stone-50">
+                  Links &amp; Contact
+                </h3>
               </div>
               <div className="space-y-4">
                 {user.linkedin && (

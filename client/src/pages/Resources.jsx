@@ -14,7 +14,7 @@ import {
   Folder,
   Bookmark,
   BookmarkCheck,
-  Plus
+  Plus,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import Sidebar from "../components/Sidebar";
@@ -56,10 +56,13 @@ const Resource = () => {
     // Fetch saved items
     const fetchSavedItems = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/profile/saved-items", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setSavedResourceIds((res.data.savedResources || []).map(r => r._id));
+        const res = await axios.get(
+          "http://localhost:5000/api/profile/saved-items",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+        setSavedResourceIds((res.data.savedResources || []).map((r) => r._id));
       } catch (err) {
         console.error("Error fetching saved items:", err);
       }
@@ -119,11 +122,15 @@ const Resource = () => {
       );
 
       if (response.ok) {
-        setSavedResourceIds(prev =>
-          isSaved ? prev.filter(id => id !== resourceId) : [...prev, resourceId]
+        setSavedResourceIds((prev) =>
+          isSaved
+            ? prev.filter((id) => id !== resourceId)
+            : [...prev, resourceId],
         );
         toast.success(
-          isSaved ? "Removed from bookmarks" : "Resource bookmarked successfully!",
+          isSaved
+            ? "Removed from bookmarks"
+            : "Resource bookmarked successfully!",
           {
             style: {
               borderRadius: "15px",
@@ -178,8 +185,7 @@ const Resource = () => {
       };
     return {
       icon: "",
-      color:
-        "from-stone-100 to-stone-200 dark:from-stone-800/50 dark:to-stone-700/50",
+      color: "bg-stone-200 dark:bg-stone-800",
       textColor: "text-stone-700 dark:text-stone-400",
     };
   };
@@ -226,12 +232,7 @@ const Resource = () => {
         {/* Header Section */}
         <div className="mb-10">
           <div className="mb-6">
-            <span className="section-kicker" />
             <h1 className="section-title">Learning Resources</h1>
-            <p className="body-copy mt-2">
-              Explore curated notes, guides, slides, and videos shared by
-              instructors
-            </p>
           </div>
 
           {/* Search Bar */}
@@ -325,13 +326,11 @@ const Resource = () => {
                   key={res._id}
                   className="group surface-card-strong overflow-hidden transition-all duration-300 hover:shadow-xl flex flex-col"
                 >
-                  <div className="h-1 bg-orange-400" />
+                  {/* <div className="h-1 bg-orange-400" /> */}
                   <div className="p-4 border-b border-stone-100 dark:border-stone-800">
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-10 h-10 rounded-xl flex items-center justify-center border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-lg">
-                          {fileInfo.icon}
-                        </div>
+                       
                         <div className="min-w-0">
                           <h3 className="font-semibold text-stone-900 dark:text-stone-50 text-base leading-tight truncate">
                             {res.title}
@@ -345,10 +344,11 @@ const Resource = () => {
                         {!isTeacher && (
                           <button
                             onClick={() => handleToggleSave(res._id)}
-                            className={`p-2 rounded-lg transition-all ${savedResourceIds.includes(res._id)
-                              ? "text-orange-500 bg-orange-50 dark:bg-orange-950/20"
-                              : "text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800"
-                              }`}
+                            className={`p-2 rounded-lg transition-all ${
+                              savedResourceIds.includes(res._id)
+                                ? "text-orange-500 bg-orange-50 dark:bg-orange-950/20"
+                                : "text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800"
+                            }`}
                           >
                             {savedResourceIds.includes(res._id) ? (
                               <BookmarkCheck className="w-4 h-4" />
@@ -398,7 +398,7 @@ const Resource = () => {
                     <div className="grid grid-cols-2 gap-3">
                       <button
                         onClick={() => handleView(res.fileUrl)}
-                        className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-4 rounded-xl flex items-center justify-center gap-3"
+                        className="w-full bg-blue-500 text-white px-6 py-4 rounded-xl flex items-center justify-center gap-3"
                       >
                         <Eye className="w-5 h-5" />
                         View Resource

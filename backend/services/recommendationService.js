@@ -308,3 +308,81 @@ export const removeInterestedCourse = async (userId, courseId) => {
     throw err;
   }
 };
+
+// ============================================
+// POPULAR COURSES (Fallback when no recommendations)
+// ============================================
+
+/**
+ * Get most popular courses based on enrollments and saves
+ * Used as fallback when no matching recommendations are available
+ *
+ * Popularity Score = (enrollmentCount * 0.6) + (savesCount * 0.4)
+ * - 60% weight on enrollment count (how many students took it)
+ * - 40% weight on saves count (how many students bookmarked it)
+ */
+export const getPopularCourses = async (limit = 6) => {
+  try {
+    // Get all courses with teacher info
+    const allCourses = await Course.find()
+      .populate("teacher", "name profilePicture subject")
+      .lean();
+
+    if (!allCourses || allCourses.length === 0) {
+      return [];
+    }
+
+    // Count saves for each course (how many users have saved this course)
+    const courseSaves = await User.aggregate([
+      {
+        $project: {
+          savedCourses: 1,
+        },
+      },
+      {
+        $unwind: "$savedCourses",
+      },
+      {
+        $group: {
+          _id: "$savedCourses",
+          savesCount: { $sum: 1 },
+        },
+      },
+    ]);
+
+    // Create a map of course saves
+    const savesMap = {};
+    courseSaves.forEach((item) => {
+      savesMap[item._id.toString()] = item.savesCount;
+    });
+
+    // Calculate popularity score for each course
+    const coursesWithScore = allCourses.map((course) => {
+      const enrollmentCount = course.enrollmentCount || 0;
+      const savesCount = savesMap[course._id.toString()] || 0;
+
+      // Popularity Score = (60% enrollment) + (40% saves)
+      const popularityScore = (enrollmentCount * 0.6 + savesCount * 0.4) / 10;
+
+      return {
+        ...course,
+        savesCount,
+        popularityScore: parseFloat(popularityScore.toFixed(2)),
+      };
+    });
+
+    // Sort by popularity score (highest first)
+    coursesWithScore.sort((a, b) => b.popularityScore - a.popularityScore);
+
+    // Filter out courses with 0 score to show only courses with at least some popularity
+    const popularCourses = coursesWithScore.filter(
+      (course) => course.popularityScore > 0,
+    );
+
+    // Return top N courses
+    return popularCourses.slice(0, limit);
+  } catch (err) {
+    console.error("Error fetching popular courses:", err);
+    return [];
+  }
+};

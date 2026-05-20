@@ -48,7 +48,7 @@ const NotificationPopup = ({
             className="surface-card-strong w-full max-w-md overflow-hidden pointer-events-auto"
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-stone-500 to-stone-600 px-6 py-4 flex items-center justify-between">
+            <div className="bg-stone-600 px-6 py-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <CheckCircle className="w-6 h-6 text-white flex-shrink-0" />
                 <h3 className="text-lg font-bold text-white">

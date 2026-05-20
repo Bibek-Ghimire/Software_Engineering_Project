@@ -120,9 +120,7 @@ const TeacherChatList = () => {
             <h1 className="text-4xl font-bold text-stone-900 dark:text-stone-50 mb-2">
               Course Chat
             </h1>
-            <p className="text-stone-500 dark:text-stone-500">
-              Connect with your approved students in course-specific chat rooms
-            </p>
+           
           </motion.div>
 
           {/* Courses Grid */}
