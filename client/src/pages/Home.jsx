@@ -140,8 +140,8 @@ const channels = [
     title: "LinkedIn",
     subtitle: "Professional Network",
     icon: linkedin,
-    href: "https://www.linkedin.com/in/your-profile",
-    display: "linkedin.com/in/your-profile",
+    href: "https://www.linkedin.com/in/samir-dawadi-516293353/",
+    display: "linkedin.com/in/Samir-Dawadi",
   },
   {
     title: "Email",
@@ -399,7 +399,7 @@ const Home = () => {
           </div>
         </section>
 
-        {/* ─── Modern Tools Showcase ─── */}
+        // Modern Tools Showcase
         <section className="mt-32">
           <div className="text-center mb-16">
             <h2 className="section-title text-4xl font-black text-stone-900 dark:text-white">
