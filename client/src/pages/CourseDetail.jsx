@@ -454,7 +454,7 @@ const CourseDetail = () => {
                       Price
                     </p>
                     <p className="text-4xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1 justify-end">
-                      <DollarSign className="w-8 h-8" />
+                      Rs.
                       {course.price}
                     </p>
                   </div>

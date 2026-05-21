@@ -140,15 +140,15 @@ const channels = [
     title: "LinkedIn",
     subtitle: "Professional Network",
     icon: linkedin,
-    href: "https://www.linkedin.com/in/your-profile",
-    display: "linkedin.com/in/your-profile",
+    href: "https://www.linkedin.com/in/samir-dawadi-516293353/",
+    display: "linkedin.com/in/samir-dawadi",
   },
   {
     title: "Email",
     subtitle: "Direct Contact",
     icon: email,
-    href: "mailto:bibekghimire764@gmail.com",
-    display: "bibekghimire764@gmail.com",
+    href: "mailto:sushimzoro777@gmail.com",
+    display: "sushimzoro777@gmail.com",
   },
 ];
 
