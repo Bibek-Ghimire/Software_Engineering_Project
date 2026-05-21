@@ -25,16 +25,15 @@ const RecommendedResources = ({ limit = 6 }) => {
 
   const getFileTypeIcon = (fileType) => {
     const icons = {
-      pdf: "📄",
-      doc: "📝",
-      docx: "📝",
-      ppt: "📊",
-      pptx: "📊",
-      xls: "📈",
-      xlsx: "📈",
-      video: "🎬",
-      image: "🖼️",
-      default: "📁",
+      pdf: "",
+      doc: "",
+      docx: "",
+      ppt: "",
+      pptx: "",
+      xls: "",
+      xlsx: "",
+      image: "",
+      default: "",
     };
     return icons[fileType?.toLowerCase()] || icons.default;
   };
@@ -60,9 +59,7 @@ const RecommendedResources = ({ limit = 6 }) => {
   if (resources.length === 0) {
     return (
       <div className="text-center py-10">
-        <div className="w-10 h-10 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 flex items-center justify-center mx-auto mb-3">
-          <FileText className="w-5 h-5 text-stone-400" />
-        </div>
+        
         <p className="body-copy text-sm">
           No recommended resources yet. Explore more to get personalized
           suggestions!
@@ -79,19 +76,11 @@ const RecommendedResources = ({ limit = 6 }) => {
           className="surface-card overflow-hidden transition-all duration-200 hover:shadow-md flex flex-col"
         >
           {/* Top accent */}
-          <div className="h-1 bg-orange-400" />
 
           <div className="p-5 flex flex-col flex-1">
             {/* Header row */}
             <div className="flex items-start justify-between gap-3 mb-3">
-              <div className="w-10 h-10 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 flex items-center justify-center text-base">
-                {getFileTypeIcon(resource.fileType)}
-              </div>
-              {resource.recommendationScore && (
-                <span className="px-2.5 py-1 rounded-full text-xs font-semibold border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900/50 text-stone-600 dark:text-stone-400">
-                  {parseFloat(resource.recommendationScore).toFixed(0)} pts
-                </span>
-              )}
+              {getFileTypeIcon(resource.fileType)}
             </div>
 
             <h3 className="text-sm font-semibold text-stone-900 dark:text-stone-50 mb-1.5 line-clamp-2">
@@ -104,7 +93,7 @@ const RecommendedResources = ({ limit = 6 }) => {
             {resource.teacher && (
               <div className="flex items-center gap-2.5 mb-3 p-2.5 rounded-lg bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-700">
                 <HumanoidAvatar
-                  src={resource.teacher.profilePicture}
+                  // src={resource.teacher.profilePicture}
                   name={resource.teacher.name}
                   size={28}
                   className="rounded-full border border-stone-200 dark:border-stone-700"
@@ -119,22 +108,14 @@ const RecommendedResources = ({ limit = 6 }) => {
             )}
 
             {resource.recommendationScore && (
-              <div className="mb-3 flex items-center gap-1.5">
-                <TrendingUp className="w-3.5 h-3.5 text-stone-400" />
-                <span className="text-xs body-copy">
-                  Match:{" "}
-                  <span className="font-semibold text-orange-600 dark:text-orange-400">
-                    {parseFloat(resource.recommendationScore).toFixed(1)}/100
-                  </span>
-                </span>
-              </div>
+              <div className="mb-3 flex items-center gap-1.5"></div>
             )}
 
             <div className="grid grid-cols-2 gap-3 mt-auto">
               <button
                 type="button"
                 onClick={() => handleView(resource.fileUrl)}
-                className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-2.5 gap-2 text-sm rounded-xl flex items-center justify-center"
+                className="bg-blue-500 text-white py-2.5 gap-2 text-sm rounded-xl flex items-center justify-center"
               >
                 <Eye className="w-4 h-4" />
                 View

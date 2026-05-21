@@ -7,7 +7,7 @@
 :root {
   --accent: #c2651a;
   --accent-hover: #a85516;
-  --accent-subtle: #fef3e6;
+  --accent-subtle: #e9e6e2;
 }
 
 .dark {
@@ -17,8 +17,13 @@
 }
 
 @layer base {
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
 
   body {
     margin: 0;
@@ -27,17 +32,22 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    @apply bg-stone-50 text-stone-900 dark:bg-stone-950 dark:text-stone-100;
+    @apply bg-stone-200 text-stone-900 dark:bg-stone-950 dark:text-stone-100;
   }
 
-  button, input, textarea, select { font: inherit; }
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
 }
 
 @layer components {
 
   /* ─── Layout ─────────────────────────────────────── */
   .page-surface {
-    @apply min-h-screen bg-stone-50 dark:bg-stone-950;
+    @apply min-h-screen bg-stone-300 dark:bg-stone-950;
   }
 
   .section-shell {
@@ -69,48 +79,49 @@
     margin-bottom: 1rem;
   }
 
-  /* ─── Cards ──────────────────────────────────────── */
   .surface-card {
-    @apply bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl shadow-sm;
+    @apply bg-stone-200 dark:bg-stone-900 border border-stone-400 dark:border-stone-800 rounded-2xl shadow-sm;
   }
 
   .surface-card-strong {
-    @apply bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl shadow-md;
+    @apply bg-stone-200 dark:bg-stone-900 border border-stone-400 dark:border-stone-800 rounded-2xl shadow-md;
   }
 
-  .artisan-card      { @apply surface-card; }
-  .artisan-card-strong { @apply surface-card-strong; }
+  .artisan-card {
+    @apply surface-card;
+  }
+
+  .artisan-card-strong {
+    @apply surface-card-strong;
+  }
 
   .surface-panel {
-    @apply bg-stone-50 dark:bg-stone-800/50 border border-stone-200 dark:border-stone-700 rounded-xl;
+    @apply bg-stone-100 dark:bg-stone-800/50 border border-stone-200 dark:border-stone-700 rounded-xl;
   }
 
   /* ─── Buttons ────────────────────────────────────── */
   .btn-base {
-    @apply inline-flex items-center justify-center gap-2 font-semibold transition-all duration-200
-           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2
-           disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center gap-2 font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .primary-action {
-    @apply btn-base bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white
-           rounded-lg px-5 py-2.5 shadow-sm hover:-translate-y-px;
+    @apply btn-base bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white rounded-lg px-5 py-2.5 shadow-sm hover:-translate-y-px;
   }
 
   .secondary-action {
-    @apply btn-base bg-white dark:bg-stone-900 hover:bg-stone-50 dark:hover:bg-stone-800
-           border border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-300
-           rounded-lg px-5 py-2.5 shadow-sm hover:-translate-y-px;
+    @apply btn-base bg-white dark:bg-stone-900 hover:bg-stone-50 dark:hover:bg-stone-800 border border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-300 rounded-lg px-5 py-2.5 shadow-sm hover:-translate-y-px;
   }
 
-  .cta-main  { @apply primary-action; }
-  .cta-ghost { @apply secondary-action; }
+  .cta-main {
+    @apply primary-action;
+  }
+
+  .cta-ghost {
+    @apply secondary-action;
+  }
 
   .icon-action {
-    @apply btn-base bg-white dark:bg-stone-900 hover:bg-stone-50 dark:hover:bg-stone-800
-           border border-stone-200 dark:border-stone-700
-           text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100
-           rounded-xl p-2.5 shadow-sm;
+    @apply btn-base bg-white dark:bg-stone-900 hover:bg-stone-50 dark:hover:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 rounded-xl p-2.5 shadow-sm;
   }
 
   .control-pill {
@@ -118,27 +129,28 @@
   }
 
   .control-pill-default {
-    @apply control-pill bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700
-           text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 hover:-translate-y-px;
+    @apply control-pill bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 hover:-translate-y-px;
   }
 
   /* ─── Navigation ─────────────────────────────────── */
   .nav-chip {
-    @apply rounded-lg px-3 py-2 text-sm font-medium text-stone-600 dark:text-stone-400
-           hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800
-           transition-all duration-150;
+    @apply rounded-lg px-3 py-2 text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 transition-all duration-150;
   }
 
   /* ─── Form inputs ────────────────────────────────── */
   .form-input {
-    @apply w-full rounded-xl border border-stone-300 dark:border-stone-700
-           bg-white dark:bg-stone-900 px-4 py-3
-           text-stone-900 dark:text-stone-100 outline-none transition-all duration-200
-           placeholder:text-stone-400 dark:placeholder:text-stone-500
-           focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20;
+    @apply w-full rounded-xl border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 px-4 py-3 text-stone-900 dark:text-stone-100 outline-none transition-all duration-200 placeholder:text-stone-400 dark:placeholder:text-stone-500 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20;
   }
 
-  .form-input-compact { @apply form-input py-2.5 text-sm; }
-  .input              { @apply form-input; }
-  .input-field        { @apply form-input-compact; }
+  .form-input-compact {
+    @apply form-input py-2.5 text-sm;
+  }
+
+  .input {
+    @apply form-input;
+  }
+
+  .input-field {
+    @apply form-input-compact;
+  }
 }

@@ -5,6 +5,7 @@ import {
   getRecommendedTeachers,
   addInterestedCourse,
   removeInterestedCourse,
+  getPopularCourses,
 } from "../services/recommendationService.js";
 import { protect } from "../middleware/authMiddleware.js";
 import express from "express";
@@ -200,6 +201,41 @@ router.delete("/interested-course/:courseId", protect, async (req, res) => {
     res
       .status(500)
       .json({ success: false, message: "Error updating interested courses" });
+  }
+});
+
+/**
+ * GET /api/recommendations/popular-courses
+ * Get most popular courses based on enrollments and saves (fallback when no recommendations)
+ */
+router.get("/popular-courses", protect, async (req, res) => {
+  try {
+    const limit = req.query.limit || 6;
+    const courses = await getPopularCourses(parseInt(limit));
+
+    res.json({
+      success: true,
+      count: courses.length,
+      data: courses.map((course) => ({
+        _id: course._id,
+        title: course.title,
+        description: course.description,
+        level: course.level,
+        duration: course.duration,
+        price: course.price,
+        teacher: course.teacher,
+        enrollmentCount: course.enrollmentCount,
+        savesCount: course.savesCount || 0,
+        rating: course.rating,
+        popularityScore: course.popularityScore || 0,
+      })),
+    });
+  } catch (err) {
+    console.error("Error fetching popular courses:", err);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching popular courses",
+    });
   }
 });
 

@@ -59,80 +59,63 @@ const LeaderBoard = () => {
     setExpanded({ ...expanded, [id]: !expanded[id] });
   };
 
-  const navigateToTeacher = async (teacherId) => {
-    try {
-      const { data } = await axios.get(`/api/users/${teacherId}`);
-      if (data) {
-        navigate(`/teacher/${teacherId}`, { state: { viewOnly: true } });
-      } else {
-        console.log("Teacher not found");
-      }
-    } catch (error) {
-      console.error("Failed to fetch teacher profile:", error.message);
-    }
+  const navigateToTeacher = (teacherId) => {
+    navigate(`/teacher/${teacherId}`, { state: { viewOnly: true } });
   };
 
   // Tier config — stone-based, no rainbow gradients
   const batchConfig = {
     Diamond: {
       border: "border-l-4 border-l-stone-900 dark:border-l-stone-100",
-      badge: "bg-stone-900 text-stone-50 border border-stone-800 dark:bg-stone-100 dark:text-stone-900 dark:border-white",
+      badge:
+        "bg-stone-900 text-stone-50 border border-stone-800 dark:bg-stone-100 dark:text-stone-900 dark:border-white",
       dot: "bg-stone-900 dark:bg-stone-100",
     },
     Platinum: {
       border: "border-l-4 border-l-stone-600",
-      badge: "bg-stone-100 text-stone-700 border border-stone-300 dark:bg-stone-800 dark:text-stone-300 dark:border-stone-600",
+      badge:
+        "bg-stone-100 text-stone-700 border border-stone-300 dark:bg-stone-800 dark:text-stone-300 dark:border-stone-600",
       dot: "bg-stone-600",
     },
     Gold: {
       border: "border-l-4 border-l-orange-500",
-      badge: "bg-orange-600 text-white border border-orange-500 shadow-sm shadow-orange-600/20",
+      badge:
+        "bg-orange-600 text-white border border-orange-500 shadow-sm shadow-orange-600/20",
       dot: "bg-orange-500",
     },
     Silver: {
       border: "border-l-4 border-l-orange-400",
-      badge: "bg-orange-50 text-orange-700 border border-orange-200 dark:bg-orange-950/20 dark:text-orange-300 dark:border-orange-900/40",
+      badge:
+        "bg-orange-50 text-orange-700 border border-orange-200 dark:bg-orange-950/20 dark:text-orange-300 dark:border-orange-900/40",
       dot: "bg-orange-400",
     },
     Bronze: {
       border: "border-l-4 border-l-stone-400",
-      badge: "bg-stone-50 text-stone-600 border border-stone-200 dark:bg-stone-800/60 dark:text-stone-400 dark:border-stone-700",
+      badge:
+        "bg-stone-50 text-stone-600 border border-stone-200 dark:bg-stone-800/60 dark:text-stone-400 dark:border-stone-700",
       dot: "bg-stone-400",
     },
     Basic: {
       border: "border-l-4 border-l-stone-200",
-      badge: "bg-stone-50 text-stone-500 border border-stone-200 dark:bg-stone-800/40 dark:text-stone-500 dark:border-stone-700",
+      badge:
+        "bg-stone-50 text-stone-500 border border-stone-200 dark:bg-stone-800/40 dark:text-stone-500 dark:border-stone-700",
       dot: "bg-stone-200",
     },
   };
 
   const courseLevelConfig = {
     Beginner: {
-      badge: "bg-stone-100 text-stone-700 border-stone-200 dark:bg-stone-800 dark:text-stone-300 dark:border-stone-700",
+      badge:
+        "bg-stone-100 text-stone-700 border-stone-200 dark:bg-stone-800 dark:text-stone-300 dark:border-stone-700",
     },
     Intermediate: {
-      badge: "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950/20 dark:text-orange-300 dark:border-orange-900/40",
+      badge:
+        "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950/20 dark:text-orange-300 dark:border-orange-900/40",
     },
     Expert: {
-      badge: "bg-stone-900 text-stone-50 border-stone-800 dark:bg-stone-100 dark:text-stone-900 dark:border-white",
+      badge:
+        "bg-stone-900 text-stone-50 border-stone-800 dark:bg-stone-100 dark:text-stone-900 dark:border-white",
     },
-  };
-
-  const getRankIcon = (index) => {
-    switch (index) {
-      case 0:
-        return <Trophy className="w-6 h-6 text-orange-500" />;
-      case 1:
-        return <Award className="w-6 h-6 text-stone-400" />;
-      case 2:
-        return <Award className="w-6 h-6 text-orange-400" />;
-      default:
-        return (
-          <div className="w-6 h-6 rounded-full bg-stone-200 dark:bg-stone-700 flex items-center justify-center text-stone-600 dark:text-stone-300 font-bold text-xs">
-            {index + 1}
-          </div>
-        );
-    }
   };
 
   return (
@@ -146,9 +129,7 @@ const LeaderBoard = () => {
         <div className="px-8 pt-10 pb-8 border-b border-stone-200 dark:border-stone-800">
           <div className="flex items-center justify-between mb-1">
             <div>
-              <span className="section-kicker" />
               <h1 className="section-title">Leaderboard</h1>
-
             </div>
             <button
               onClick={() => setDarkMode(!darkMode)}
@@ -187,7 +168,7 @@ const LeaderBoard = () => {
                 label: "Avg Engagement",
                 value: (
                   teachers.reduce((acc, t) => acc + t.engagementScore, 0) /
-                  teachers.length || 0
+                    teachers.length || 0
                 ).toFixed(1),
               },
               {
@@ -196,11 +177,11 @@ const LeaderBoard = () => {
                 value: Math.max(...teachers.map((t) => t.totalScore), 0),
               },
             ].map((stat, index) => (
-              <div key={index} className="surface-panel p-4">
+              <div
+                key={index}
+                className="surface-panel p-4"
+              >
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
-                    <stat.icon className="w-4 h-4 text-stone-500 dark:text-stone-400" />
-                  </div>
                   <div>
                     <p className="text-xs text-stone-500 dark:text-stone-400 font-medium">
                       {stat.label}
@@ -242,9 +223,7 @@ const LeaderBoard = () => {
                           <motion.div
                             whileHover={{ scale: 1.1 }}
                             transition={{ type: "spring", stiffness: 400 }}
-                          >
-                            {getRankIcon(index)}
-                          </motion.div>
+                          ></motion.div>
                           <div className="w-12 h-12 rounded-full bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 flex items-center justify-center">
                             <User className="w-6 h-6 text-stone-500 dark:text-stone-400" />
                           </div>
@@ -254,12 +233,6 @@ const LeaderBoard = () => {
                           <h3 className="text-lg font-bold text-stone-900 dark:text-stone-50 leading-tight mb-1">
                             {teacher.name}
                           </h3>
-                          {/* <span
-                            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${config.badge}`}
-                          > */}
-                          {/* <span className={`w-1.5 h-1.5 rounded-full ${config.dot}`} />
-                            {teacher.batch} Tier
-                          </span> */}
                         </div>
                       </div>
 
@@ -287,9 +260,6 @@ const LeaderBoard = () => {
                             className="surface-panel p-3 text-center"
                             whileHover={{ y: -2 }}
                           >
-                            <div className="w-8 h-8 mx-auto mb-1.5 rounded-lg bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 flex items-center justify-center">
-                              <stat.icon className="w-4 h-4 text-stone-500 dark:text-stone-400" />
-                            </div>
                             <p className="text-xl font-bold text-stone-900 dark:text-stone-50 leading-none">
                               {stat.value}
                             </p>

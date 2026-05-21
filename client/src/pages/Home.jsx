@@ -141,14 +141,14 @@ const channels = [
     subtitle: "Professional Network",
     icon: linkedin,
     href: "https://www.linkedin.com/in/samir-dawadi-516293353/",
-    display: "linkedin.com/in/Samir-Dawadi",
+    display: "linkedin.com/in/samir-dawadi",
   },
   {
     title: "Email",
     subtitle: "Direct Contact",
     icon: email,
-    href: "mailto:bibekghimire764@gmail.com",
-    display: "bibekghimire764@gmail.com",
+    href: "mailto:sushimzoro777@gmail.com",
+    display: "sushimzoro777@gmail.com",
   },
 ];
 
@@ -196,15 +196,24 @@ const Home = () => {
               </button>
 
               <nav className="hidden items-center gap-2 lg:flex">
-                <button onClick={scrollToTop} className="nav-chip px-4 py-2 font-semibold">Home</button>
                 <button
-                  onClick={() => aboutRef.current?.scrollIntoView({ behavior: "smooth" })}
+                  onClick={scrollToTop}
+                  className="nav-chip px-4 py-2 font-semibold"
+                >
+                  Home
+                </button>
+                <button
+                  onClick={() =>
+                    aboutRef.current?.scrollIntoView({ behavior: "smooth" })
+                  }
                   className="nav-chip px-4 py-2 font-semibold"
                 >
                   About
                 </button>
                 <button
-                  onClick={() => contactRef.current?.scrollIntoView({ behavior: "smooth" })}
+                  onClick={() =>
+                    contactRef.current?.scrollIntoView({ behavior: "smooth" })
+                  }
                   className="nav-chip px-4 py-2 font-semibold"
                 >
                   Contact
@@ -250,17 +259,18 @@ const Home = () => {
             transition={{ duration: 0.6 }}
           >
             <div className="flex items-center gap-3 mb-6">
-              <span className="section-kicker !mb-0" />
               <span className="text-orange-600 dark:text-orange-400 font-bold text-xs uppercase tracking-widest">
                 Learn Together, Grow Together
               </span>
             </div>
             <h1 className="brand-title text-5xl leading-[1.05] font-black md:text-7xl lg:text-8xl">
-              Success is <span className="text-orange-600">better</span> when shared.
+              Success is <span className="text-orange-600">better</span> when
+              shared.
             </h1>
             <p className="body-copy mt-8 max-w-xl text-lg leading-relaxed md:text-xl">
-              Transform your learning experience with collaborative study squads,
-              interactive note-taking, and a supportive community of over 50,000 learners.
+              Transform your learning experience with collaborative study
+              squads, interactive note-taking, and a supportive community of
+              over 50,000 learners.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <button
@@ -290,7 +300,6 @@ const Home = () => {
               alt="Students collaborating"
               className="h-[480px] w-full rounded-[2rem] object-cover shadow-2xl"
             />
-
           </motion.div>
         </section>
 
@@ -308,8 +317,12 @@ const Home = () => {
               <div className="w-12 h-12 bg-orange-50 dark:bg-orange-950/20 rounded-xl flex items-center justify-center text-orange-600 mb-4 border border-orange-100 dark:border-orange-900/40">
                 {item.icon}
               </div>
-              <p className="brand-title text-4xl font-black text-stone-900 dark:text-white">{item.number}</p>
-              <p className="body-copy mt-1 font-semibold text-sm uppercase tracking-wider">{item.label}</p>
+              <p className="brand-title text-4xl font-black text-stone-900 dark:text-white">
+                {item.number}
+              </p>
+              <p className="body-copy mt-1 font-semibold text-sm uppercase tracking-wider">
+                {item.label}
+              </p>
             </motion.div>
           ))}
         </section>
@@ -321,8 +334,9 @@ const Home = () => {
               Why Choose <span className="text-orange-600">Syncademy?</span>
             </h2>
             <p className="body-copy mt-4 text-lg">
-              Experience the future of education with cutting-edge technology designed to
-              maximize your learning potential through collaboration and community.
+              Experience the future of education with cutting-edge technology
+              designed to maximize your learning potential through collaboration
+              and community.
             </p>
           </div>
 
@@ -339,8 +353,12 @@ const Home = () => {
                 <div className="w-14 h-14 bg-stone-50 dark:bg-stone-800 rounded-2xl flex items-center justify-center text-orange-600 mb-6 group-hover:scale-110 group-hover:bg-orange-600 group-hover:text-white transition-all shadow-sm">
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-stone-900 dark:text-white">{feature.title}</h3>
-                <p className="body-copy leading-relaxed">{feature.description}</p>
+                <h3 className="text-xl font-bold mb-3 text-stone-900 dark:text-white">
+                  {feature.title}
+                </h3>
+                <p className="body-copy leading-relaxed">
+                  {feature.description}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -350,7 +368,10 @@ const Home = () => {
         <section className="mt-32 bg-stone-100/50 dark:bg-stone-900/30 rounded-[3rem] px-8 py-20 border border-stone-200 dark:border-stone-800">
           <div className="text-center mb-20">
             <h2 className="section-title text-4xl">Simple Steps to Success</h2>
-            <p className="body-copy mt-3">Get started in minutes and unlock the power of collaborative learning</p>
+            <p className="body-copy mt-3">
+              Get started in minutes and unlock the power of collaborative
+              learning
+            </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto">
@@ -358,36 +379,59 @@ const Home = () => {
               {
                 step: "01",
                 title: "Create Your Profile",
-                description: "Sign up in seconds and tell us about your goals. We match you with compatible partners based on academic interests.",
+                description:
+                  "Sign up in seconds and tell us about your goals. We match you with compatible partners based on academic interests.",
                 icon: <Users className="w-6 h-6" />,
-                features: ["Matching Interests", "Goal setting", "Schedule sync"],
+                features: [
+                  "Matching Interests",
+                  "Goal setting",
+                  "Schedule sync",
+                ],
               },
               {
                 step: "02",
                 title: "Join Study Squads",
-                description: "Connect with peers who share your academic interests. Collaborate on notes and participate in live study sessions.",
+                description:
+                  "Connect with peers who share your academic interests. Collaborate on notes and participate in live study sessions.",
                 icon: <Heart className="w-6 h-6" />,
-                features: ["Real-time collaboration", "Resource sharing", "Live sessions"],
+                features: [
+                  "Real-time collaboration",
+                  "Resource sharing",
+                  "Live sessions",
+                ],
               },
               {
                 step: "03",
                 title: "Achieve & Celebrate",
-                description: "Track your progress with detailed analytics, earn badges, and celebrate milestones together with your squad.",
+                description:
+                  "Track your progress with detailed analytics, earn badges, and celebrate milestones together with your squad.",
                 icon: <Trophy className="w-6 h-6" />,
-                features: ["Progress tracking", "Achievement system", "Success analytics"],
+                features: [
+                  "Progress tracking",
+                  "Achievement system",
+                  "Success analytics",
+                ],
               },
             ].map((step, idx) => (
-              <div key={idx} className="relative group">
+              <div
+                key={idx}
+                className="relative group"
+              >
                 <div className="surface-card p-8 pt-12 h-full hover:shadow-xl transition-all border-l-4 border-l-orange-500">
                   <div className="absolute -top-6 left-8 w-12 h-12 bg-stone-900 dark:bg-stone-100 rounded-full flex items-center justify-center text-white dark:text-stone-900 font-bold text-lg shadow-lg">
                     {step.step}
                   </div>
                   <div className="mb-6 text-orange-600">{step.icon}</div>
                   <h3 className="text-xl font-bold mb-4">{step.title}</h3>
-                  <p className="body-copy text-sm mb-6 leading-relaxed">{step.description}</p>
+                  <p className="body-copy text-sm mb-6 leading-relaxed">
+                    {step.description}
+                  </p>
                   <div className="space-y-2">
                     {step.features.map((f, i) => (
-                      <div key={i} className="flex items-center gap-2 text-xs font-semibold text-stone-500 dark:text-stone-400">
+                      <div
+                        key={i}
+                        className="flex items-center gap-2 text-xs font-semibold text-stone-500 dark:text-stone-400"
+                      >
                         <CheckCircle2 className="w-3.5 h-3.5 text-orange-500" />
                         {f}
                       </div>
@@ -403,23 +447,47 @@ const Home = () => {
         <section className="mt-32">
           <div className="text-center mb-16">
             <h2 className="section-title text-4xl font-black text-stone-900 dark:text-white">
-              Powerful Tools for <span className="text-orange-600">Modern Learning</span>
+              Powerful Tools for{" "}
+              <span className="text-orange-600">Modern Learning</span>
             </h2>
-            <p className="body-copy mt-3">Everything you need to excel academically, all in one platform</p>
+            <p className="body-copy mt-3">
+              Everything you need to excel academically, all in one platform
+            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: <FileText size={24} />, title: "Artisan Notes", desc: "Collaborative drafting" },
-              { icon: <Video size={24} />, title: "Live Rooms", desc: "Interactive study spaces" },
-              { icon: <MessageSquare size={24} />, title: "Instant Chat", desc: "Real-time messaging" },
-              { icon: <BarChart3 size={24} />, title: "Analytics", desc: "Progress insights" }
+              {
+                icon: <FileText size={24} />,
+                title: "Artisan Notes",
+                desc: "Collaborative drafting",
+              },
+              {
+                icon: <Video size={24} />,
+                title: "Live Rooms",
+                desc: "Interactive study spaces",
+              },
+              {
+                icon: <MessageSquare size={24} />,
+                title: "Instant Chat",
+                desc: "Real-time messaging",
+              },
+              {
+                icon: <BarChart3 size={24} />,
+                title: "Analytics",
+                desc: "Progress insights",
+              },
             ].map((tool, idx) => (
-              <div key={idx} className="surface-card p-6 text-center group hover:border-orange-500/30 transition-all">
+              <div
+                key={idx}
+                className="surface-card p-6 text-center group hover:border-orange-500/30 transition-all"
+              >
                 <div className="w-12 h-12 bg-orange-600 text-white rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   {tool.icon}
                 </div>
-                <h4 className="font-bold text-stone-900 dark:text-white mb-1">{tool.title}</h4>
+                <h4 className="font-bold text-stone-900 dark:text-white mb-1">
+                  {tool.title}
+                </h4>
                 <p className="text-xs body-copy">{tool.desc}</p>
               </div>
             ))}
@@ -433,17 +501,25 @@ const Home = () => {
               <Quote className="w-64 h-64 text-white" />
             </div>
 
-            <div className="relative z-10 px-8 py-16 md:px-16 md:py-20 flex flex-col md:flex-row items-center gap-12">
+            <div className="bg-white relative z-10 px-8 py-16 md:px-16 md:py-20 flex flex-col md:flex-row items-center gap-12 dark:bg-black border border-stone-200 dark:border-stone-700 rounded-[2rem] shadow-2xl">
               <div className="flex-1 text-center md:text-left">
-                <h2 className="brand-title text-4xl md:text-5xl font-black text-white mb-6">What Students Say</h2>
-                <p className="text-stone-400 text-lg max-w-md">Join thousands of students who have transformed their learning experience.</p>
+                <h2 className="brand-title text-4xl md:text-5xl font-black text-black mb-6 dark:text-stone-200">
+                  What Students Say
+                </h2>
+                <p className="text-black text-lg max-w-md dark:text-stone-300">
+                  Join thousands of students who have transformed their learning
+                  experience.
+                </p>
                 <div className="mt-10 flex gap-2 justify-center md:justify-start">
                   {testimonials.map((_, i) => (
                     <button
                       key={i}
                       onClick={() => setCurrentTestimonial(i)}
-                      className={`h-1.5 rounded-full transition-all duration-300 ${i === currentTestimonial ? "w-12 bg-orange-500" : "w-6 bg-stone-700 hover:bg-stone-600"
-                        }`}
+                      className={`h-1.5 rounded-full transition-all duration-300 ${
+                        i === currentTestimonial
+                          ? "w-12 bg-orange-500"
+                          : "w-6 bg-stone-700 hover:bg-stone-600"
+                      }`}
                     />
                   ))}
                 </div>
@@ -456,19 +532,26 @@ const Home = () => {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
-                    className="surface-card bg-white p-8 md:p-10 rounded-[2rem] shadow-2xl"
+                    className="surface-card bg-white p-8 md:p-10 rounded-[2rem] shadow-2xl dark:bg-white border border-stone-200 dark:border-stone-700"
                   >
                     <div className="flex items-center gap-4 mb-6">
                       <div className="w-14 h-14 bg-stone-100 rounded-full flex items-center justify-center text-stone-400">
                         <Users className="w-7 h-7" />
                       </div>
                       <div>
-                        <h4 className="font-bold text-stone-900 text-lg">{testimonials[currentTestimonial].name}</h4>
-                        <p className="text-stone-500 text-sm">{testimonials[currentTestimonial].role}</p>
+                        <h4 className="font-bold text-stone-900 text-lg">
+                          {testimonials[currentTestimonial].name}
+                        </h4>
+                        <p className="text-stone-500 text-sm">
+                          {testimonials[currentTestimonial].role}
+                        </p>
                       </div>
                       <div className="ml-auto hidden sm:flex gap-1 text-orange-500">
                         {[...Array(5)].map((_, i) => (
-                          <Star key={i} className="w-4 h-4 fill-current" />
+                          <Star
+                            key={i}
+                            className="w-4 h-4 fill-current"
+                          />
                         ))}
                       </div>
                     </div>
@@ -483,31 +566,45 @@ const Home = () => {
         </section>
 
         {/* ─── About Section ─── */}
-        <section ref={aboutRef} className="mt-32 grid lg:grid-cols-[1fr_1.1fr] gap-16 items-start">
+        <section
+          ref={aboutRef}
+          className="mt-32 grid lg:grid-cols-[1fr_1.1fr] gap-16 items-start"
+        >
           <div className="relative">
             <div className="surface-card-strong overflow-hidden rounded-[2.5rem]">
-              <img src={team} alt="Syncademy Team" className="w-full h-[500px] object-cover" />
+              <img
+                src={team}
+                alt="Syncademy Team"
+                className="w-full h-[500px] object-cover"
+              />
             </div>
             <div className="absolute -bottom-10 -right-10 hidden xl:grid grid-cols-2 gap-4">
               <div className="surface-card p-3 rounded-2xl w-32 h-32 overflow-hidden shadow-2xl">
-                <img src={team1} className="w-full h-full object-cover rounded-xl" />
+                <img
+                  src={team1}
+                  className="w-full h-full object-cover rounded-xl"
+                />
               </div>
               <div className="surface-card p-3 rounded-2xl w-32 h-32 overflow-hidden shadow-2xl">
-                <img src={team2} className="w-full h-full object-cover rounded-xl" />
+                <img
+                  src={team2}
+                  className="w-full h-full object-cover rounded-xl"
+                />
               </div>
             </div>
           </div>
 
           <div>
-            <span className="section-kicker mb-6" />
             <h2 className="section-title text-4xl md:text-5xl">
-              Built for <span className="text-orange-600">community</span> learning.
+              Built for <span className="text-orange-600">community</span>{" "}
+              learning.
             </h2>
             <p className="body-copy mt-8 text-lg leading-relaxed">
-              Syncademy is a next-generation peer learning platform designed to empower
-              students through collaborative study methods and community-driven academic support.
-              We revolutionize traditional learning by creating an interactive environment
-              where knowledge flows freely.
+              Syncademy is a next-generation peer learning platform designed to
+              empower students through collaborative study methods and
+              community-driven academic support. We revolutionize traditional
+              learning by creating an interactive environment where knowledge
+              flows freely.
             </p>
 
             <AnimatePresence>
@@ -520,13 +617,21 @@ const Home = () => {
                 >
                   <div className="surface-panel p-6">
                     <h4 className="font-bold text-stone-900 dark:text-white mb-4 flex items-center gap-2">
-                      <Target className="w-5 h-5 text-orange-500" />
+                      {/* <Target className="w-5 h-5 text-orange-500" /> */}
                       Our Core Values:
                     </h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {["Inclusive Learning", "Community-Driven", "Innovation", "Data-Driven Results"].map((v) => (
-                        <div key={v} className="flex items-center gap-3">
-                          <CheckCircle className="w-4 h-4 text-orange-500" />
+                      {[
+                        "Inclusive Learning",
+                        "Community-Driven",
+                        "Innovation",
+                        "Data-Driven Results",
+                      ].map((v) => (
+                        <div
+                          key={v}
+                          className="flex items-center gap-3"
+                        >
+                          {/* <CheckCircle className="w-4 h-4 text-orange-500" /> */}
                           <span className="font-semibold text-sm">{v}</span>
                         </div>
                       ))}
@@ -534,15 +639,20 @@ const Home = () => {
                   </div>
 
                   <div className="bg-stone-100 dark:bg-stone-900/50 rounded-2xl p-6 border border-stone-200 dark:border-stone-800">
-                    <h4 className="font-bold text-stone-900 dark:text-white mb-4">What Makes Us Different:</h4>
+                    <h4 className="font-bold text-stone-900 dark:text-white mb-4">
+                      What Makes Us Different:
+                    </h4>
                     <ul className="space-y-3">
                       {[
                         "Foster real-time collaboration and discussions",
                         "Encourage peer mentorship and growth",
                         "Provide scalable tools for institutions",
-                        "Integrate gamification to boost engagement"
+                        "Integrate gamification to boost engagement",
                       ].map((item) => (
-                        <li key={item} className="flex items-center gap-3 text-sm body-copy">
+                        <li
+                          key={item}
+                          className="flex items-center gap-3 text-sm body-copy"
+                        >
                           <div className="w-1.5 h-1.5 bg-orange-500 rounded-full" />
                           {item}
                         </li>
@@ -564,10 +674,17 @@ const Home = () => {
         </section>
 
         {/* ─── Contact Section ─── */}
-        <section ref={contactRef} className="mt-32">
+        <section
+          ref={contactRef}
+          className="mt-32"
+        >
           <div className="text-center mb-16">
-            <h2 className="section-title text-4xl">Ready to <span className="text-orange-600">Connect?</span></h2>
-            <p className="body-copy mt-3">We welcome contributions from passionate educators and developers.</p>
+            <h2 className="section-title text-4xl">
+              Ready to <span className="text-orange-600">Connect?</span>
+            </h2>
+            <p className="body-copy mt-3">
+              We welcome contributions from passionate educators and developers.
+            </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
@@ -580,12 +697,19 @@ const Home = () => {
                 className="surface-card group p-8 hover:border-orange-500/40 transition-all"
               >
                 <div className="w-14 h-14 bg-stone-50 dark:bg-stone-800 rounded-2xl flex items-center justify-center p-3 mb-6 group-hover:scale-110 transition-transform">
-                  <img src={channel.icon} alt={channel.title} className="w-full h-full object-contain" />
+                  <img
+                    src={channel.icon}
+                    alt={channel.title}
+                    className="w-full h-full object-contain"
+                  />
                 </div>
                 <h3 className="text-xl font-bold mb-1">{channel.title}</h3>
-                <p className="text-orange-600 dark:text-orange-400 text-sm font-bold uppercase tracking-wider mb-4">{channel.subtitle}</p>
+                <p className="text-orange-600 dark:text-orange-400 text-sm font-bold uppercase tracking-wider mb-4">
+                  {channel.subtitle}
+                </p>
                 <p className="body-copy text-sm leading-relaxed mb-6">
-                  Stay updated with our latest features, join discussions, and connect with our team members.
+                  Stay updated with our latest features, join discussions, and
+                  connect with our team members.
                 </p>
                 <div className="flex items-center gap-2 text-stone-400 group-hover:text-stone-900 dark:group-hover:text-stone-100 transition-colors">
                   <span className="text-xs font-mono">{channel.display}</span>
@@ -598,8 +722,6 @@ const Home = () => {
 
         {/* ─── CTA Section ─── */}
         <section className="mt-32 relative overflow-hidden rounded-[3rem] bg-orange-600 dark:bg-orange-600 px-8 py-20 md:py-28 text-center text-white">
-
-
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -607,11 +729,13 @@ const Home = () => {
             className="relative z-10 max-w-4xl mx-auto"
           >
             <h2 className="brand-title text-5xl md:text-7xl font-black mb-8 leading-tight">
-              Your Academic Success <br /> <span className="text-orange-200">Starts Today.</span>
+              Your Academic Success <br />{" "}
+              <span className="text-orange-200">Starts Today.</span>
             </h2>
             <p className="text-orange-50 text-xl max-w-2xl mx-auto mb-12 opacity-90">
-              Join over 50,000 students who have already transformed their learning experience.
-              Start collaborating, start achieving, start succeeding.
+              Join over 50,000 students who have already transformed their
+              learning experience. Start collaborating, start achieving, start
+              succeeding.
             </p>
             <button
               onClick={() => handleNavigation("/register")}
@@ -622,7 +746,6 @@ const Home = () => {
           </motion.div>
         </section>
       </main>
-
     </div>
   );
 };

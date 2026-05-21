@@ -287,65 +287,65 @@ const StudentProfileUpgraded = () => {
               </div>
 
               {/* Basic Info */}
-              <div className="space-y-6">
+              <div className="space-y-5">
                 {/* Name and Email */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-xs font-black body-copy uppercase tracking-widest mb-2">
-                      Full Name
-                    </label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        className="form-input"
-                      />
-                    ) : (
-                      <p className="text-lg font-bold text-stone-900 dark:text-stone-50">
-                        {profile.name}
-                      </p>
-                    )}
-                  </div>
+                <div className="bg-stone-50 dark:bg-stone-800/30 px-6 py-5 rounded-r-lg">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-bold text-stone-900 dark:text-stone-100 mb-3 tracking-wide">
+                        Full Name
+                      </label>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleInputChange}
+                          className="form-input"
+                        />
+                      ) : (
+                        <p className="text-base font-semibold text-stone-700 dark:text-stone-200">
+                          {profile.name}
+                        </p>
+                      )}
+                    </div>
 
-                  <div>
-                    <label className="text-xs font-black body-copy uppercase tracking-widest mb-2 flex items-center gap-2">
-                      <Mail className="w-4 h-4 text-orange-500" /> Email
-                    </label>
-                    <p className="text-lg font-medium text-stone-600 dark:text-stone-400 surface-panel px-4 py-3">
-                      {profile.email}
-                    </p>
+                    <div>
+                      <label className="block text-sm font-bold text-stone-900 dark:text-stone-100 mb-3 tracking-wide">
+                        Email Address
+                      </label>
+                      <p className="text-base font-medium text-stone-600 dark:text-stone-300">
+                        {profile.email}
+                      </p>
+                    </div>
                   </div>
                 </div>
 
-                {/* College and Bio */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="text-xs font-black body-copy uppercase tracking-widest mb-2">
-                      College / Institution
-                    </label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        name="college"
-                        value={formData.college}
-                        onChange={handleInputChange}
-                        placeholder="Enter your college name"
-                        className="form-input"
-                      />
-                    ) : (
-                      <p className="text-stone-700 dark:text-stone-300 font-medium">
-                        {profile.college || "Not specified"}
-                      </p>
-                    )}
-                  </div>
+                {/* College */}
+                <div className="bg-stone-50 dark:bg-stone-800/30  px-6 py-5 rounded-r-lg">
+                  <label className="block text-sm font-bold text-stone-900 dark:text-stone-100 mb-3 tracking-wide">
+                    College / Institution
+                  </label>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      name="college"
+                      value={formData.college}
+                      onChange={handleInputChange}
+                      placeholder="Enter your college name"
+                      className="form-input"
+                    />
+                  ) : (
+                    <p className="text-base font-medium text-stone-600 dark:text-stone-300">
+                      {profile.college || "Not specified"}
+                    </p>
+                  )}
                 </div>
 
                 {/* Bio */}
-                <div>
-                  <label className="block text-xs font-black body-copy uppercase tracking-widest mb-2">
-                    Bio
+                <div className="bg-stone-50 dark:bg-stone-800/30  px-6 py-5 rounded-r-lg">
+                  <label className="block text-sm font-bold text-stone-900 dark:text-stone-100 mb-3 tracking-wide">
+                    Bio / About You
                   </label>
                   {isEditing ? (
                     <textarea
@@ -357,15 +357,15 @@ const StudentProfileUpgraded = () => {
                       className="form-input resize-none"
                     />
                   ) : (
-                    <p className="body-copy leading-relaxed">
+                    <p className="text-stone-600 dark:text-stone-300 leading-relaxed">
                       {profile.bio || "No bio added yet"}
                     </p>
                   )}
                 </div>
 
                 {/* Skills */}
-                <div>
-                  <label className="block text-xs font-black body-copy uppercase tracking-widest mb-3">
+                <div className="bg-stone-50 dark:bg-stone-800/30  px-6 py-5 rounded-r-lg">
+                  <label className="block text-sm font-bold text-stone-900 dark:text-stone-100 mb-4 tracking-wide">
                     Skills
                   </label>
                   {isEditing ? (
@@ -430,8 +430,8 @@ const StudentProfileUpgraded = () => {
                 </div>
 
                 {/* Interests */}
-                <div>
-                  <label className="block text-xs font-black body-copy uppercase tracking-widest mb-3">
+                <div className="bg-stone-50 dark:bg-stone-800/30  px-6 py-5 rounded-r-lg">
+                  <label className="block text-sm font-bold text-stone-900 dark:text-stone-100 mb-4 tracking-wide">
                     Interests
                   </label>
                   {isEditing ? (
@@ -498,68 +498,76 @@ const StudentProfileUpgraded = () => {
                 </div>
 
                 {/* Social Links */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="text-xs font-black body-copy uppercase tracking-widest mb-2 flex items-center gap-2">
-                      <Github className="w-4 h-4 text-stone-400" /> GitHub URL
-                    </label>
-                    {isEditing ? (
-                      <input
-                        type="url"
-                        name="github"
-                        value={formData.github}
-                        onChange={handleInputChange}
-                        placeholder="https://github.com/username"
-                        className="form-input"
-                      />
-                    ) : (
-                      <>
-                        {profile.github ? (
-                          <a
-                            href={profile.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-orange-600 dark:text-orange-400 hover:underline font-semibold break-all"
-                          >
-                            {profile.github}
-                          </a>
-                        ) : (
-                          <p className="body-copy text-sm">Not provided</p>
-                        )}
-                      </>
-                    )}
-                  </div>
+                <div className="bg-stone-50 dark:bg-stone-800/30  px-6 py-5 rounded-r-lg">
+                  <label className="block text-sm font-bold text-stone-900 dark:text-stone-100 mb-4 tracking-wide">
+                    Social Links
+                  </label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-stone-600 dark:text-stone-400 mb-2 uppercase tracking-wider">
+                        GitHub URL
+                      </label>
+                      {isEditing ? (
+                        <input
+                          type="url"
+                          name="github"
+                          value={formData.github}
+                          onChange={handleInputChange}
+                          placeholder="https://github.com/username"
+                          className="form-input"
+                        />
+                      ) : (
+                        <>
+                          {profile.github ? (
+                            <a
+                              href={profile.github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-orange-600 dark:text-orange-400 hover:underline font-medium text-sm break-all"
+                            >
+                              {profile.github}
+                            </a>
+                          ) : (
+                            <p className="text-stone-500 dark:text-stone-400 text-sm">
+                              Not provided
+                            </p>
+                          )}
+                        </>
+                      )}
+                    </div>
 
-                  <div>
-                    <label className="text-xs font-black body-copy uppercase tracking-widest mb-2 flex items-center gap-2">
-                      <Linkedin className="w-4 h-4 text-stone-400" /> LinkedIn
-                      URL
-                    </label>
-                    {isEditing ? (
-                      <input
-                        type="url"
-                        name="linkedin"
-                        value={formData.linkedin}
-                        onChange={handleInputChange}
-                        placeholder="https://linkedin.com/in/username"
-                        className="form-input"
-                      />
-                    ) : (
-                      <>
-                        {profile.linkedin ? (
-                          <a
-                            href={profile.linkedin}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-orange-600 dark:text-orange-400 hover:underline font-semibold break-all"
-                          >
-                            {profile.linkedin}
-                          </a>
-                        ) : (
-                          <p className="body-copy text-sm">Not provided</p>
-                        )}
-                      </>
-                    )}
+                    <div>
+                      <label className="block text-xs font-semibold text-stone-600 dark:text-stone-400 mb-2 uppercase tracking-wider">
+                        LinkedIn URL
+                      </label>
+                      {isEditing ? (
+                        <input
+                          type="url"
+                          name="linkedin"
+                          value={formData.linkedin}
+                          onChange={handleInputChange}
+                          placeholder="https://linkedin.com/in/username"
+                          className="form-input"
+                        />
+                      ) : (
+                        <>
+                          {profile.linkedin ? (
+                            <a
+                              href={profile.linkedin}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-orange-600 dark:text-orange-400 hover:underline font-medium text-sm break-all"
+                            >
+                              {profile.linkedin}
+                            </a>
+                          ) : (
+                            <p className="text-stone-500 dark:text-stone-400 text-sm">
+                              Not provided
+                            </p>
+                          )}
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
 

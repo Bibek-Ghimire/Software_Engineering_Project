@@ -5,6 +5,7 @@ import {
   createUser,
   getAllTeachers,
 } from "../controllers/userController.js";
+import { protect } from "../middleware/authMiddleware.js";
 import User from "../models/User.js";
 
 const router = express.Router();
@@ -16,6 +17,6 @@ router.post("/", createUser);
 router.get("/teachers", getAllTeachers);
 
 // GET specific user by ID (readonly) - must be last to avoid conflicts
-router.get("/:id", getUserById);
+router.get("/:id", protect, getUserById);
 
 export default router;

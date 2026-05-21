@@ -133,7 +133,7 @@ export default function StudyBatchPage() {
               </p>
               <div className="w-full max-w-xs bg-stone-200 dark:bg-stone-800 rounded-full h-3 overflow-hidden">
                 <div
-                  className="bg-gradient-to-r from-orange-500 to-amber-500 h-full transition-all duration-300"
+                  className="bg-orange-500 h-full transition-all duration-300"
                   style={{ width: `${batch.fillPercentage}%` }}
                 ></div>
               </div>
@@ -329,4 +329,3 @@ export default function StudyBatchPage() {
     </div>
   );
 }
-

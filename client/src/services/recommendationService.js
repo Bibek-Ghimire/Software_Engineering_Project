@@ -72,6 +72,22 @@ export const recommendationService = {
     }
   },
 
+  // Get popular courses (fallback when no recommendations available)
+  getPopularCourses: async (limit = 6) => {
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/popular-courses?limit=${limit}`,
+        {
+          headers: getAuthHeaders(),
+        },
+      );
+      return response.data.data || [];
+    } catch (error) {
+      console.error("Error fetching popular courses:", error);
+      return [];
+    }
+  },
+
   // Add course to interested list
   addInterestedCourse: async (courseId) => {
     try {

@@ -47,7 +47,7 @@ const Payments = () => {
       name: "Credit Card",
       image: "/images/payment-methods/creditcard.jpg",
       description: "Pay securely with your credit card",
-      color: "from-blue-500 to-blue-600",
+      color: "#3b82f6",
       textColor: "text-orange-600",
     },
     {
@@ -55,7 +55,7 @@ const Payments = () => {
       name: "Debit Card",
       image: "/images/payment-methods/debitcard.jpg",
       description: "Pay directly from your bank account",
-      color: "from-purple-500 to-purple-600",
+      color: "#a855f7",
       textColor: "text-purple-600",
     },
     {
@@ -63,7 +63,7 @@ const Payments = () => {
       name: "eSewa",
       image: "/images/payment-methods/esewa.jpg",
       description: "Quick payment via eSewa digital wallet",
-      color: "from-green-500 to-green-600",
+      color: "#22c55e",
       textColor: "text-green-600",
     },
     {
@@ -71,7 +71,7 @@ const Payments = () => {
       name: "Khalti",
       image: "/images/payment-methods/khalti.png",
       description: "Instant payment through Khalti wallet",
-      color: "from-purple-600 to-purple-700",
+      color: "#a855f7",
       textColor: "text-purple-700",
     },
   ];
@@ -366,7 +366,9 @@ const Payments = () => {
                         maxLength="5"
                         value={cardDetails.expiryDate}
                         onChange={(e) => {
-                          let val = e.target.value.replace(/\D/g, "").slice(0, 4);
+                          let val = e.target.value
+                            .replace(/\D/g, "")
+                            .slice(0, 4);
                           if (val.length >= 2) {
                             val = val.slice(0, 2) + "/" + val.slice(2);
                           }
@@ -454,11 +456,15 @@ const Payments = () => {
             <>
               <button
                 onClick={() => handleCompletePayment(payment._id)}
-                disabled={processingId === payment._id || !selectedPaymentMethod}
+                disabled={
+                  processingId === payment._id || !selectedPaymentMethod
+                }
                 className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <CreditCard className="w-4 h-4" />
-                {processingId === payment._id ? "Processing..." : "Complete Payment"}
+                {processingId === payment._id
+                  ? "Processing..."
+                  : "Complete Payment"}
               </button>
               <button
                 onClick={() => handleFailPayment(payment._id)}
@@ -477,7 +483,9 @@ const Payments = () => {
               className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-semibold transition-all"
             >
               <CreditCard className="w-4 h-4" />
-              {payment.status === "failed" ? "Retry Payment" : "Proceed to Payment"}
+              {payment.status === "failed"
+                ? "Retry Payment"
+                : "Proceed to Payment"}
               <ArrowRight className="w-4 h-4" />
             </button>
           )}
@@ -500,7 +508,11 @@ const Payments = () => {
           onClick={() => setDarkMode(!darkMode)}
           className="absolute top-8 right-8 icon-action absolute top-8 right-8 z-10"
         >
-          {darkMode ? <Sun className="w-6 h-6" /> : <Moon className="w-6 h-6" />}
+          {darkMode ? (
+            <Sun className="w-6 h-6" />
+          ) : (
+            <Moon className="w-6 h-6" />
+          )}
         </button>
         <div className="p-8">
           {/* Header */}
@@ -512,15 +524,15 @@ const Payments = () => {
             <h1 className="text-4xl font-bold text-stone-900 dark:text-stone-50 mb-2">
               Course Payments
             </h1>
-            <p className="text-stone-500 dark:text-stone-500">
-              Manage your course enrollment payments
-            </p>
+           
           </motion.div>
 
           {loading ? (
             <div className="text-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
-              <p className="text-stone-500 dark:text-stone-500">Loading payments...</p>
+              <p className="text-stone-500 dark:text-stone-500">
+                Loading payments...
+              </p>
             </div>
           ) : (
             <div className="space-y-8">
@@ -528,7 +540,6 @@ const Payments = () => {
               {pendingPayments.length > 0 && (
                 <div>
                   <h2 className="text-2xl font-bold text-stone-900 dark:text-stone-50 mb-4 flex items-center gap-2">
-                    <Clock className="w-6 h-6 text-yellow-500" />
                     Pending Payments
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -537,10 +548,10 @@ const Payments = () => {
                         key={payment._id}
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className={`bg-white dark:bg-stone-900 rounded-xl shadow-lg p-6 border-l-4 hover:shadow-xl transition-all ${
+                        className={`bg-white dark:bg-stone-900 rounded-xl shadow-lg p-6  hover:shadow-xl transition-all ${
                           lastEnrollmentPaymentId === payment._id
-                            ? "border-l-green-500 ring-2 ring-green-400 dark:ring-green-600 ring-offset-2 dark:ring-offset-gray-900"
-                            : "border-l-yellow-500"
+                            // ? "border-l-green-500 ring-2 ring-green-400 dark:ring-green-600 ring-offset-2 dark:ring-offset-gray-900"
+                            // : "border-l-yellow-500"
                         }`}
                       >
                         <div className="flex justify-between items-start mb-4">
@@ -549,7 +560,8 @@ const Payments = () => {
                               {payment.course?.title || "Unknown Course"}
                             </h3>
                             <p className="text-sm text-stone-500 dark:text-stone-400">
-                              Requested on {new Date(payment.createdAt).toLocaleDateString()}
+                              Requested on{" "}
+                              {new Date(payment.createdAt).toLocaleDateString()}
                             </p>
                           </div>
                           <span className="px-3 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded-full text-xs font-semibold">
@@ -577,7 +589,6 @@ const Payments = () => {
               {completedPayments.length > 0 && (
                 <div>
                   <h2 className="text-2xl font-bold text-stone-900 dark:text-stone-50 mb-4 flex items-center gap-2">
-                    <CheckCircle className="w-6 h-6 text-green-500" />
                     Completed Payments
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -586,7 +597,7 @@ const Payments = () => {
                         key={payment._id}
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="surface-card p-6 border-l-4 border-emerald-400"
+                        className="surface-card p-6"
                       >
                         <div className="flex justify-between items-start mb-4">
                           <div>
@@ -594,7 +605,10 @@ const Payments = () => {
                               {payment.course?.title || "Unknown Course"}
                             </h3>
                             <p className="text-sm text-stone-500 dark:text-stone-400">
-                              Paid on {new Date(payment.paymentDate).toLocaleDateString()}
+                              Paid on{" "}
+                              {new Date(
+                                payment.paymentDate,
+                              ).toLocaleDateString()}
                             </p>
                           </div>
                           <span className="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs font-semibold">
@@ -612,7 +626,9 @@ const Payments = () => {
                         </div>
 
                         <button
-                          onClick={() => navigate(`/course/${payment.course._id}`)}
+                          onClick={() =>
+                            navigate(`/course/${payment.course._id}`)
+                          }
                           className="w-full px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-semibold transition-all"
                         >
                           Go to Course
@@ -627,7 +643,6 @@ const Payments = () => {
               {failedPayments.length > 0 && (
                 <div>
                   <h2 className="text-2xl font-bold text-stone-900 dark:text-stone-50 mb-4 flex items-center gap-2">
-                    <AlertCircle className="w-6 h-6 text-red-500" />
                     Failed Payments
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -636,7 +651,7 @@ const Payments = () => {
                         key={payment._id}
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="bg-white dark:bg-stone-900 rounded-xl shadow-lg p-6 border-l-4 border-red-500"
+                        className="bg-white dark:bg-stone-900 rounded-xl shadow-lg p-6 "
                       >
                         <div className="flex justify-between items-start mb-4">
                           <div>
@@ -677,8 +692,8 @@ const Payments = () => {
                 >
                   <CreditCard className="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" />
                   <p className="text-stone-500 dark:text-stone-500 text-lg">
-                    No payments found. When your enrollment is approved, payment details will appear
-                    here.
+                    No payments found. When your enrollment is approved, payment
+                    details will appear here.
                   </p>
                 </motion.div>
               )}

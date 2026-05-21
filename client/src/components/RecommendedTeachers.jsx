@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   MessageSquare,
   Award,
   Star,
   TrendingUp,
+  ArrowRight,
 } from "lucide-react";
 import HumanoidAvatar from "./HumanoidAvatar";
 import recommendationService from "../services/recommendationService";
@@ -31,12 +33,17 @@ const RecommendedTeachers = ({ limit = 6 }) => {
   // Tier badge — stone-based, no rainbow
   const getTierBadge = (batch) => {
     const map = {
-      Diamond:  "bg-stone-900 text-stone-50 border-white dark:bg-stone-100 dark:text-stone-900 dark:border-white shadow-md",
-      Platinum: "bg-stone-100 text-stone-700 border-stone-300 dark:bg-stone-800 dark:text-stone-300 dark:border-stone-600",
-      Gold:     "bg-orange-600 text-white border-orange-500 shadow-sm shadow-orange-600/20",
-      Silver:   "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950/20 dark:text-orange-300 dark:border-orange-900/40",
-      Bronze:   "bg-stone-50 text-stone-600 border-stone-200 dark:bg-stone-800/60 dark:text-stone-400 dark:border-stone-700",
-      Basic:    "bg-stone-50 text-stone-500 border-stone-200 dark:bg-stone-800/40 dark:text-stone-500 dark:border-stone-700",
+      Diamond:
+        "bg-stone-900 text-stone-50 border-white dark:bg-stone-100 dark:text-stone-900 dark:border-white shadow-md",
+      Platinum:
+        "bg-stone-100 text-stone-700 border-stone-300 dark:bg-stone-800 dark:text-stone-300 dark:border-stone-600",
+      Gold: "bg-orange-600 text-white border-orange-500 shadow-sm shadow-orange-600/20",
+      Silver:
+        "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950/20 dark:text-orange-300 dark:border-orange-900/40",
+      Bronze:
+        "bg-stone-50 text-stone-600 border-stone-200 dark:bg-stone-800/60 dark:text-stone-400 dark:border-stone-700",
+      Basic:
+        "bg-stone-50 text-stone-500 border-stone-200 dark:bg-stone-800/40 dark:text-stone-500 dark:border-stone-700",
     };
     return map[batch] || map.Basic;
   };
@@ -45,7 +52,10 @@ const RecommendedTeachers = ({ limit = 6 }) => {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {[...Array(3)].map((_, i) => (
-          <div key={i} className="surface-card h-56 " />
+          <div
+            key={i}
+            className="surface-card h-56 "
+          />
         ))}
       </div>
     );
@@ -54,9 +64,7 @@ const RecommendedTeachers = ({ limit = 6 }) => {
   if (teachers.length === 0) {
     return (
       <div className="text-center py-10">
-        <div className="w-10 h-10 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 flex items-center justify-center mx-auto mb-3">
-          <Award className="w-5 h-5 text-stone-400" />
-        </div>
+ 
         <p className="body-copy text-sm">
           No recommended teachers yet. Update your interests to see expert
           instructors!
@@ -72,8 +80,6 @@ const RecommendedTeachers = ({ limit = 6 }) => {
           key={teacher._id}
           className="surface-card overflow-hidden transition-all duration-200 hover:shadow-md flex flex-col"
         >
-          {/* Top accent bar */}
-          <div className="h-1 bg-orange-400" />
 
           <div className="p-5 flex flex-col flex-1">
             {/* Avatar + tier */}
@@ -84,11 +90,6 @@ const RecommendedTeachers = ({ limit = 6 }) => {
                 size={52}
                 className="border border-stone-200 dark:border-stone-700 shadow-sm"
               />
-              <span
-                className={`flex-shrink-0 px-2.5 py-1 rounded-full text-xs font-semibold border ${getTierBadge(teacher.batch)}`}
-              >
-                {teacher.batch || "Basic"}
-              </span>
             </div>
 
             <h3 className="text-sm font-semibold text-stone-900 dark:text-stone-50 mb-1 line-clamp-2">
@@ -111,7 +112,7 @@ const RecommendedTeachers = ({ limit = 6 }) => {
             )}
 
             <p className="text-xs body-copy line-clamp-2 mb-3 flex-1">
-              {teacher.bio || "Experienced educator"}
+              {teacher.bio || "No bio available."}
             </p>
 
             {/* Stats */}
@@ -149,22 +150,33 @@ const RecommendedTeachers = ({ limit = 6 }) => {
               </div>
             )}
 
-            {teacher.recommendationScore && (
-              <div className="mb-3 flex items-center gap-1.5">
-                <TrendingUp className="w-3.5 h-3.5 text-stone-400" />
-                <span className="text-xs body-copy">
-                  Match:{" "}
-                  <span className="font-semibold text-orange-600 dark:text-orange-400">
-                    {parseFloat(teacher.recommendationScore).toFixed(1)}/100
-                  </span>
-                </span>
+            {teacher.interests && teacher.interests.length > 0 && (
+              <div className="mb-3">
+                <div className="text-xs font-semibold body-copy mb-1.5">
+                  Interests
+                </div>
+                <div className="flex flex-wrap gap-1">
+                  {teacher.interests.slice(0, 4).map((interest, idx) => (
+                    <span
+                      key={idx}
+                      className="px-2 py-0.5 rounded-full text-xs font-medium border border-stone-200 bg-stone-50 text-stone-600 dark:border-stone-700 dark:bg-stone-800/60 dark:text-stone-400"
+                    >
+                      {interest}
+                    </span>
+                  ))}
+                </div>
               </div>
             )}
 
-            <button className="primary-action w-full py-2.5 gap-2 text-sm mt-auto">
-              <MessageSquare className="w-4 h-4" />
-              Contact Teacher
-            </button>
+           
+
+            {/* Explore Button */}
+            <Link
+              to={`/courses?teacher=${teacher._id}`}
+              className="mt-auto pt-3 border border-stone-300 dark:border-stone-700 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-stone-100 dark:bg-stone-800 text-orange-600 dark:text-orange-400 hover:bg-orange-100 dark:hover:bg-orange-950/40 font-semibold text-sm transition-all duration-200"
+            >
+              Explore Courses
+            </Link>
           </div>
         </div>
       ))}

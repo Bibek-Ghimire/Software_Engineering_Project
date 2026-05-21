@@ -195,9 +195,7 @@ const EnrollmentRequests = () => {
             <h1 className="text-4xl font-bold text-stone-900 dark:text-stone-50 mb-2">
               Enrollment Requests
             </h1>
-            <p className="text-stone-500 dark:text-stone-500">
-              Manage student enrollment requests for your courses
-            </p>
+          
           </motion.div>
 
           {/* Filter Tabs */}

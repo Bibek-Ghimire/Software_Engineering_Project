@@ -4,7 +4,7 @@ import { allocateUserToBatch } from "../services/batchAllocationService.js";
 
 // Generate JWT token
 const generateToken = (id, role) => {
-  return jwt.sign({ id, role }, process.env.JWT_SECRET, { expiresIn: "1h" });
+  return jwt.sign({ id, role }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
 // REGISTER USER
