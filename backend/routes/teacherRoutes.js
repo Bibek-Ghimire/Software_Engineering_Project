@@ -37,9 +37,7 @@ router.get("/courses", protect, async (req, res) => {
       .populate("teacher", "name email _id")
       .sort({ createdAt: -1 });
 
-    console.log(
-      `📚 Fetched ${courses.length} courses for teacher ${teacherId}`,
-    );
+    console.log(`Fetched ${courses.length} courses for teacher ${teacherId}`);
 
     res.json({
       success: true,

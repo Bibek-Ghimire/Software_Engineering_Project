@@ -17,14 +17,14 @@ const router = express.Router();
  * Get recommended courses for the logged-in user
  */
 router.get("/courses", protect, async (req, res) => {
-  process.stderr.write("🔴 API Called\n");
+  process.stderr.write("API Called\n");
   try {
     const limit = req.query.limit || 6;
     const recommendations = await getRecommendedCourses(
       req.user.id,
       parseInt(limit),
     );
-    process.stderr.write("🔴 Got " + recommendations.length + " items\n");
+    process.stderr.write("Got " + recommendations.length + " items\n");
 
     res.json({
       success: true,

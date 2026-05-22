@@ -145,7 +145,9 @@ router.post(
 router.get("/enrolled-courses", protect, async (req, res) => {
   try {
     const studentId = req.user._id || req.user.id;
-    console.log(`📚 Fetching enrolled courses for user: ${studentId} (${req.user.name})`);
+    console.log(
+      `Fetching enrolled courses for user: ${studentId} (${req.user.name})`,
+    );
 
     // Get all courses where student is enrolled (in students array)
     // We use a more robust query to match the student ID in the array
@@ -157,7 +159,7 @@ router.get("/enrolled-courses", protect, async (req, res) => {
     });
 
     console.log(
-      `✅ Dashboard: Found ${courses.length} enrolled courses for ${req.user.name}`,
+      `Dashboard: Found ${courses.length} enrolled courses for ${req.user.name}`,
     );
 
     // Transform courses to include needed fields
@@ -177,11 +179,11 @@ router.get("/enrolled-courses", protect, async (req, res) => {
     }));
 
     console.log(
-      `📤 Returning ${enrolledCourses.length} enrolled courses to client`,
+      `Returning ${enrolledCourses.length} enrolled courses to client`,
     );
     res.json(enrolledCourses);
   } catch (error) {
-    console.error("❌ Error fetching enrolled courses:", error);
+    console.error("Error fetching enrolled courses:", error);
     res.status(500).json({
       message: "Error fetching enrolled courses",
       error: error.message,

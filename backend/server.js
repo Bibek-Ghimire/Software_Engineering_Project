@@ -98,11 +98,11 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // MongoDB Connection
 // -------------------------
 console.log(
-  `📦 Connecting to MongoDB: ${process.env.MONGO_URI?.substring(0, 60)}...`,
+  `Connecting to MongoDB: ${process.env.MONGO_URI?.substring(0, 60)}...`,
 );
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB connected"))
+  .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log("MongoDB connection error:", err));
 
 // -------------------------
@@ -132,6 +132,6 @@ global.io = io;
 global.notificationIO = notificationIO;
 
 httpServer.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`💬 Socket.IO enabled for real-time chat and notifications`);
+  console.log(`Server running on port ${PORT}`);
+  console.log(`Socket.IO enabled for real-time chat and notifications`);
 });

@@ -175,7 +175,7 @@ export const getRecommendedGroups = async (userId, limit = 5) => {
 
     // STRICT: No interests = empty results
     if (!user || !user.interests || user.interests.length === 0) {
-      console.log("❌ No user interests - returning empty array");
+      console.log("No user interests - returning empty array");
       return [];
     }
 
@@ -224,7 +224,7 @@ export const getRecommendedTeachers = async (userId, limit = 5) => {
 
     // STRICT: No interests = empty results
     if (!user || !user.interests || user.interests.length === 0) {
-      console.log("❌ No user interests - returning empty array");
+      console.log("No user interests - returning empty array");
       return [];
     }
 

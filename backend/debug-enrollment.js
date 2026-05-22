@@ -9,13 +9,13 @@ dotenv.config();
 const checkEnrollment = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
-    console.log("✅ Connected to MongoDB");
+    console.log("Connected to MongoDB");
 
     // Get all courses with student count
     const courses = await Course.find().select(
       "title students enrollmentCount",
     );
-    console.log(`\n📚 Total Courses: ${courses.length}`);
+    console.log(`\nTotal Courses: ${courses.length}`);
     courses.forEach((course) => {
       console.log(
         `  - ${course.title}: ${course.students.length} students enrolled`,
@@ -24,7 +24,7 @@ const checkEnrollment = async () => {
 
     // Get all payments
     const payments = await Payment.find().select("status course student");
-    console.log(`\n💳 Total Payments: ${payments.length}`);
+    console.log(`\nTotal Payments: ${payments.length}`);
     const completed = payments.filter((p) => p.status === "completed");
     const pending = payments.filter((p) => p.status === "pending");
     const failed = payments.filter((p) => p.status === "failed");
@@ -36,7 +36,7 @@ const checkEnrollment = async () => {
     const students = await User.find({ role: "student" }).limit(1);
     if (students.length > 0) {
       const student = students[0];
-      console.log(`\n👤 Sample Student: ${student.name} (${student._id})`);
+      console.log(`\nSample Student: ${student.name} (${student._id})`);
 
       // Check courses where this student is enrolled
       const enrolledCourses = await Course.find({ students: student._id });
@@ -54,9 +54,9 @@ const checkEnrollment = async () => {
     }
 
     await mongoose.disconnect();
-    console.log("\n✅ Disconnected from MongoDB");
+    console.log("\nDisconnected from MongoDB");
   } catch (error) {
-    console.error("❌ Error:", error);
+    console.error("Error:", error);
     process.exit(1);
   }
 };

@@ -58,7 +58,7 @@ router.get("/:id", protect, async (req, res) => {
     });
 
     console.log(
-      `🔍 Course Check - User: ${req.user.name} (${userId}), Course: ${course.title}, Enrolled: ${isCurrentUserEnrolled}, Pending Request: ${!!pendingRequest}, Payment Status: ${payment?.status || null}`,
+      `Course Check - User: ${req.user.name} (${userId}), Course: ${course.title}, Enrolled: ${isCurrentUserEnrolled}, Pending Request: ${!!pendingRequest}, Payment Status: ${payment?.status || null}`,
     );
 
     // Return course with enrollment and request status for current user
@@ -153,22 +153,22 @@ router.delete("/:id", protect, async (req, res) => {
 // @access  Private (student)
 router.post("/:id/enroll", protect, async (req, res) => {
   try {
-    // 🔐 STRICT VALIDATION: Verify authenticated user ID
+    // STRICT VALIDATION: Verify authenticated user ID
     const authenticatedUserId = req.user.id || req.user._id;
     const authenticatedUserName = req.user.name;
 
     console.log(
-      `🔐 Enrollment Request - Authenticated User: ${authenticatedUserName} (${authenticatedUserId})`,
+      `Enrollment Request - Authenticated User: ${authenticatedUserName} (${authenticatedUserId})`,
     );
 
     // Verify the authenticated user is a student
     console.log(
-      `🔍 Role Check - User: ${authenticatedUserName}, Role: ${req.user.role}, Role Type: ${typeof req.user.role}`,
+      `Role Check - User: ${authenticatedUserName}, Role: ${req.user.role}, Role Type: ${typeof req.user.role}`,
     );
 
     if (!req.user.role || req.user.role.toLowerCase() !== "student") {
       console.warn(
-        `⚠️  Non-student attempted enrollment: ${authenticatedUserName} (Role: ${req.user.role || "undefined"})`,
+        `Non-student attempted enrollment: ${authenticatedUserName} (Role: ${req.user.role || "undefined"})`,
       );
       return res.status(403).json({
         message: `Only students can enroll in courses. Your role is: ${req.user.role || "undefined"}`,
@@ -176,25 +176,25 @@ router.post("/:id/enroll", protect, async (req, res) => {
     }
 
     const courseId = req.params.id;
-    console.log(`📚 Attempting enrollment request for course: ${courseId}`);
+    console.log(`Attempting enrollment request for course: ${courseId}`);
 
     const course = await Course.findById(courseId).populate(
       "teacher",
       "name email",
     );
     if (!course) {
-      console.error(`❌ Course not found: ${courseId}`);
+      console.error(`Course not found: ${courseId}`);
       return res.status(404).json({ message: "Course not found" });
     }
 
     if (!course.teacher) {
-      console.error(`❌ Course has no teacher assigned: ${courseId}`);
+      console.error(`Course has no teacher assigned: ${courseId}`);
       return res
         .status(400)
         .json({ message: "Course has no teacher assigned" });
     }
 
-    // 🔐 STRICT CHECK: Check if already enrolled
+    // STRICT CHECK: Check if already enrolled
     const studentIdString = authenticatedUserId.toString();
     const isAlreadyEnrolled = course.students.some(
       (studentId) => studentId.toString() === studentIdString,
@@ -202,7 +202,7 @@ router.post("/:id/enroll", protect, async (req, res) => {
 
     if (isAlreadyEnrolled) {
       console.warn(
-        `⚠️  Student ${authenticatedUserName} already enrolled in ${course.title}`,
+        `Student ${authenticatedUserName} already enrolled in ${course.title}`,
       );
       return res
         .status(400)
@@ -218,7 +218,7 @@ router.post("/:id/enroll", protect, async (req, res) => {
 
     if (existingRequest) {
       console.warn(
-        `⚠️  Student ${authenticatedUserName} already has a pending request for ${course.title}`,
+        `Student ${authenticatedUserName} already has a pending request for ${course.title}`,
       );
       return res.status(400).json({
         message:
@@ -236,7 +236,7 @@ router.post("/:id/enroll", protect, async (req, res) => {
     await enrollmentRequest.save();
 
     console.log(
-      `📝 Enrollment request created - Student: ${authenticatedUserName}, Course: ${course.title}`,
+      `Enrollment request created - Student: ${authenticatedUserName}, Course: ${course.title}`,
     );
 
     // Create notification for teacher
@@ -251,7 +251,7 @@ router.post("/:id/enroll", protect, async (req, res) => {
       actionData: { enrollmentRequestId: enrollmentRequest._id },
     });
     await notification.save();
-    console.log(`📬 Notification created for teacher ${course.teacher.name}`);
+    console.log(`Notification created for teacher ${course.teacher.name}`);
 
     // Send email notification to teacher
     await sendEnrollmentNotificationEmail(
@@ -260,7 +260,7 @@ router.post("/:id/enroll", protect, async (req, res) => {
       authenticatedUserName,
       course.title,
     );
-    console.log(`✉️  Email sent to ${course.teacher.email}`);
+    console.log(`Email sent to ${course.teacher.email}`);
 
     res.status(201).json({
       message: "Enrollment request sent to teacher",

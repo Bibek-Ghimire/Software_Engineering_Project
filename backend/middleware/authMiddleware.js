@@ -14,22 +14,22 @@ const protect = async (req, res, next) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
       console.log(
-        `🔐 Auth: Decoded ID: ${decoded.id}, Decoded Role: ${decoded.role}`,
+        `Auth: Decoded ID: ${decoded.id}, Decoded Role: ${decoded.role}`,
       );
       const user = await User.findById(decoded.id).select("-password");
 
       if (!user) {
-        console.error(`❌ Auth: User NOT found with ID: ${decoded.id}`);
+        console.error(`Auth: User NOT found with ID: ${decoded.id}`);
         return res
           .status(401)
           .json({ message: "Auth middleware: User not found" });
       }
 
-      console.log(`✅ Auth: User found: ${user.name}, Role: ${user.role}`);
+      console.log(`Auth: User found: ${user.name}, Role: ${user.role}`);
 
       // Verify role exists and is valid
       if (!user.role) {
-        console.error(`❌ Auth: User ${user.name} has no role assigned`);
+        console.error(`Auth: User ${user.name} has no role assigned`);
         return res
           .status(401)
           .json({ message: "Auth middleware: User role not defined" });
@@ -38,11 +38,11 @@ const protect = async (req, res, next) => {
       req.user = user;
       next();
     } catch (error) {
-      console.error("❌ Auth error:", error.message);
+      console.error("Auth error:", error.message);
       return res.status(401).json({ message: "Auth middleware: Token failed" });
     }
   } else {
-    console.log("❌ No Bearer token in headers");
+    console.log("No Bearer token in headers");
     return res.status(401).json({ message: "Auth middleware: No token" });
   }
 };
