@@ -1,7 +1,6 @@
 import express from "express";
 import Payment from "../models/Payment.js";
 import Course from "../models/Course.js";
-import EnrollmentRequest from "../models/EnrollmentRequest.js";
 import Notification from "../models/Notification.js";
 import { protect } from "../middleware/authMiddleware.js";
 
@@ -14,7 +13,7 @@ router.get("/", protect, async (req, res) => {
   try {
     const studentId = req.user.id || req.user._id;
 
-    console.log(`🔍 Getting payments for student: ${req.user.name}`);
+    console.log(`Getting payments for student: ${req.user.name}`);
 
     const payments = await Payment.find({
       student: studentId,
@@ -78,7 +77,7 @@ router.put("/:id/complete", protect, async (req, res) => {
     const { paymentMethod, transactionId } = req.body;
     const studentId = req.user.id || req.user._id;
 
-    console.log(`💳 Processing payment: ${id} by student: ${req.user.name}`);
+    console.log(`Processing payment: ${id} by student: ${req.user.name}`);
 
     // Get the payment
     const payment = await Payment.findById(id)
@@ -113,7 +112,7 @@ router.put("/:id/complete", protect, async (req, res) => {
     await payment.save();
 
     console.log(
-      `✅ Payment processed for student ${payment.student.name}, Amount: ${payment.amount}`,
+      `Payment processed for student ${payment.student.name}, Amount: ${payment.amount}`,
     );
 
     // Now enroll the student in the course
@@ -130,7 +129,7 @@ router.put("/:id/complete", protect, async (req, res) => {
         await course.save();
 
         console.log(
-          `✅ Student ${payment.student.name} enrolled in course ${course.title} after payment`,
+          `Student ${payment.student.name} enrolled in course ${course.title} after payment`,
         );
       }
     }
@@ -147,7 +146,7 @@ router.put("/:id/complete", protect, async (req, res) => {
     await studentNotification.save();
 
     console.log(
-      `📬 Enrollment completion notification sent to student ${payment.student.name}`,
+      `Enrollment completion notification sent to student ${payment.student.name}`,
     );
 
     res.status(200).json({
@@ -170,7 +169,7 @@ router.put("/:id/fail", protect, async (req, res) => {
     const studentId = req.user.id || req.user._id;
 
     console.log(
-      `❌ Marking payment as failed: ${id} by student: ${req.user.name}`,
+      `Marking payment as failed: ${id} by student: ${req.user.name}`,
     );
 
     // Get the payment
@@ -201,7 +200,7 @@ router.put("/:id/fail", protect, async (req, res) => {
     await payment.save();
 
     console.log(
-      `❌ Payment marked as failed for student ${payment.student.name}`,
+      `Payment marked as failed for student ${payment.student.name}`,
     );
 
     // Send notification to student
@@ -254,7 +253,10 @@ router.get("/teacher/course/:courseId", protect, async (req, res) => {
       course: courseId,
       status: "completed",
     })
-      .populate("student", "name email college _id")
+      .populate({
+        path: "student",
+        select: "name email college _id completedCourses",
+      })
       .sort({ paymentDate: -1 });
 
     const pendingPayments = await Payment.find({
@@ -282,6 +284,7 @@ router.get("/teacher/course/:courseId", protect, async (req, res) => {
           college: p.student.college,
           status: "enrolled",
           paymentDate: p.paymentDate,
+          completedCourses: p.student.completedCourses || [],
         })),
       pending: pendingPayments
         .filter((p) => p.student)

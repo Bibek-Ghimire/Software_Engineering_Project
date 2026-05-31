@@ -63,7 +63,7 @@ const StudyGroups = () => {
             ></textarea>
             <button
               onClick={handleCreateGroup}
-              className="w-full py-3 bg-gradient-to-r from-green-400 to-lime-500 rounded-lg text-white font-bold hover:from-green-500 hover:to-lime-600 transition"
+              className="w-full py-3 bg-green-500 rounded-lg text-white font-bold hover:bg-green-600 transition"
             >
               Create Group
             </button>
@@ -112,5 +112,3 @@ const StudyGroups = () => {
 };
 
 export default StudyGroups;
-
-

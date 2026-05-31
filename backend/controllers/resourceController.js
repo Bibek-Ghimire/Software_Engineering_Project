@@ -7,7 +7,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// ✅ GET all resources
+// GET all resources
 export const getAllResources = async (req, res) => {
   try {
     const resources = await Resource.find().populate(
@@ -27,7 +27,7 @@ export const getAllResources = async (req, res) => {
   }
 };
 
-// ✅ CREATE resource
+// CREATE resource
 export const createResource = async (req, res) => {
   try {
     if (!req.user) {
@@ -72,7 +72,7 @@ export const createResource = async (req, res) => {
   }
 };
 
-// ✅ UPDATE resource
+// UPDATE resource
 export const updateResource = async (req, res) => {
   try {
     if (!req.user) {
@@ -133,7 +133,7 @@ export const updateResource = async (req, res) => {
   }
 };
 
-// ✅ DELETE resource
+// DELETE resource
 export const deleteResource = async (req, res) => {
   try {
     if (!req.user) {

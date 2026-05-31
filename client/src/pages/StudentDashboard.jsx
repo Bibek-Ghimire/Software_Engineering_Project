@@ -12,7 +12,6 @@ import {
   Users,
   Award,
   TrendingUp,
-  Sparkles,
   Target,
   Clock,
   Star,
@@ -31,17 +30,16 @@ import {
 } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import student from "../assets/images/student.jpg";
-import recommendationService from "../services/recommendationService";
-import RecommendedTeachers from "../components/RecommendedTeachers";
-import RecommendedResources from "../components/RecommendedResources";
 import { useNotification } from "../hooks/useNotification";
 import HumanoidAvatar from "../components/HumanoidAvatar";
 import Sidebar from "../components/Sidebar";
+import RecommendedCourses from "../components/RecommendedCourses";
+import RecommendedResources from "../components/RecommendedResources";
+import RecommendedTeachers from "../components/RecommendedTeachers";
 
 const user = JSON.parse(sessionStorage.getItem("user"));
 
-const EnhancedStatCard = ({ title, value, iconColor, icon, subtitle }) => (
+const EnhancedStatCard = ({ title, value, iconColor, subtitle }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -61,11 +59,10 @@ const EnhancedStatCard = ({ title, value, iconColor, icon, subtitle }) => (
         </p>
       </div>
       <div
-        className={`p-3 rounded-xl bg-stone-100 dark:bg-stone-800 transition-colors group-hover:bg-orange-50 dark:group-hover:bg-orange-950/20`}
       >
-        {React.cloneElement(icon, {
+        {/* {React.cloneElement(icon, {
           className: "w-5 h-5 text-orange-600 dark:text-orange-400",
-        })}
+        })} */}
       </div>
     </div>
   </motion.div>
@@ -73,7 +70,6 @@ const EnhancedStatCard = ({ title, value, iconColor, icon, subtitle }) => (
 
 const StudentDashboard = () => {
   const navigate = useNavigate();
-  const [courses, setCourses] = useState([]);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [badgesCount, setBadgesCount] = useState(0);
   const [darkMode, setDarkMode] = useState(
@@ -92,21 +88,11 @@ const StudentDashboard = () => {
     completedCourses: [],
   });
   const [savedLoading, setSavedLoading] = useState(true);
+  const [studentProfile, setStudentProfile] = useState(null);
+  const [isShowingPopularCourses, setIsShowingPopularCourses] = useState(false);
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
-
-    const fetchCourses = async () => {
-      try {
-        // Fetch recommended courses instead of all courses
-        const recommendedCourses =
-          await recommendationService.getRecommendedCourses(12);
-        setCourses(recommendedCourses);
-      } catch (err) {
-        console.error("Error fetching recommended courses:", err);
-        setCourses([]);
-      }
-    };
 
     const fetchBadges = async () => {
       try {
@@ -125,16 +111,14 @@ const StudentDashboard = () => {
 
     const fetchTeachers = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/teachers", {
+        const res = await axios.get("http://localhost:5000/api/leaderboard", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        // Handle both array and nested data formats
-        const teachersData = Array.isArray(res.data)
-          ? res.data
-          : res.data.data || [];
+        // Handle both array and nested data formats from leaderboard API
+        const teachersData = res.data.teachers || res.data || [];
         setTeachers(teachersData);
       } catch (err) {
-        console.error(err);
+        console.error("Error fetching leaderboard data:", err);
       }
     };
 
@@ -231,13 +215,24 @@ const StudentDashboard = () => {
       }
     };
 
-    fetchCourses();
+    const fetchProfile = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/profile", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setStudentProfile(res.data);
+      } catch (err) {
+        console.error("Error fetching profile:", err);
+      }
+    };
+
     fetchBadges();
     fetchTeachers();
     fetchBatchData();
     fetchNotifications();
     fetchSavedItems();
     fetchEnrolledCourses();
+    fetchProfile();
 
     // Refresh notifications every 30 seconds
     const notificationInterval = setInterval(fetchNotifications, 30000);
@@ -499,9 +494,7 @@ const StudentDashboard = () => {
             <h1 className="brand-title text-4xl font-bold text-stone-900 dark:text-stone-50 leading-tight">
               Learning Hub
             </h1>
-            <p className="text-stone-500 dark:text-stone-400 mt-1.5 text-base">
-              Your journey to knowledge starts here
-            </p>
+          
           </div>
 
           <div className="flex items-center gap-2">
@@ -546,7 +539,7 @@ const StudentDashboard = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
           >
-            <div className="sticky top-0 bg-white dark:bg-stone-900 p-4 border-b border-stone-200 dark:border-stone-800 flex justify-between items-center">
+            <div className="sticky top-0 bg-stone-50 dark:bg-stone-900 p-4 border-b border-stone-200 dark:border-stone-800 flex justify-between items-center">
               <h3 className="font-bold text-base text-stone-900 dark:text-stone-50">
                 Notifications
               </h3>
@@ -568,10 +561,11 @@ const StudentDashboard = () => {
                 {notifications.slice(0, 10).map((notification) => (
                   <motion.div
                     key={notification._id}
-                    className={`p-4 hover:bg-stone-50 dark:hover:bg-stone-800/60 transition-colors cursor-pointer ${!notification.isRead
-                      ? "bg-orange-50 dark:bg-orange-950/10 border-l-4 border-l-orange-500"
-                      : ""
-                      }`}
+                    className={`p-4 hover:bg-stone-50 dark:hover:bg-stone-800/60 transition-colors cursor-pointer ${
+                      !notification.isRead
+                        ? "bg-orange-50 dark:bg-orange-950/10 border-l-4 border-l-orange-500"
+                        : ""
+                    }`}
                     onClick={() =>
                       !notification.isRead &&
                       markNotificationAsRead(notification._id)
@@ -610,34 +604,30 @@ const StudentDashboard = () => {
 
         {/* Enhanced Hero Section */}
         <motion.div
-          className="relative w-full h-96 rounded-3xl overflow-hidden shadow-2xl group"
+          className="relative w-full overflow-hidden rounded-[2.5rem] shadow-2xl border border-stone-200/50 dark:border-stone-800/50"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <img
-            src={student}
-            alt="Learning background"
-            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-          />
-          <div className="absolute inset-0 bg-stone-900/80" />
+          {/* Enhanced Background with Glassmorphism */}
+          <div className="absolute inset-0 bg-stone-50 dark:bg-stone-900"></div>
 
-          <div className="relative z-10 h-full flex items-center justify-between px-12 py-8">
-            <div className="text-white space-y-6 max-w-2xl">
+          <div className="relative z-10 h-full flex flex-col md:flex-row items-center justify-between px-10 py-12 md:py-16">
+            <div className="flex-1 space-y-8">
               <motion.div
                 initial={{ opacity: 0, x: -40 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2, duration: 0.7 }}
               >
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="text-orange-400 font-bold text-xs uppercase tracking-widest">
+                  <span className="text-orange-700 font-bold text-lg uppercase tracking-widest">
                     Welcome
                   </span>
                 </div>
                 <h1 className="text-6xl font-black leading-tight mb-2 brand-title">
-                  Hey, <span className="text-orange-300">{user.name}</span>!
+                  Hey, <span className="text-orange-700">{user.name}</span>!
                 </h1>
-                <p className="text-lg text-stone-100 font-medium">
+                <p className="text-lg text-stone-600 font-medium dark:text-stone-200">
                   Your learning journey awaits. Explore new horizons today!
                 </p>
               </motion.div>
@@ -648,7 +638,7 @@ const StudentDashboard = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.6 }}
               >
-                <div className="flex items-center gap-2 bg-white/20 backdrop-blur-xl rounded-full px-5 py-3 border border-white/30 hover:bg-white/30 transition-all">
+                <div className="flex items-center gap-2 bg-stone-400/5 backdrop-blur-xl rounded-full px-5 py-3 border border-stone-500/35 hover:bg-stone-50/30 transition-all dark:bg-stone-50/20 backdrop-blur-xl border-stone-200/30 hover:bg-stone-50/30">
                   <Calendar className="w-4 h-4" />
                   <span className="text-sm font-semibold">
                     {new Date().toLocaleDateString("en-US", {
@@ -658,7 +648,7 @@ const StudentDashboard = () => {
                     })}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 bg-white/20 backdrop-blur-xl rounded-full px-5 py-3 border border-white/30 hover:bg-white/30 transition-all">
+                <div className="flex items-center gap-2 bg-stone-400/5 backdrop-blur-xl rounded-full px-5 py-3 border border-stone-500/35 hover:bg-stone-50/30 transition-all dark:bg-stone-50/20 backdrop-blur-xl border-stone-200/30 hover:bg-stone-50/30">
                   <span className="text-sm font-semibold">
                     {getProgressPercentage()}% Done
                   </span>
@@ -671,21 +661,7 @@ const StudentDashboard = () => {
               initial={{ opacity: 0, scale: 0.5, rotate: -15 }}
               animate={{ opacity: 1, scale: 1, rotate: 0 }}
               transition={{ delay: 0.4, duration: 1 }}
-            >
-              <div className="relative w-56 h-56 flex items-center justify-center">
-                <motion.div
-                  className="absolute w-40 h-40 rounded-full bg-white/10 backdrop-blur-sm border-2 border-white/30 flex items-center justify-center"
-                  animate={{ rotate: 360 }}
-                  transition={{
-                    duration: 20,
-                    repeat: Infinity,
-                    ease: "linear",
-                  }}
-                >
-                  <GraduationCap className="w-20 h-20 text-yellow-200" />
-                </motion.div>
-              </div>
-            </motion.div>
+            ></motion.div>
           </div>
         </motion.div>
 
@@ -695,7 +671,7 @@ const StudentDashboard = () => {
             title="Enrolled Courses"
             value={enrolledCourses.length}
             iconColor="bg-stone-100 dark:bg-stone-800/60 text-orange-600 dark:text-orange-400"
-            icon={<BookOpen className="w-5 h-5" />}
+            // icon={<BookOpen className="w-5 h-5" />}
             subtitle="Active learning"
           />
           <EnhancedStatCard
@@ -707,7 +683,10 @@ const StudentDashboard = () => {
           />
           <EnhancedStatCard
             title="Saved Items"
-            value={savedItems.savedCourses?.length + savedItems.savedResources?.length || 0}
+            value={
+              savedItems.savedCourses?.length +
+                savedItems.savedResources?.length || 0
+            }
             iconColor="bg-orange-50 dark:bg-orange-950/40 text-orange-600 dark:text-orange-400"
             icon={<Bookmark className="w-5 h-5" />}
             subtitle="Saves"
@@ -723,23 +702,16 @@ const StudentDashboard = () => {
         >
           <div className="surface-card-strong p-8 relative overflow-hidden border-none shadow-xl">
             {/* Background Decorative Element */}
-            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-orange-500/5 dark:bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
 
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 relative z-10">
               <div className="flex items-center gap-4">
                 <div className="relative">
-                  <div className="absolute inset-0 bg-orange-500/20 rounded-2xl blur-lg animate-pulse" />
-                  <div className="relative p-3.5 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/20">
-                    <Bookmark className="w-6 h-6 text-white" />
-                  </div>
+                  <div className="absolute inset-0 bg-orange-500/20 rounded-2xl blur-lg" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-black text-stone-900 dark:text-stone-50 tracking-tight">
+                  <h3 className="text-2xl font-black text-stone-900 dark:text-stone-50">
                     Saved Library
                   </h3>
-                  <p className="text-sm body-copy mt-1 font-medium">
-                    Your curated collection of learning materials
-                  </p>
                 </div>
               </div>
 
@@ -753,38 +725,27 @@ const StudentDashboard = () => {
             </div>
 
             {savedItems.savedCourses.length === 0 &&
-              savedItems.savedResources.length === 0 ? (
-              <div className="py-12 px-6 text-center surface-card border-dashed border-2 border-stone-200 dark:border-stone-800 rounded-3xl">
+            savedItems.savedResources.length === 0 ? (
+              <div className="py-12 px-6 text-center surface-card border-s-orange-50 border-2 border-stone-200 dark:border-stone-800 rounded-3xl">
                 <div className="w-16 h-16 rounded-full bg-stone-50 dark:bg-stone-900 flex items-center justify-center mx-auto mb-4 border border-stone-100 dark:border-stone-800">
                   <Package className="w-8 h-8 text-stone-300 dark:text-stone-600" />
                 </div>
                 <h4 className="text-lg font-bold text-stone-800 dark:text-stone-200 mb-1">
-                  Your library is waiting
+                  No Saved Items Yet
                 </h4>
-                <p className="body-copy text-sm max-w-xs mx-auto">
-                  Save courses and resources as you explore to see them here for
-                  quick access.
-                </p>
-                <button
-                  onClick={() => navigate("/courses")}
-                  className="mt-6 text-sm font-bold text-orange-600 dark:text-orange-400 hover:underline flex items-center justify-center gap-1.5 mx-auto"
-                >
-                  Start Exploring <ArrowUpRight className="w-4 h-4" />
-                </button>
               </div>
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative z-10">
                 {/* Saved Courses Column */}
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="w-1 h-4 bg-orange-500 rounded-full" />
-                    <h4 className="text-xs font-black uppercase tracking-widest text-stone-400 dark:text-stone-500">
+                <div className="space-y-4 ">
+                  <div className="flex items-center gap-2 mb-2 ">
+                    <h4 className="text-xs font-black uppercase tracking-widest text-stone-500 dark:text-white">
                       Saved Courses
                     </h4>
                   </div>
 
                   {savedItems.savedCourses.length === 0 ? (
-                    <div className="p-4 rounded-2xl border border-stone-100 dark:border-stone-800 text-xs body-copy text-center italic">
+                    <div className="p-4 rounded-2xl border border-stone-100 dark:border-stone-800 text-xs body-copy text-center italic ">
                       No courses saved yet
                     </div>
                   ) : (
@@ -799,11 +760,9 @@ const StudentDashboard = () => {
                               : "rgba(250, 250, 249, 1)",
                           }}
                           onClick={() => navigate(`/course/${course._id}`)}
-                          className="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-stone-900/40 border border-stone-100 dark:border-stone-800 cursor-pointer group transition-all duration-300 shadow-sm hover:shadow-md"
+                          className="flex items-center gap-4 p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/40 border border-stone-100 dark:border-stone-800 cursor-pointer group transition-all duration-300 shadow-sm hover:shadow-md"
                         >
-                          <div className="w-12 h-12 flex-shrink-0 rounded-xl bg-orange-50 dark:bg-orange-950/20 flex items-center justify-center border border-orange-100 dark:border-orange-900/30">
-                            <BookOpen className="w-6 h-6 text-orange-600 dark:text-orange-400" />
-                          </div>
+                          
                           <div className="flex-1 min-w-0">
                             <h5 className="font-bold text-stone-900 dark:text-stone-50 text-sm truncate group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
                               {course.title}
@@ -817,9 +776,6 @@ const StudentDashboard = () => {
                               </span>
                             </div>
                           </div>
-                          <div className="p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity bg-stone-100 dark:bg-stone-800">
-                            <ArrowUpRight className="w-4 h-4 text-orange-500" />
-                          </div>
                         </motion.div>
                       ))}
                     </div>
@@ -829,8 +785,7 @@ const StudentDashboard = () => {
                 {/* Saved Resources Column */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="w-1 h-4 bg-blue-500 rounded-full" />
-                    <h4 className="text-xs font-black uppercase tracking-widest text-stone-400 dark:text-stone-500">
+                    <h4 className="text-xs font-black uppercase tracking-widest text-stone-500 dark:text-white">
                       Saved Resources
                     </h4>
                   </div>
@@ -851,11 +806,9 @@ const StudentDashboard = () => {
                               : "rgba(250, 250, 249, 1)",
                           }}
                           onClick={() => navigate("/resources")}
-                          className="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-stone-900/40 border border-stone-100 dark:border-stone-800 cursor-pointer group transition-all duration-300 shadow-sm hover:shadow-md"
+                          className="flex items-center gap-4 p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/40 border border-stone-100 dark:border-stone-800 cursor-pointer group transition-all duration-300 shadow-sm hover:shadow-md"
                         >
-                          <div className="w-12 h-12 flex-shrink-0 rounded-xl bg-blue-50 dark:bg-blue-950/20 flex items-center justify-center border border-blue-100 dark:border-blue-900/30">
-                            <FileText className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                          </div>
+                         
                           <div className="flex-1 min-w-0">
                             <h5 className="font-bold text-stone-900 dark:text-stone-50 text-sm truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                               {resource.title}
@@ -869,9 +822,7 @@ const StudentDashboard = () => {
                               </span>
                             </div>
                           </div>
-                          <div className="p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity bg-stone-100 dark:bg-stone-800">
-                            <ArrowUpRight className="w-4 h-4 text-blue-500" />
-                          </div>
+                          <div className="p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity bg-stone-100 dark:bg-stone-800"></div>
                         </motion.div>
                       ))}
                     </div>
@@ -946,12 +897,8 @@ const StudentDashboard = () => {
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h3 className="text-base font-semibold text-stone-900 dark:text-stone-50 flex items-center gap-2">
-                    <BookOpen className="w-5 h-5 text-emerald-500" />
                     My Enrolled Courses
                   </h3>
-                  <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
-                    Continue learning and track your progress
-                  </p>
                 </div>
               </div>
 
@@ -971,22 +918,18 @@ const StudentDashboard = () => {
                           className="flex items-center gap-4 flex-1 min-w-0 cursor-pointer"
                           onClick={() => navigate(`/course/${course._id}`)}
                         >
-                          <div
-                            className={`p-2.5 rounded-xl border ${isCompleted ? "bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800" : "bg-white dark:bg-stone-900 border-stone-100 dark:border-stone-800"}`}
-                          >
-                            {isCompleted ? (
-                              <CheckCircle className="w-5 h-5 text-emerald-500" />
-                            ) : (
-                              <BookOpen className="w-5 h-5 text-orange-500" />
-                            )}
-                          </div>
                           <div className="flex-1 min-w-0">
                             <h5 className="font-bold text-stone-900 dark:text-stone-50 text-sm truncate group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
                               {course.title}
                             </h5>
-                            <p className="text-xs body-copy truncate mt-0.5">
-                              {course.teacher?.name || "Instructor"} •{" "}
-                              {course.level}
+                            <p className="text-xs body-copy truncate mt-0.5 flex items-center">
+                              <span>
+                                {course.teacher?.name || "Instructor"}
+                              </span>
+
+                              <span className="mx-4">-</span>
+
+                              <span>{course.level}</span>
                             </p>
                           </div>
                         </div>
@@ -995,14 +938,13 @@ const StudentDashboard = () => {
                             e.stopPropagation();
                             handleToggleCompleteCourse(course._id);
                           }}
-                          className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors flex items-center gap-1.5 ${isCompleted
-                            ? "bg-emerald-50 text-emerald-600 border-emerald-200 hover:bg-emerald-100 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-800 dark:hover:bg-emerald-900/50"
-                            : "bg-white text-stone-600 border-stone-200 hover:bg-stone-50 dark:bg-stone-900 dark:text-stone-400 dark:border-stone-700 dark:hover:bg-stone-800"
-                            }`}
+                          className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors flex items-center gap-1.5 ${
+                            isCompleted
+                              ? "bg-emerald-50 text-orange-600 border-orange-200 hover:bg-emerald-100 dark:bg-emerald-950/30 dark:text-orange-400 dark:border-orange-800 dark:hover:bg-orange-900/50"
+                              : "bg-stone-50 text-stone-600 border-stone-200 hover:bg-stone-100 dark:bg-stone-900 dark:text-stone-400 dark:border-stone-700 dark:hover:bg-stone-800"
+                          }`}
                         >
-                          <CheckCircle
-                            className={`w-3.5 h-3.5 ${isCompleted ? "opacity-100" : "opacity-50"}`}
-                          />
+                          
                           {isCompleted ? "Completed" : "Mark Complete"}
                         </button>
                       </motion.div>
@@ -1056,17 +998,11 @@ const StudentDashboard = () => {
             <div className="surface-card-strong p-8">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
-                    <Users className="w-5 h-5 text-stone-500 dark:text-stone-400" />
-                  </div>
                   <div>
                     <h3 className="text-xl font-bold text-stone-900 dark:text-stone-50">
                       Your Study Batch
                     </h3>
-                    <p className="text-xs body-copy mt-1">
-                      Learn together with students who share your interests
-                    </p>
-                  </div>
+                                  </div>
                 </div>
               </div>
 
@@ -1126,16 +1062,11 @@ const StudentDashboard = () => {
               <div className="surface-card-strong p-8">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
-                    <div className="p-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
-                      <Users className="w-5 h-5 text-stone-500 dark:text-stone-400" />
-                    </div>
                     <div>
                       <h3 className="text-xl font-bold text-stone-900 dark:text-stone-50">
                         Batch Members
                       </h3>
-                      <p className="text-xs body-copy mt-1">
-                        Connect with your learning cohort
-                      </p>
+                    
                     </div>
                   </div>
                 </div>
@@ -1185,15 +1116,6 @@ const StudentDashboard = () => {
                           </div>
                         </div>
                       )}
-
-                      {/* Connect Button */}
-                      <motion.button
-                        className="w-full primary-action px-4 py-2 rounded-xl font-semibold text-sm"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        Connect
-                      </motion.button>
                     </motion.div>
                   ))}
                 </div>
@@ -1202,6 +1124,7 @@ const StudentDashboard = () => {
           </motion.div>
         )}
 
+        {/* Enhanced Teachers Leaderboard */}
         <motion.div
           className="surface-card-strong p-8"
           initial={{ opacity: 0, y: 30 }}
@@ -1211,7 +1134,7 @@ const StudentDashboard = () => {
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
               <h3 className="text-xl font-bold text-stone-900 dark:text-stone-50">
-                Teachers Leaderboard
+                Top Educators
               </h3>
             </div>
             <motion.button
@@ -1220,7 +1143,6 @@ const StudentDashboard = () => {
               whileHover={{ scale: 1.02 }}
             >
               View Full Rankings
-              <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </motion.button>
           </div>
 
@@ -1238,50 +1160,61 @@ const StudentDashboard = () => {
               {teachers.slice(0, 3).map((teacher, idx) => (
                 <motion.div
                   key={teacher._id || idx}
-                  className="group relative overflow-hidden"
+                  className="group relative"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.1, duration: 0.4 }}
-                  whileHover={{ y: -3 }}
+                  whileHover={{ y: -5 }}
                 >
-                  <div className="surface-card p-5 hover:shadow-md transition-all duration-200 relative">
-                    <div className="absolute -top-2 -left-2 w-7 h-7 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold text-xs z-10">
+                  <div className="surface-card p-6 hover:shadow-xl transition-all duration-300 relative border border-stone-100 dark:border-stone-800/50">
+                    {/* Ranking Badge */}
+                    <div className="absolute -top-3 -left-3 w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center text-white font-black text-sm z-10 shadow-lg border-2 border-white dark:border-stone-900">
                       {idx + 1}
                     </div>
-                    <span
-                      className={`absolute top-3 right-3 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${getTierColor(getTier(teacher))}`}
-                    >
-                      {getTier(teacher)}
-                    </span>
-                    <div className="mt-3">
-                      <h4 className="font-semibold text-stone-900 dark:text-stone-50 mb-3">
+
+                    <div className="flex flex-col items-center text-center mt-4">
+                      {/* Avatar Section */}
+                      <div className="relative mb-4 group-hover:scale-105 transition-transform duration-300">
+                        <div className="absolute inset-0 bg-orange-500/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <HumanoidAvatar
+                          src={teacher.profilePicture}
+                          name={getTeacherName(teacher)}
+                          size={64}
+                          className="relative border-2 border-white dark:border-stone-800 shadow-md"
+                        />
+                      </div>
+
+                      {/* Name */}
+                      <h4 className="font-bold text-lg text-stone-900 dark:text-stone-50 mb-1 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
                         {getTeacherName(teacher)}
                       </h4>
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="flex items-center gap-1.5 text-stone-500 dark:text-stone-400">
-                            <Clock className="w-3.5 h-3.5" />
-                            Hours
+                      <p className="text-[10px] font-bold text-stone-400 dark:text-stone-500 uppercase tracking-widest mb-6">
+                        Verified Educator
+                      </p>
+
+                      {/* Stats Grid */}
+                      <div className="w-full space-y-3 pt-6 border-t border-stone-100 dark:border-stone-800/50">
+                        <div className="flex items-center justify-between">
+                          <span className="flex items-center gap-2 text-[10px] font-black text-stone-500 dark:text-stone-400 uppercase tracking-widest">
+                            Teaching Hours
                           </span>
-                          <span className="font-semibold text-stone-900 dark:text-white">
+                          <span className="text-sm font-bold text-stone-900 dark:text-white">
                             {getTeacherHours(teacher)}
                           </span>
                         </div>
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="flex items-center gap-1.5 text-stone-500 dark:text-stone-400">
-                            <TrendingUp className="w-3.5 h-3.5" />
+                        <div className="flex items-center justify-between">
+                          <span className="flex items-center gap-2 text-[10px] font-black text-stone-500 dark:text-stone-400 uppercase tracking-widest">
                             Engagements
                           </span>
-                          <span className="font-semibold text-stone-900 dark:text-white">
+                          <span className="text-sm font-bold text-stone-900 dark:text-white">
                             {getTeacherEngagements(teacher)}
                           </span>
                         </div>
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="flex items-center gap-1.5 text-stone-500 dark:text-stone-400">
-                            <Trophy className="w-3.5 h-3.5" />
-                            Score
+                        <div className="flex items-center justify-between">
+                          <span className="flex items-center gap-2 text-[10px] font-black text-stone-500 dark:text-stone-400 uppercase tracking-widest">
+                            Ranking Score
                           </span>
-                          <span className="font-semibold text-stone-900 dark:text-white">
+                          <span className="text-sm font-bold text-stone-900 dark:text-white">
                             {getTeacherScore(teacher)}
                           </span>
                         </div>
@@ -1294,195 +1227,69 @@ const StudentDashboard = () => {
           )}
         </motion.div>
 
+        {/* Recommended Courses Section */}
         <motion.div
-          className="space-y-8"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-        >
-          <div className="surface-card p-6">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h3 className="text-base font-semibold text-stone-900 dark:text-stone-50">
-                  Recommended Courses
-                </h3>
-                <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
-                  Personalized picks for you
-                </p>
-              </div>
-              <button
-                onClick={() => navigate("/courses")}
-                className="secondary-action text-sm gap-1.5"
-              >
-                View All <ArrowUpRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-
-            {courses.length === 0 ? (
-              <div className="text-center py-12">
-                <div className="w-10 h-10 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 flex items-center justify-center mx-auto mb-3">
-                  <BookOpen className="w-5 h-5 text-stone-400" />
-                </div>
-                <p className="body-copy text-sm">No recommended courses yet</p>
-                <p className="body-copy text-xs mt-1">
-                  Complete a few courses first to see personalized
-                  recommendations!
-                </p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-                {courses.slice(0, 6).map((course, index) => {
-                  const levelLower = course.level?.toLowerCase();
-                  let levelInfo = {
-                    badge:
-                      "bg-stone-50 text-stone-700 border-stone-200 dark:bg-stone-800 dark:text-stone-200 dark:border-stone-700",
-                  };
-
-                  if (levelLower === "beginner") {
-                    levelInfo = {
-                      badge:
-                        "bg-stone-100 text-stone-700 border-stone-200 dark:bg-stone-800 dark:text-stone-300 dark:border-stone-700",
-                    };
-                  } else if (levelLower === "intermediate") {
-                    levelInfo = {
-                      badge:
-                        "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950/20 dark:text-orange-300 dark:border-orange-900/40",
-                    };
-                  } else if (levelLower === "advanced") {
-                    levelInfo = {
-                      badge:
-                        "bg-stone-900 text-stone-50 border-stone-800 dark:bg-stone-100 dark:text-stone-900 dark:border-white",
-                    };
-                  }
-
-                  return (
-                    <motion.div
-                      key={course._id || course.id}
-                      className="surface-card overflow-hidden flex flex-col hover:shadow-md transition-all duration-200 cursor-pointer"
-                      onClick={() =>
-                        navigate(`/course/${course._id || course.id}`)
-                      }
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.08, duration: 0.4 }}
-                      whileHover={{ y: -3 }}
-                    >
-                      <div className="p-5 border-b border-stone-100 dark:border-stone-800">
-                        <div className="flex items-start justify-between gap-3 mb-3">
-                          <h2 className="text-base font-semibold text-stone-900 dark:text-stone-50 leading-snug">
-                            {course.title}
-                          </h2>
-                          <div className="flex items-center gap-1">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleToggleSaveCourse(course._id || course.id);
-                              }}
-                              className={`p-1.5 rounded-lg transition-all ${savedItems.savedCourses.some(
-                                (c) => c._id === (course._id || course.id),
-                              )
-                                ? "text-orange-500 bg-orange-50 dark:bg-orange-950/20"
-                                : "text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800"
-                                }`}
-                            >
-                              {savedItems.savedCourses.some(
-                                (c) => c._id === (course._id || course.id),
-                              ) ? (
-                                <BookmarkCheck className="w-4 h-4" />
-                              ) : (
-                                <Bookmark className="w-4 h-4" />
-                              )}
-                            </button>
-                            <BookOpen className="w-4 h-4 text-stone-400 flex-shrink-0" />
-                          </div>
-                        </div>
-                        <span
-                          className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border ${levelInfo.badge}`}
-                        >
-                          {course.level || "Beginner"}
-                        </span>
-                      </div>
-
-                      <div className="p-5 flex-grow flex flex-col">
-                        <p className="body-copy text-sm leading-relaxed mb-4 flex-grow line-clamp-3">
-                          {course.description}
-                        </p>
-                        <div className="space-y-2 mb-4">
-                          <div className="flex items-center gap-2 text-sm body-copy">
-                            <Clock className="w-3.5 h-3.5" />
-                            <span>{course.duration || "Self-paced"}</span>
-                          </div>
-                          <div className="flex items-center gap-2 text-sm body-copy">
-                            <User className="w-3.5 h-3.5" />
-                            <span>
-                              {course.teacher?.name || "Expert Instructor"}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() =>
-                              navigate(`/course/${course._id || course.id}`)
-                            }
-                            className="flex-1 primary-action text-sm py-3"
-                          >
-                            <BookOpen className="w-4 h-4" /> Explore Course
-                          </button>
-                        </div>
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        </motion.div>
-
-        {/* Learning Insights */}
-        <motion.div
-          className="space-y-8"
+          className="space-y-6"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
         >
-          {/* Recommended Teachers Section */}
-          <div className="surface-card p-6">
-            <div className="flex items-center justify-between mb-5">
-              <div>
-                <h3 className="text-base font-semibold text-stone-900 dark:text-stone-50">
-                  Recommended Teachers
-                </h3>
-                <p className="text-xs body-copy mt-0.5">
-                  Matched to your interests
-                </p>
+          <div className="surface-card-strong p-8">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div>
+                  <h3 className="text-xl font-bold text-stone-900 dark:text-stone-50">
+                    {isShowingPopularCourses
+                      ? "Popular Courses"
+                      : "Recommended Courses"}
+                  </h3>
+                </div>
               </div>
-              <button
-                onClick={() => navigate("/teachers")}
-                className="secondary-action text-sm gap-1.5"
-              >
-                View All <ArrowUpRight className="w-3.5 h-3.5" />
-              </button>
+            </div>
+            <RecommendedCourses
+              limit={6}
+              onCourseTypeChange={setIsShowingPopularCourses}
+            />
+          </div>
+        </motion.div>
+
+        {/* Recommended Teachers Section */}
+        <motion.div
+          className="space-y-6"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+        >
+          <div className="surface-card-strong p-8">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div>
+                  <h3 className="text-xl font-bold text-stone-900 dark:text-stone-50">
+                    Recommended Teachers
+                  </h3>
+                </div>
+              </div>
             </div>
             <RecommendedTeachers limit={6} />
           </div>
+        </motion.div>
 
-          {/* Recommended Resources Section */}
-          <div className="surface-card p-6">
-            <div className="flex items-center justify-between mb-5">
-              <div>
-                <h3 className="text-base font-semibold text-stone-900 dark:text-stone-50">
-                  Recommended Resources
-                </h3>
-                <p className="text-xs body-copy mt-0.5">
-                  Curated study materials for you
-                </p>
+        {/* Recommended Resources Section */}
+        <motion.div
+          className="space-y-6"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.7 }}
+        >
+          <div className="surface-card-strong p-8">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div>
+                  <h3 className="text-xl font-bold text-stone-900 dark:text-stone-50">
+                    Recommended Resources
+                  </h3>
+                </div>
               </div>
-              <button
-                onClick={() => navigate("/resources")}
-                className="secondary-action text-sm gap-1.5"
-              >
-                View All <ArrowUpRight className="w-3.5 h-3.5" />
-              </button>
             </div>
             <RecommendedResources limit={6} />
           </div>

@@ -54,7 +54,7 @@ const CourseEdit = () => {
     } catch (err) {
       console.error(err);
       alert("Failed to fetch course details!");
-      navigate("/courses");
+      navigate("/teacher/course");
     } finally {
       setLoading(false);
     }
@@ -78,7 +78,7 @@ const CourseEdit = () => {
         { headers: { Authorization: `Bearer ${token}` } },
       );
       alert("Course updated successfully!");
-      navigate("/courses", { state: { updated: true } }); //  trigger refresh in CoursesPage
+      navigate("/teacher/course", { state: { updated: true } }); //  trigger refresh in CoursesPage
     } catch (err) {
       console.error(err);
       alert(err.response?.data?.message || "Error updating course!");
@@ -151,7 +151,7 @@ const CourseEdit = () => {
         </div>
         <button
           onClick={handleUpdateCourse}
-          className="mt-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-2 rounded-2xl shadow-lg hover:scale-105 transform transition"
+          className="mt-4 bg-blue-500 text-white px-6 py-2 rounded-2xl shadow-lg hover:bg-blue-600 transform transition"
         >
           Update Course
         </button>

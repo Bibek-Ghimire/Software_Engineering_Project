@@ -5,6 +5,7 @@ import {
   ArrowLeft,
   BookOpen,
   Clock,
+  DollarSign,
   User,
   Star,
   BarChart3,
@@ -17,8 +18,10 @@ import {
   Moon,
   Bookmark,
   BookmarkCheck,
+  CheckCircle2,
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
+import TeacherSidebar from "../components/TeacherSidebar";
 import { motion } from "framer-motion";
 
 const CourseDetail = () => {
@@ -37,7 +40,6 @@ const CourseDetail = () => {
   const [isSaved, setIsSaved] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const user = JSON.parse(sessionStorage.getItem("user") || "{}");
-  const isStudent = user.role === "student";
 
   useEffect(() => {
     const fetchCourseDetail = async () => {
@@ -90,6 +92,29 @@ const CourseDetail = () => {
           console.log(`Payment status: ${data.paymentStatus}`);
           setPaymentStatus(data.paymentStatus);
         }
+
+        // Fetch saved and completed status for students
+        if (user.role === "student") {
+          try {
+            const savedRes = await fetch(
+              "http://localhost:5000/api/profile/saved-items",
+              {
+                headers: { Authorization: `Bearer ${token}` },
+              },
+            );
+            if (savedRes.ok) {
+              const savedData = await savedRes.json();
+              setIsSaved(
+                (savedData.savedCourses || []).some((c) => c._id === id),
+              );
+              setIsCompleted(
+                (savedData.completedCourses || []).some((c) => c._id === id),
+              );
+            }
+          } catch (err) {
+            console.error("Error fetching saved items:", err);
+          }
+        }
       } catch (err) {
         console.error("Error fetching course:", err);
         setError(err.message);
@@ -98,96 +123,10 @@ const CourseDetail = () => {
       }
     };
 
-    const fetchSavedStatus = async () => {
-      try {
-        const token = sessionStorage.getItem("token");
-        if (!token || !isStudent) return;
-
-        const res = await fetch("http://localhost:5000/api/profile/saved-items", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await res.json();
-        const saved = (data.savedCourses || []).some((c) => c._id === id || c === id);
-        setIsSaved(saved);
-
-        const completed = (data.completedCourses || []).some((c) => c._id === id || c === id);
-        setIsCompleted(completed);
-      } catch (err) {
-        console.error("Error fetching saved status:", err);
-      }
-    };
-
     if (id) {
       fetchCourseDetail();
-      fetchSavedStatus();
     }
-  }, [id, isStudent]);
-
-  const handleToggleSave = async () => {
-    try {
-      const token = sessionStorage.getItem("token");
-      const method = isSaved ? "DELETE" : "POST";
-
-      const response = await fetch(
-        `http://localhost:5000/api/profile/save-course/${id}`,
-        {
-          method,
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-
-      if (response.ok) {
-        setIsSaved(!isSaved);
-        toast.success(
-          isSaved ? "Removed from saved" : "Course saved for later!",
-          {
-            style: {
-              borderRadius: "15px",
-              background: darkMode ? "#1c1917" : "#fff",
-              color: darkMode ? "#fff" : "#1c1917",
-              border: "1px solid #e76f51",
-            },
-          },
-        );
-      }
-    } catch (err) {
-      console.error("Error toggling save:", err);
-      toast.error("Failed to update saved status");
-    }
-  };
-
-  const handleToggleComplete = async () => {
-    try {
-      const token = sessionStorage.getItem("token");
-      const method = isCompleted ? "DELETE" : "POST";
-
-      const response = await fetch(
-        `http://localhost:5000/api/profile/complete-course/${id}`,
-        {
-          method,
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-
-      if (response.ok) {
-        setIsCompleted(!isCompleted);
-        toast.success(
-          isCompleted ? "Course marked as in-progress" : "Course Completed! 🎉",
-          {
-            style: {
-              borderRadius: "15px",
-              background: darkMode ? "#1c1917" : "#fff",
-              color: darkMode ? "#fff" : "#1c1917",
-              border: "1px solid #10b981",
-            },
-          },
-        );
-      }
-    } catch (err) {
-      console.error("Error toggling complete:", err);
-      toast.error("Failed to update completion status");
-    }
-  };
+  }, [id, user.role]);
 
   // Dark mode toggle
   useEffect(() => {
@@ -271,7 +210,7 @@ const CourseDetail = () => {
       } else {
         toast.error(
           data.message ||
-          "Failed to send enrollment request. Please try again.",
+            "Failed to send enrollment request. Please try again.",
           {
             duration: 4000,
             position: "top-center",
@@ -289,29 +228,89 @@ const CourseDetail = () => {
     }
   };
 
+  const handleToggleSaveCourse = async () => {
+    try {
+      const token = sessionStorage.getItem("token");
+      const method = isSaved ? "DELETE" : "POST";
+
+      const response = await fetch(
+        `http://localhost:5000/api/profile/save-course/${id}`,
+        {
+          method,
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      if (response.ok) {
+        setIsSaved(!isSaved);
+        toast.success(
+          isSaved ? "Removed from saved" : "Course saved for later!",
+          {
+            duration: 3000,
+            position: "top-center",
+          },
+        );
+      }
+    } catch (err) {
+      console.error("Error toggling save:", err);
+      toast.error("Failed to update saved status");
+    }
+  };
+
+  const handleToggleCompleteCourse = async () => {
+    try {
+      const token = sessionStorage.getItem("token");
+      const method = isCompleted ? "DELETE" : "POST";
+
+      const response = await fetch(
+        `http://localhost:5000/api/profile/complete-course/${id}`,
+        {
+          method,
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      if (response.ok) {
+        setIsCompleted(!isCompleted);
+        toast.success(
+          isCompleted
+            ? "Course marked as in-progress"
+            : "Course marked as completed!",
+          {
+            duration: 3000,
+            position: "top-center",
+          },
+        );
+      }
+    } catch (err) {
+      console.error("Error toggling completion:", err);
+      toast.error("Failed to update course status");
+    }
+  };
+
   const getLevelColor = (level) => {
     switch (level) {
       case "Beginner":
-        return "from-stone-700 to-stone-800";
+        return "bg-green-500";
       case "Intermediate":
-        return "from-orange-500 to-orange-600";
+        return "bg-orange-500";
       case "Expert":
-        return "from-stone-900 to-black";
+        return "bg-red-500";
       default:
-        return "from-stone-500 to-stone-600";
+        return "bg-blue-500";
     }
   };
 
   const getLevelBgColor = (level) => {
     switch (level) {
       case "Beginner":
-        return "bg-stone-100 text-stone-700 border-stone-200";
+        return "bg-green-100 text-green-800";
       case "Intermediate":
-        return "bg-orange-50 text-orange-800 border-orange-200";
+        return "bg-orange-100 text-orange-800";
       case "Expert":
-        return "bg-stone-900 text-stone-50 border-stone-800";
+        return "bg-red-100 text-red-800";
       default:
-        return "bg-stone-50 text-stone-700 border-stone-200";
+        return "bg-blue-100 text-blue-800";
     }
   };
 
@@ -319,13 +318,13 @@ const CourseDetail = () => {
     return (
       <div className="flex min-h-screen page-surface">
         <div className="w-64 fixed top-0 left-0 h-full z-30">
-          <Sidebar />
+          {user.role === "teacher" ? <TeacherSidebar /> : <Sidebar />}
         </div>
         <div className="ml-64 w-full flex items-center justify-center">
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="w-12 h-12 border-4 border-stone-200 border-t-orange-600 rounded-full"
+            className="w-12 h-12 border-4 border-blue-400 border-t-blue-600 rounded-full"
           />
         </div>
       </div>
@@ -336,7 +335,7 @@ const CourseDetail = () => {
     return (
       <div className="flex min-h-screen page-surface">
         <div className="w-64 fixed top-0 left-0 h-full z-30">
-          <Sidebar />
+          {user.role === "teacher" ? <TeacherSidebar /> : <Sidebar />}
         </div>
         <div className="ml-64 w-full">
           <div className="max-w-4xl mx-auto px-6 py-12">
@@ -353,7 +352,11 @@ const CourseDetail = () => {
                 {error || "The course you're looking for doesn't exist."}
               </p>
               <button
-                onClick={() => navigate("/courses")}
+                onClick={() =>
+                  navigate(
+                    user.role === "teacher" ? "/teacher/course" : "/courses",
+                  )
+                }
                 className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
               >
                 Back to Courses
@@ -369,7 +372,7 @@ const CourseDetail = () => {
     <div className="flex min-h-screen page-surface">
       {/* Sidebar */}
       <div className="w-64 fixed top-0 left-0 h-full z-30">
-        <Sidebar />
+        {user.role === "teacher" ? <TeacherSidebar /> : <Sidebar />}
       </div>
 
       {/* Main Content */}
@@ -377,19 +380,21 @@ const CourseDetail = () => {
         {/* Dark Mode Toggle */}
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className="absolute top-8 right-8 icon-action absolute top-8 right-8 z-10"
+          className="absolute top-8 right-8 p-4 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-xl hover:shadow-2xl hover:scale-110 border-2 border-blue-200/50 dark:border-gray-600/50 transition-all duration-300 z-10 group"
         >
           {darkMode ? (
-            <Sun className="w-6 h-6" />
+            <Sun className="w-6 h-6 group-hover:rotate-180 transition-transform duration-500" />
           ) : (
-            <Moon className="w-6 h-6" />
+            <Moon className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
           )}
         </button>
         {/* Back Button */}
         <div className="pt-8 px-6">
           <motion.button
-            onClick={() => navigate("/courses")}
-            className="flex items-center gap-2 text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 font-semibold transition-colors"
+            onClick={() =>
+              navigate(user.role === "teacher" ? "/teacher/course" : "/courses")
+            }
+            className="flex items-center gap-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-semibold transition-colors"
             whileHover={{ x: -4 }}
           >
             <ArrowLeft className="w-5 h-5" />
@@ -404,24 +409,24 @@ const CourseDetail = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="bg-white dark:bg-stone-900 rounded-3xl shadow-2xl overflow-hidden">
+          <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden">
             {/* Header Background */}
             <div
-              className={`h-64 bg-gradient-to-r ${getLevelColor(course.level)} opacity-90`}
+              className={`h-64 ${getLevelColor(course.level)} opacity-90`}
             ></div>
 
             {/* Course Info Card */}
-            <div className="px-8 py-8 -mt-32 relative z-10 bg-white dark:bg-stone-900 rounded-3xl mx-8 mb-8 shadow-xl">
+            <div className="px-8 py-8 -mt-32 relative z-10 bg-white dark:bg-gray-800 rounded-3xl mx-8 mb-8 shadow-xl">
               <div className="flex flex-col md:flex-row justify-between items-start gap-6">
                 <div className="flex-1">
                   <div className="flex items-start gap-4 mb-4">
                     <div
-                      className={`p-4 rounded-xl bg-gradient-to-r ${getLevelColor(course.level)}`}
+                      className={`p-4 rounded-xl ${getLevelColor(course.level)}`}
                     >
                       <BookOpen className="w-8 h-8 text-white" />
                     </div>
                     <div className="flex-1">
-                      <h1 className="text-4xl md:text-5xl font-bold text-stone-900 dark:text-stone-50 mb-3 leading-tight">
+                      <h1 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-3 leading-tight">
                         {course.title}
                       </h1>
                       <div className="flex flex-wrap items-center gap-3">
@@ -433,7 +438,7 @@ const CourseDetail = () => {
                         {course.rating && (
                           <div className="flex items-center gap-1">
                             <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-                            <span className="font-semibold text-stone-700 dark:text-stone-300">
+                            <span className="font-semibold text-gray-700 dark:text-gray-300">
                               {course.rating.toFixed(1)}
                             </span>
                           </div>
@@ -445,97 +450,108 @@ const CourseDetail = () => {
 
                 <div className="flex flex-col gap-3">
                   <div className="text-right">
-                    <p className="text-sm text-stone-500 dark:text-stone-500 mb-1">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
                       Price
                     </p>
-                    <p className="text-4xl font-bold text-orange-600 dark:text-orange-400 flex items-center gap-1 justify-end">
-                      <span className="text-2xl font-semibold">Rs.</span>
+                    <p className="text-4xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1 justify-end">
+                      Rs.
                       {course.price}
                     </p>
                   </div>
-                  <button
-                    onClick={() => {
-                      if (paymentStatus === "pending") {
-                        navigate("/payments");
-                      } else {
-                        handleEnroll();
+                  <div className="flex gap-2 flex-wrap">
+                    <button
+                      onClick={() => {
+                        if (paymentStatus === "pending") {
+                          navigate("/payments");
+                        } else {
+                          handleEnroll();
+                        }
+                      }}
+                      disabled={
+                        isEnrolled ||
+                        enrollmentRequestStatus === "pending" ||
+                        enrolling
                       }
-                    }}
-                    disabled={
-                      isEnrolled ||
-                      enrollmentRequestStatus === "pending" ||
-                      enrolling
-                    }
-                    className={`px-8 py-3 rounded-xl font-bold text-white transition-all duration-300 flex items-center gap-2 ${isEnrolled
-                      ? "bg-emerald-500 cursor-not-allowed"
-                      : enrollmentRequestStatus === "pending"
-                        ? "bg-amber-400 cursor-not-allowed text-stone-900"
-                        : paymentStatus === "pending"
-                          ? "bg-orange-500 hover:bg-orange-600"
-                          : enrolling
-                            ? "primary-action cursor-wait"
-                            : "primary-action hover:shadow-xl"
+                      className={`flex-1 px-8 py-3 rounded-xl font-bold text-white transition-all duration-300 flex items-center gap-2 min-w-max ${
+                        isEnrolled
+                          ? "bg-emerald-500 cursor-not-allowed"
+                          : enrollmentRequestStatus === "pending"
+                            ? "bg-amber-400 cursor-not-allowed text-slate-900"
+                            : paymentStatus === "pending"
+                              ? "bg-orange-500 hover:bg-orange-600"
+                              : enrolling
+                                ? "primary-action cursor-wait"
+                                : "primary-action hover:shadow-xl"
                       }`}
-                  >
-                    {isEnrolled ? (
+                    >
+                      {isEnrolled ? (
+                        <>
+                          <CheckCircle className="w-5 h-5" />
+                          Enrolled
+                        </>
+                      ) : enrollmentRequestStatus === "pending" ? (
+                        <>
+                          <AlertCircle className="w-5 h-5" />
+                          Request Pending
+                        </>
+                      ) : paymentStatus === "pending" ? (
+                        <>
+                          <DollarSign className="w-5 h-5" />
+                          Complete Payment
+                        </>
+                      ) : enrolling ? (
+                        <>
+                          <Loader className="w-5 h-5 animate-spin" />
+                          Sending Request...
+                        </>
+                      ) : (
+                        <>
+                          <BookOpen className="w-5 h-5" />
+                          Enroll Now
+                        </>
+                      )}
+                    </button>
+
+                    {user.role === "student" && (
                       <>
-                        <CheckCircle className="w-5 h-5" />
-                        Enrolled
-                      </>
-                    ) : enrollmentRequestStatus === "pending" ? (
-                      <>
-                        <AlertCircle className="w-5 h-5" />
-                        Request Pending
-                      </>
-                    ) : paymentStatus === "pending" ? (
-                      <>
-                        <span className="text-sm font-bold">Rs.</span>
-                        Complete Payment
-                      </>
-                    ) : enrolling ? (
-                      <>
-                        <Loader className="w-5 h-5 animate-spin" />
-                        Sending Request...
-                      </>
-                    ) : (
-                      <>
-                        <BookOpen className="w-5 h-5" />
-                        Enroll Now
+                        <button
+                          onClick={handleToggleSaveCourse}
+                          title={
+                            isSaved ? "Remove from saved" : "Save for later"
+                          }
+                          className={`px-4 py-3 rounded-xl font-bold transition-all duration-300 flex items-center gap-2 ${
+                            isSaved
+                              ? "bg-orange-100 dark:bg-orange-950/30 text-orange-600 dark:text-orange-400"
+                              : "bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-300 dark:hover:bg-gray-600"
+                          }`}
+                        >
+                          {isSaved ? (
+                            <BookmarkCheck className="w-5 h-5" />
+                          ) : (
+                            <Bookmark className="w-5 h-5" />
+                          )}
+                        </button>
+
+                        {isEnrolled && (
+                          <button
+                            onClick={handleToggleCompleteCourse}
+                            title={
+                              isCompleted
+                                ? "Mark as in-progress"
+                                : "Mark as completed"
+                            }
+                            className={`px-4 py-3 rounded-xl font-bold transition-all duration-300 flex items-center gap-2 ${
+                              isCompleted
+                                ? "bg-emerald-100 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400"
+                                : "bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-300 dark:hover:bg-gray-600"
+                            }`}
+                          >
+                            <CheckCircle2 className="w-5 h-5" />
+                          </button>
+                        )}
                       </>
                     )}
-                  </button>
-                  {isStudent && (
-                    <button
-                      onClick={handleToggleSave}
-                      className={`px-4 py-3 rounded-xl font-bold border transition-all duration-300 flex items-center justify-center gap-2 ${isSaved
-                        ? "border-orange-500 text-orange-500 bg-orange-50 dark:bg-orange-950/20"
-                        : "border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800"
-                        }`}
-                    >
-                      {isSaved ? (
-                        <BookmarkCheck className="w-5 h-5" />
-                      ) : (
-                        <Bookmark className="w-5 h-5" />
-                      )}
-                      <span>{isSaved ? "Saved" : "Save for Later"}</span>
-                    </button>
-                  )}
-                  {isEnrolled && isStudent && (
-                    <button
-                      onClick={handleToggleComplete}
-                      className={`px-4 py-3 rounded-xl font-bold border transition-all duration-300 flex items-center justify-center gap-2 ${isCompleted
-                        ? "border-emerald-500 text-emerald-500 bg-emerald-50 dark:bg-emerald-950/20"
-                        : "border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800"
-                        }`}
-                    >
-                      {isCompleted ? (
-                        <CheckCircle className="w-5 h-5" />
-                      ) : (
-                        <CheckCircle className="w-5 h-5 opacity-50" />
-                      )}
-                      <span>{isCompleted ? "Completed" : "Mark as Completed"}</span>
-                    </button>
-                  )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -547,10 +563,8 @@ const CourseDetail = () => {
                 whileHover={{ y: -5 }}
               >
                 <div className="flex items-center gap-3 mb-2">
-                  <Clock className="w-6 h-6 text-orange-600 dark:text-orange-400" />
-                  <p className="text-sm body-copy font-semibold">
-                    Duration
-                  </p>
+                  <Clock className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                  <p className="text-sm body-copy font-semibold">Duration</p>
                 </div>
                 <p className="text-2xl font-bold text-stone-900 dark:text-stone-50">
                   {course.duration}
@@ -563,9 +577,7 @@ const CourseDetail = () => {
               >
                 <div className="flex items-center gap-3 mb-2">
                   <Users className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
-                  <p className="text-sm body-copy font-semibold">
-                    Enrolled
-                  </p>
+                  <p className="text-sm body-copy font-semibold">Enrolled</p>
                 </div>
                 <p className="text-2xl font-bold text-stone-900 dark:text-stone-50">
                   {course.enrollmentCount || 0}
@@ -578,9 +590,7 @@ const CourseDetail = () => {
               >
                 <div className="flex items-center gap-3 mb-2">
                   <BarChart3 className="w-6 h-6 text-purple-600 dark:text-purple-400" />
-                  <p className="text-sm body-copy font-semibold">
-                    Level
-                  </p>
+                  <p className="text-sm body-copy font-semibold">Level</p>
                 </div>
                 <p className="text-2xl font-bold text-stone-900 dark:text-stone-50">
                   {course.level}
@@ -593,9 +603,7 @@ const CourseDetail = () => {
               >
                 <div className="flex items-center gap-3 mb-2">
                   <User className="w-6 h-6 text-orange-600 dark:text-orange-400" />
-                  <p className="text-sm body-copy font-semibold">
-                    Instructor
-                  </p>
+                  <p className="text-sm body-copy font-semibold">Instructor</p>
                 </div>
                 <p className="text-lg font-bold text-stone-900 dark:text-stone-50 truncate">
                   {course.teacher?.name || "Instructor"}
@@ -633,16 +641,14 @@ const CourseDetail = () => {
                     Your Instructor
                   </h2>
                   <div className="flex items-center gap-6">
-                    <div className="w-24 h-24 rounded-full bg-stone-900 dark:bg-stone-100 flex items-center justify-center flex-shrink-0 text-white dark:text-stone-900 shadow-sm">
+                    <div className="w-24 h-24 rounded-full bg-slate-900 dark:bg-slate-100 flex items-center justify-center flex-shrink-0 text-white dark:text-slate-900 shadow-sm">
                       <User className="w-12 h-12" />
                     </div>
                     <div className="flex-1">
                       <h3 className="text-2xl font-bold text-stone-900 dark:text-stone-50 mb-2">
                         {course.teacher.name}
                       </h3>
-                      <p className="body-copy mb-3">
-                        {course.teacher.email}
-                      </p>
+                      <p className="body-copy mb-3">{course.teacher.email}</p>
                       <p className="text-sm body-copy">
                         {course.teacher.role === "teacher"
                           ? "Expert Instructor"
@@ -714,5 +720,3 @@ const CourseDetail = () => {
 };
 
 export default CourseDetail;
-
-

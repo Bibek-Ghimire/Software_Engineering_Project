@@ -18,6 +18,7 @@ import groupRoutes from "./routes/groupRoutes.js";
 import discussionRoutes from "./routes/discussionRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import teacherRoutes from "./routes/teacherRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 import recommendationRoutes from "./routes/recommendationRoutes.js";
 import batchRoutes from "./routes/batchRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
@@ -72,6 +73,7 @@ app.use("/api/groups", groupRoutes);
 app.use("/api/discussions", discussionRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/teachers", teacherRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/recommendations", recommendationRoutes);
 app.use("/api/leaderboard", leaderboardRoutes);
 app.use("/api/batches", batchRoutes);
@@ -96,11 +98,11 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // MongoDB Connection
 // -------------------------
 console.log(
-  `📦 Connecting to MongoDB: ${process.env.MONGO_URI?.substring(0, 60)}...`,
+  `Connecting to MongoDB: ${process.env.MONGO_URI?.substring(0, 60)}...`,
 );
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB connected"))
+  .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log("MongoDB connection error:", err));
 
 // -------------------------
@@ -130,6 +132,6 @@ global.io = io;
 global.notificationIO = notificationIO;
 
 httpServer.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`💬 Socket.IO enabled for real-time chat and notifications`);
+  console.log(`Server running on port ${PORT}`);
+  console.log(`Socket.IO enabled for real-time chat and notifications`);
 });

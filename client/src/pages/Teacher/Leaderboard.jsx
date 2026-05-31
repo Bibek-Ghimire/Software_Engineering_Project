@@ -117,22 +117,22 @@ const LeaderBoard = () => {
     },
   };
 
-  const getRankIcon = (index) => {
-    switch (index) {
-      case 0:
-        return <Trophy className="w-6 h-6 text-orange-500" />;
-      case 1:
-        return <Award className="w-6 h-6 text-stone-400" />;
-      case 2:
-        return <Award className="w-6 h-6 text-orange-400" />;
-      default:
-        return (
-          <div className="w-6 h-6 rounded-full bg-stone-200 dark:bg-stone-700 flex items-center justify-center text-stone-600 dark:text-stone-300 font-bold text-xs">
-            {index + 1}
-          </div>
-        );
-    }
-  };
+  // const getRankIcon = (index) => {
+  //   switch (index) {
+  //     case 0:
+  //       return <Trophy className="w-6 h-6 text-orange-500" />;
+  //     case 1:
+  //       return <Award className="w-6 h-6 text-stone-400" />;
+  //     case 2:
+  //       return <Award className="w-6 h-6 text-orange-400" />;
+  //     default:
+  //       return (
+  //         <div className="w-6 h-6 rounded-full bg-stone-200 dark:bg-stone-700 flex items-center justify-center text-stone-600 dark:text-stone-300 font-bold text-xs">
+  //           {index + 1}
+  //         </div>
+  //       );
+  //   }
+  // };
 
   return (
     <div className="flex min-h-screen page-surface transition-all duration-700">
@@ -145,12 +145,8 @@ const LeaderBoard = () => {
         <div className="px-8 pt-10 pb-8 border-b border-stone-200 dark:border-stone-800">
           <div className="flex items-center justify-between mb-1">
             <div>
-              <span className="section-kicker" />
               <h1 className="section-title">Leaderboard</h1>
-              <p className="body-copy mt-2">
-                Celebrating our top-performing educators and their outstanding
-                contributions to learning
-              </p>
+            
             </div>
             <button
               onClick={() => setDarkMode(!darkMode)}
@@ -175,17 +171,14 @@ const LeaderBoard = () => {
           >
             {[
               {
-                icon: Users,
                 label: "Active Teachers",
                 value: teachers.length,
               },
               {
-                icon: BookOpen,
                 label: "Total Courses",
                 value: teachers.reduce((acc, t) => acc + t.coursesCreated, 0),
               },
               {
-                icon: TrendingUp,
                 label: "Avg Engagement",
                 value: (
                   teachers.reduce((acc, t) => acc + t.engagementScore, 0) /
@@ -193,16 +186,13 @@ const LeaderBoard = () => {
                 ).toFixed(1),
               },
               {
-                icon: Star,
                 label: "Top Score",
                 value: Math.max(...teachers.map((t) => t.totalScore), 0),
               },
             ].map((stat, index) => (
               <div key={index} className="surface-panel p-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
-                    <stat.icon className="w-4 h-4 text-stone-500 dark:text-stone-400" />
-                  </div>
+                 
                   <div>
                     <p className="text-xs text-stone-500 dark:text-stone-400 font-medium">
                       {stat.label}
@@ -245,7 +235,6 @@ const LeaderBoard = () => {
                             whileHover={{ scale: 1.1 }}
                             transition={{ type: "spring", stiffness: 400 }}
                           >
-                            {getRankIcon(index)}
                           </motion.div>
                           <div className="w-12 h-12 rounded-full bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 flex items-center justify-center">
                             <User className="w-6 h-6 text-stone-500 dark:text-stone-400" />
@@ -256,12 +245,12 @@ const LeaderBoard = () => {
                           <h3 className="text-lg font-bold text-stone-900 dark:text-stone-50 leading-tight mb-1">
                             {teacher.name}
                           </h3>
-                          <span
+                          {/* <span
                             className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${config.badge}`}
-                          >
-                            <span className={`w-1.5 h-1.5 rounded-full ${config.dot}`} />
-                            {teacher.batch} Tier
-                          </span>
+                          > */}
+                            {/* <span className={`w-1.5 h-1.5 rounded-full ${config.dot}`} /> */}
+                            {/* {teacher.batch} Tier */}
+                          {/* </span> */}
                         </div>
                       </div>
 
@@ -269,17 +258,14 @@ const LeaderBoard = () => {
                       <div className="grid grid-cols-3 gap-3 w-full lg:w-auto">
                         {[
                           {
-                            icon: BookOpen,
                             label: "Courses",
                             value: teacher.coursesCreated,
                           },
                           {
-                            icon: TrendingUp,
                             label: "Engagement",
                             value: teacher.engagementScore,
                           },
                           {
-                            icon: Star,
                             label: "Score",
                             value: teacher.totalScore,
                           },
@@ -289,9 +275,7 @@ const LeaderBoard = () => {
                             className="surface-panel p-3 text-center"
                             whileHover={{ y: -2 }}
                           >
-                            <div className="w-8 h-8 mx-auto mb-1.5 rounded-lg bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 flex items-center justify-center">
-                              <stat.icon className="w-4 h-4 text-stone-500 dark:text-stone-400" />
-                            </div>
+                          
                             <p className="text-xl font-bold text-stone-900 dark:text-stone-50 leading-none">
                               {stat.value}
                             </p>

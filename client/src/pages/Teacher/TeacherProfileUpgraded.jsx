@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import {
   Upload,
@@ -16,6 +16,7 @@ import {
   GraduationCap,
   Sun,
   Moon,
+  ArrowLeft,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
@@ -23,7 +24,24 @@ import TeacherSidebar from "../../components/TeacherSidebar";
 
 const TeacherProfileUpgraded = () => {
   const navigate = useNavigate();
+  const { id } = useParams(); // Get profile id from URL params
+  const location = useLocation(); // Get navigation state
   const token = sessionStorage.getItem("token");
+
+  // Get logged-in user info to determine if this is view-only
+  const loggedInUser = JSON.parse(sessionStorage.getItem("user") || "{}");
+  const loggedInUserId = loggedInUser?._id || loggedInUser?.id;
+  const loggedInUserRole = loggedInUser?.role?.toLowerCase();
+
+  // Determine view-only mode: it's view-only if:
+  // 1. Location state explicitly says viewOnly: true, OR
+  // 2. There's an ID param AND (student viewing any profile OR teacher viewing a different teacher's profile)
+  const isViewOnly =
+    location.state?.viewOnly === true ||
+    (id &&
+      (loggedInUserRole === "student" ||
+        (loggedInUserRole === "teacher" && id !== loggedInUserId)));
+
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -61,9 +79,20 @@ const TeacherProfileUpgraded = () => {
         return;
       }
       try {
-        const res = await axios.get("http://localhost:5000/api/profile", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        let res;
+
+        // If viewing another user's profile (id is present in URL), fetch that user's data
+        if (id) {
+          res = await axios.get(`http://localhost:5000/api/users/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+        } else {
+          // Otherwise, fetch the current user's profile
+          res = await axios.get("http://localhost:5000/api/profile", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+        }
+
         setProfile(res.data);
         setFormData(res.data);
       } catch (err) {
@@ -74,7 +103,7 @@ const TeacherProfileUpgraded = () => {
       }
     };
     fetchProfile();
-  }, [token, navigate]);
+  }, [token, navigate, id]);
 
   useEffect(() => {
     if (darkMode) {
@@ -222,9 +251,12 @@ const TeacherProfileUpgraded = () => {
 
   return (
     <div className="flex min-h-screen page-surface">
-      <TeacherSidebar />
+      {/* Only show sidebar when viewing own profile or not in view-only mode */}
+      {!isViewOnly && <TeacherSidebar />}
 
-      <div className="flex-1 p-8 lg:p-12 relative">
+      <div
+        className={`${!isViewOnly ? "flex-1" : "w-full"} p-8 lg:p-12 relative`}
+      >
         <button
           onClick={() => setDarkMode(!darkMode)}
           className="absolute top-8 right-8 icon-action absolute top-8 right-8 z-10"
@@ -235,6 +267,18 @@ const TeacherProfileUpgraded = () => {
             <Moon className="w-6 h-6" />
           )}
         </button>
+
+        {/* Back button when viewing another user's profile */}
+        {isViewOnly && (
+          <button
+            onClick={() => navigate(-1)}
+            className="mb-4 flex items-center gap-2 text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            Back
+          </button>
+        )}
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -243,30 +287,32 @@ const TeacherProfileUpgraded = () => {
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
             <h1 className="section-title">
-              Instructor Profile
+              {isViewOnly ? "Instructor Profile" : "Instructor Profile"}
             </h1>
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => {
-                if (isEditing) {
-                  setFormData(profile);
-                  setPreviewImage(null);
-                }
-                setIsEditing(!isEditing);
-              }}
-              className={isEditing ? "secondary-action" : "primary-action"}
-            >
-              {isEditing ? (
-                <>
-                  <X className="w-5 h-5" /> Cancel
-                </>
-              ) : (
-                <>
-                  <Edit2 className="w-5 h-5" /> Edit Profile
-                </>
-              )}
-            </motion.button>
+            {!isViewOnly && (
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => {
+                  if (isEditing) {
+                    setFormData(profile);
+                    setPreviewImage(null);
+                  }
+                  setIsEditing(!isEditing);
+                }}
+                className={isEditing ? "secondary-action" : "primary-action"}
+              >
+                {isEditing ? (
+                  <>
+                    <X className="w-5 h-5" /> Cancel
+                  </>
+                ) : (
+                  <>
+                    <Edit2 className="w-5 h-5" /> Edit Profile
+                  </>
+                )}
+              </motion.button>
+            )}
           </div>
 
           {/* Main Card */}
@@ -278,14 +324,15 @@ const TeacherProfileUpgraded = () => {
           >
             {/* Profile Picture Section */}
             <div className="bg-stone-800 dark:bg-stone-950 h-40 relative">
-               <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+              <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
             </div>
 
             <div className="px-8 py-6 relative">
               {/* Profile Picture */}
               <div className="relative -mt-28 mb-8">
                 <div className="relative inline-block">
-                  {previewImage || (profile.profilePicture && !isEditing) ? (
+                  {previewImage ||
+                  (profile.profilePicture && !(isEditing && !isViewOnly)) ? (
                     <img
                       src={
                         previewImage ||
@@ -300,7 +347,7 @@ const TeacherProfileUpgraded = () => {
                     </div>
                   )}
 
-                  {isEditing && (
+                  {isEditing && !isViewOnly && (
                     <label className="absolute -bottom-2 -right-2 bg-orange-600 hover:bg-orange-700 text-white p-3 rounded-xl cursor-pointer shadow-lg transition-all hover:scale-110">
                       <Upload className="w-5 h-5" />
                       <input
@@ -317,85 +364,89 @@ const TeacherProfileUpgraded = () => {
               {/* Basic Info */}
               <div className="space-y-6">
                 {/* Name and Email */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-xs font-black body-copy uppercase tracking-widest mb-2">
-                      Full Name
-                    </label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        className="form-input"
-                      />
-                    ) : (
-                      <p className="text-lg font-bold text-stone-900 dark:text-white">
-                        {profile.name}
-                      </p>
-                    )}
-                  </div>
+                <div className="bg-stone-50 dark:bg-stone-800/30  px-6 py-5 rounded-r-lg">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-bold text-stone-900 dark:text-stone-100 mb-3 tracking-wide">
+                        Full Name
+                      </label>
+                      {isEditing && !isViewOnly ? (
+                        <input
+                          type="text"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleInputChange}
+                          className="form-input"
+                        />
+                      ) : (
+                        <p className="text-base font-semibold text-stone-700 dark:text-stone-200">
+                          {profile.name}
+                        </p>
+                      )}
+                    </div>
 
-                  <div>
-                    <label className="block text-xs font-black body-copy uppercase tracking-widest mb-2 flex items-center gap-2">
-                      <Mail className="w-4 h-4 text-orange-500" /> Email
-                    </label>
-                    <p className="text-lg font-medium text-stone-600 dark:text-stone-400 surface-panel px-4 py-3">
-                      {profile.email}
-                    </p>
+                    <div>
+                      <label className="block text-sm font-bold text-stone-900 dark:text-stone-100 mb-3 tracking-wide">
+                        Email Address
+                      </label>
+                      <p className="text-base font-medium text-stone-600 dark:text-stone-300">
+                        {profile.email}
+                      </p>
+                    </div>
                   </div>
                 </div>
 
                 {/* Department and Qualification */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-xs font-black body-copy uppercase tracking-widest mb-2 flex items-center gap-2">
-                      <BookOpen className="w-4 h-4 text-orange-500" /> Department
-                    </label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        name="department"
-                        value={formData.department}
-                        onChange={handleInputChange}
-                        placeholder="Enter department"
-                        className="form-input"
-                      />
-                    ) : (
-                      <p className="text-stone-700 dark:text-stone-300 font-medium">
-                        {profile.department || "Not specified"}
-                      </p>
-                    )}
-                  </div>
+                <div className="bg-stone-50 dark:bg-stone-800/30  px-6 py-5 rounded-r-lg">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-bold text-stone-900 dark:text-stone-100 mb-3 tracking-wide">
+                        Department
+                      </label>
+                      {isEditing && !isViewOnly ? (
+                        <input
+                          type="text"
+                          name="department"
+                          value={formData.department}
+                          onChange={handleInputChange}
+                          placeholder="Enter department"
+                          className="form-input"
+                        />
+                      ) : (
+                        <p className="text-base font-medium text-stone-600 dark:text-stone-300">
+                          {profile.department || "Not specified"}
+                        </p>
+                      )}
+                    </div>
 
-                  <div>
-                    <label className="block text-xs font-black body-copy uppercase tracking-widest mb-2 flex items-center gap-2">
-                      <GraduationCap className="w-4 h-4 text-orange-500" /> Qualification
-                    </label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        name="qualification"
-                        value={formData.qualification}
-                        onChange={handleInputChange}
-                        placeholder="e.g., M.Sc, Ph.D"
-                        className="form-input"
-                      />
-                    ) : (
-                      <p className="text-stone-700 dark:text-stone-300 font-medium">
-                        {profile.qualification || "Not specified"}
-                      </p>
-                    )}
+                    <div>
+                      <label className="block text-sm font-bold text-stone-900 dark:text-stone-100 mb-3 tracking-wide">
+                        Qualification
+                      </label>
+                      {isEditing && !isViewOnly ? (
+                        <input
+                          type="text"
+                          name="qualification"
+                          value={formData.qualification}
+                          onChange={handleInputChange}
+                          placeholder="e.g., M.Sc, Ph.D"
+                          className="form-input"
+                        />
+                      ) : (
+                        <p className="text-base font-medium text-stone-600 dark:text-stone-300">
+                          {profile.qualification || "Not specified"}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
 
                 {/* Subject */}
-                <div>
-                  <label className="block text-xs font-black body-copy uppercase tracking-widest mb-2">
+                <div className="bg-stone-50 dark:bg-stone-800/30  px-6 py-5 rounded-r-lg">
+                  <label className="block text-sm font-bold text-stone-900 dark:text-stone-100 mb-3 tracking-wide">
                     Subject / Specialization
                   </label>
-                  {isEditing ? (
+                  {isEditing && !isViewOnly ? (
                     <input
                       type="text"
                       name="subject"
@@ -405,18 +456,18 @@ const TeacherProfileUpgraded = () => {
                       className="form-input"
                     />
                   ) : (
-                    <p className="text-stone-700 dark:text-stone-300 font-medium">
+                    <p className="text-base font-medium text-stone-600 dark:text-stone-300">
                       {profile.subject || "Not specified"}
                     </p>
                   )}
                 </div>
 
                 {/* Bio */}
-                <div>
-                  <label className="block text-xs font-black body-copy uppercase tracking-widest mb-2">
+                <div className="bg-stone-50 dark:bg-stone-800/30  px-6 py-5 rounded-r-lg">
+                  <label className="block text-sm font-bold text-stone-900 dark:text-stone-100 mb-3 tracking-wide">
                     Bio / About Me
                   </label>
-                  {isEditing ? (
+                  {isEditing && !isViewOnly ? (
                     <textarea
                       name="bio"
                       value={formData.bio}
@@ -426,18 +477,18 @@ const TeacherProfileUpgraded = () => {
                       className="form-input resize-none"
                     />
                   ) : (
-                    <p className="body-copy leading-relaxed">
+                    <p className="text-stone-600 dark:text-stone-300 leading-relaxed">
                       {profile.bio || "No bio added yet"}
                     </p>
                   )}
                 </div>
 
                 {/* Skills */}
-                <div>
-                  <label className="block text-xs font-black body-copy uppercase tracking-widest mb-3">
+                <div className="bg-stone-50 dark:bg-stone-800/30  px-6 py-5 rounded-r-lg">
+                  <label className="block text-sm font-bold text-stone-900 dark:text-stone-100 mb-4 tracking-wide">
                     Teaching Skills
                   </label>
-                  {isEditing ? (
+                  {isEditing && !isViewOnly ? (
                     <div className="space-y-3">
                       <div className="flex gap-2">
                         <input
@@ -492,18 +543,20 @@ const TeacherProfileUpgraded = () => {
                           </span>
                         ))
                       ) : (
-                        <p className="body-copy text-sm">No skills added yet</p>
+                        <p className="text-stone-500 dark:text-stone-400 text-sm">
+                          No skills added yet
+                        </p>
                       )}
                     </div>
                   )}
                 </div>
 
                 {/* Achievements */}
-                <div>
-                  <label className="block text-xs font-black body-copy uppercase tracking-widest mb-3 flex items-center gap-2">
-                    <Award className="w-4 h-4 text-orange-500" /> Achievements & Awards
+                <div className="bg-stone-50 dark:bg-stone-800/30  px-6 py-5 rounded-r-lg">
+                  <label className="block text-sm font-bold text-stone-900 dark:text-stone-100 mb-4 tracking-wide">
+                    Achievements & Awards
                   </label>
-                  {isEditing ? (
+                  {isEditing && !isViewOnly ? (
                     <div className="space-y-3">
                       <div className="flex gap-2">
                         <input
@@ -558,18 +611,20 @@ const TeacherProfileUpgraded = () => {
                           </span>
                         ))
                       ) : (
-                        <p className="body-copy text-sm">No achievements added yet</p>
+                        <p className="text-stone-500 dark:text-stone-400 text-sm">
+                          No achievements added yet
+                        </p>
                       )}
                     </div>
                   )}
                 </div>
 
                 {/* Interests */}
-                <div>
-                  <label className="block text-xs font-black body-copy uppercase tracking-widest mb-3">
+                <div className="bg-stone-50 dark:bg-stone-800/30  px-6 py-5 rounded-r-lg">
+                  <label className="block text-sm font-bold text-stone-900 dark:text-stone-100 mb-4 tracking-wide">
                     Interests
                   </label>
-                  {isEditing ? (
+                  {isEditing && !isViewOnly ? (
                     <div className="space-y-3">
                       <div className="flex gap-2">
                         <input
@@ -624,79 +679,90 @@ const TeacherProfileUpgraded = () => {
                           </span>
                         ))
                       ) : (
-                        <p className="body-copy text-sm">No interests added yet</p>
+                        <p className="text-stone-500 dark:text-stone-400 text-sm">
+                          No interests added yet
+                        </p>
                       )}
                     </div>
                   )}
                 </div>
 
                 {/* Social Links */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-xs font-black body-copy uppercase tracking-widest mb-2 flex items-center gap-2">
-                      <Github className="w-4 h-4 text-stone-400" /> GitHub URL
-                    </label>
-                    {isEditing ? (
-                      <input
-                        type="url"
-                        name="github"
-                        value={formData.github}
-                        onChange={handleInputChange}
-                        placeholder="https://github.com/username"
-                        className="form-input"
-                      />
-                    ) : (
-                      <>
-                        {profile.github ? (
-                          <a
-                            href={profile.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-orange-600 dark:text-orange-400 hover:underline font-semibold break-all"
-                          >
-                            {profile.github}
-                          </a>
-                        ) : (
-                          <p className="body-copy text-sm">Not provided</p>
-                        )}
-                      </>
-                    )}
-                  </div>
+                <div className="bg-stone-50 dark:bg-stone-800/30  px-6 py-5 rounded-r-lg">
+                  <label className="block text-sm font-bold text-stone-900 dark:text-stone-100 mb-4 tracking-wide">
+                    Social Links
+                  </label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-stone-600 dark:text-stone-400 mb-2 uppercase tracking-wider">
+                        GitHub URL
+                      </label>
+                      {isEditing && !isViewOnly ? (
+                        <input
+                          type="url"
+                          name="github"
+                          value={formData.github}
+                          onChange={handleInputChange}
+                          placeholder="https://github.com/username"
+                          className="form-input"
+                        />
+                      ) : (
+                        <>
+                          {profile.github ? (
+                            <a
+                              href={profile.github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-orange-600 dark:text-orange-400 hover:underline font-medium text-sm break-all"
+                            >
+                              {profile.github}
+                            </a>
+                          ) : (
+                            <p className="text-stone-500 dark:text-stone-400 text-sm">
+                              Not provided
+                            </p>
+                          )}
+                        </>
+                      )}
+                    </div>
 
-                  <div>
-                    <label className="block text-xs font-black body-copy uppercase tracking-widest mb-2 flex items-center gap-2">
-                      <Linkedin className="w-4 h-4 text-stone-400" /> LinkedIn URL
-                    </label>
-                    {isEditing ? (
-                      <input
-                        type="url"
-                        name="linkedin"
-                        value={formData.linkedin}
-                        onChange={handleInputChange}
-                        placeholder="https://linkedin.com/in/username"
-                        className="form-input"
-                      />
-                    ) : (
-                      <>
-                        {profile.linkedin ? (
-                          <a
-                            href={profile.linkedin}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-orange-600 dark:text-orange-400 hover:underline font-semibold break-all"
-                          >
-                            {profile.linkedin}
-                          </a>
-                        ) : (
-                          <p className="body-copy text-sm">Not provided</p>
-                        )}
-                      </>
-                    )}
+                    <div>
+                      <label className="block text-xs font-semibold text-stone-600 dark:text-stone-400 mb-2 uppercase tracking-wider">
+                        LinkedIn URL
+                      </label>
+                      {isEditing && !isViewOnly ? (
+                        <input
+                          type="url"
+                          name="linkedin"
+                          value={formData.linkedin}
+                          onChange={handleInputChange}
+                          placeholder="https://linkedin.com/in/username"
+                          className="form-input"
+                        />
+                      ) : (
+                        <>
+                          {profile.linkedin ? (
+                            <a
+                              href={profile.linkedin}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-orange-600 dark:text-orange-400 hover:underline font-medium text-sm break-all"
+                            >
+                              {profile.linkedin}
+                            </a>
+                          ) : (
+                            <p className="text-stone-500 dark:text-stone-400 text-sm">
+                              Not provided
+                            </p>
+                          )}
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
 
                 {/* Save Button */}
-                {isEditing && (
+                {isEditing && !isViewOnly && (
                   <motion.button
                     whileHover={{ y: -2 }}
                     whileTap={{ scale: 0.98 }}
@@ -726,4 +792,3 @@ const TeacherProfileUpgraded = () => {
 };
 
 export default TeacherProfileUpgraded;
-

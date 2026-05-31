@@ -14,7 +14,7 @@ router.get("/", protect, async (req, res) => {
   try {
     const teacherId = req.user.id || req.user._id;
 
-    console.log(`🔍 Getting enrollment requests for teacher: ${req.user.name}`);
+    console.log(`Getting enrollment requests for teacher: ${req.user.name}`);
 
     const requests = await EnrollmentRequest.find({
       teacher: teacherId,
@@ -79,7 +79,7 @@ router.put("/:id/approve", protect, async (req, res) => {
     const teacherId = req.user.id || req.user._id;
 
     console.log(
-      `✅ Approving enrollment request: ${id} by teacher: ${req.user.name}`,
+      `Approving enrollment request: ${id} by teacher: ${req.user.name}`,
     );
 
     // Get the enrollment request
@@ -129,7 +129,7 @@ router.put("/:id/approve", protect, async (req, res) => {
     await payment.save();
 
     console.log(
-      `💳 Payment record created for student ${enrollmentRequest.student.name}, Amount: ${course.price}`,
+      `Payment record created for student ${enrollmentRequest.student.name}, Amount: ${course.price}`,
     );
 
     // Send notification to student with link to payment page
@@ -144,7 +144,7 @@ router.put("/:id/approve", protect, async (req, res) => {
     await studentNotification.save();
 
     console.log(
-      `📬 Payment notification sent to student ${enrollmentRequest.student.name}`,
+      `Payment notification sent to student ${enrollmentRequest.student.name}`,
     );
 
     // Emit real-time notification via socket.io
@@ -172,7 +172,7 @@ router.put("/:id/approve", protect, async (req, res) => {
         },
       );
       console.log(
-        `🔔 Real-time socket notification sent to student ${enrollmentRequest.student._id}`,
+        `Real-time socket notification sent to student ${enrollmentRequest.student._id}`,
       );
     }
 
@@ -196,7 +196,7 @@ router.put("/:id/reject", protect, async (req, res) => {
     const teacherId = req.user.id || req.user._id;
 
     console.log(
-      `❌ Rejecting enrollment request: ${id} by teacher: ${req.user.name}`,
+      `Rejecting enrollment request: ${id} by teacher: ${req.user.name}`,
     );
 
     // Get the enrollment request
@@ -240,7 +240,7 @@ router.put("/:id/reject", protect, async (req, res) => {
     await studentNotification.save();
 
     console.log(
-      `📬 Rejection notification sent to student ${enrollmentRequest.student.name}`,
+      `Rejection notification sent to student ${enrollmentRequest.student.name}`,
     );
 
     res.status(200).json({

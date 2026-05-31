@@ -4,7 +4,7 @@ import { allocateUserToBatch } from "../services/batchAllocationService.js";
 
 // Generate JWT token
 const generateToken = (id, role) => {
-  return jwt.sign({ id, role }, process.env.JWT_SECRET, { expiresIn: "1h" });
+  return jwt.sign({ id, role }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
 // REGISTER USER
@@ -13,7 +13,7 @@ export const registerUser = async (req, res) => {
     const { name, email, password, role, interests } = req.body;
 
     console.log(
-      `📝 Registration Request - Name: ${name}, Email: ${email}, Role: ${role}, Role Type: ${typeof role}`,
+      ` Registration Request - Name: ${name}, Email: ${email}, Role: ${role}, Role Type: ${typeof role}`,
     );
 
     const existingUser = await User.findOne({ email });
@@ -46,7 +46,7 @@ export const registerUser = async (req, res) => {
 
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
-    console.error("❌ Registration error:", error.message);
+    console.error("Registration error:", error.message);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
@@ -58,17 +58,17 @@ export const loginUser = async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user || !(await user.matchPassword(password))) {
-      console.warn(`⚠️  Login failed - Invalid credentials for: ${email}`);
+      console.warn(`  Login failed - Invalid credentials for: ${email}`);
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
     console.log(
-      `🔑 Login successful - User: ${user.name}, ID: ${user._id}, Role: ${user.role}`,
+      ` Login successful - User: ${user.name}, ID: ${user._id}, Role: ${user.role}`,
     );
 
     const token = generateToken(user._id, user.role);
     console.log(
-      `✅ JWT token generated - Contains ID: ${user._id}, Role: ${user.role}`,
+      ` JWT token generated - Contains ID: ${user._id}, Role: ${user.role}`,
     );
 
     res.json({
@@ -83,7 +83,7 @@ export const loginUser = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("❌ Login error:", error.message);
+    console.error(" Login error:", error.message);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };

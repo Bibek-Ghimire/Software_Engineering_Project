@@ -240,10 +240,6 @@ const CoursesPage = () => {
             <h1 className="text-4xl font-bold brand-title text-4xl font-bold text-stone-900 dark:text-stone-50 mb-2">
               Course Management
             </h1>
-            <p className="text-stone-600 dark:text-stone-400 font-medium flex items-center gap-2">
-              <BookOpen className="w-4 h-4" />
-              Create and manage your educational content
-            </p>
           </div>
           <button
             onClick={() => setDarkMode(!darkMode)}
@@ -261,9 +257,7 @@ const CoursesPage = () => {
         {user?.role === "teacher" && (
           <div className="mb-10 surface-card-strong p-8">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-2xl bg-orange-50 dark:bg-orange-950/30 flex items-center justify-center border border-orange-100 dark:border-orange-900/40 text-stone-600 dark:text-stone-400">
-                <Plus className="w-5 h-5" />
-              </div>
+        
               <h2 className="text-2xl font-semibold text-stone-900 dark:text-stone-50">
                 Create a New Course
               </h2>
@@ -363,7 +357,6 @@ const CoursesPage = () => {
               onClick={handleCreateCourse}
               className="primary-action px-6 py-3.5 rounded-2xl"
             >
-              <Plus className="w-5 h-5" />
               Create Course
             </button>
           </div>
@@ -372,16 +365,12 @@ const CoursesPage = () => {
         {/* Courses List Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl flex items-center justify-center">
-              <BookOpen className="w-5 h-5 text-white" />
-            </div>
             <h2 className="text-3xl font-bold text-stone-700 dark:text-stone-300">
               All Courses
             </h2>
           </div>
           <div className="flex items-center gap-4 text-stone-600 dark:text-stone-400">
             <div className="flex items-center gap-2 surface-panel px-4 py-2">
-              <Users className="w-4 h-4" />
               <span className="font-medium">{courses.length} courses</span>
             </div>
           </div>
@@ -391,9 +380,7 @@ const CoursesPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {courses.length === 0 && !loading && (
             <div className="col-span-full text-center py-16">
-              <div className="w-20 h-20 bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-2xl mx-auto mb-6 flex items-center justify-center">
-                <BookOpen className="w-8 h-8 text-stone-500 dark:text-stone-400" />
-              </div>
+              <div className="w-20 h-20 bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-2xl mx-auto mb-6 flex items-center justify-center"></div>
               <p className="text-xl font-semibold text-stone-500 dark:text-stone-400 mb-2">
                 No courses found
               </p>
@@ -485,9 +472,6 @@ const CoursesPage = () => {
                         placeholder="React, JavaScript, Web Dev"
                         className="w-full p-3 border-2 border-stone-200 dark:border-stone-700 rounded-xl dark:bg-stone-800/50 dark:text-white focus:border-orange-400 focus:ring-2 focus:ring-orange-100 dark:focus:ring-orange-900/20 transition-all duration-300"
                       />
-                      <p className="text-xs text-stone-500 dark:text-stone-400 mt-2">
-                        Separate with commas (e.g., React, JavaScript, Web Dev)
-                      </p>
                     </div>
                   </div>
 
@@ -509,7 +493,7 @@ const CoursesPage = () => {
               ) : (
                 <>
                   {/* Course Header */}
-                  <div className="bg-gradient-to-r from-stone-700 to-stone-900 p-6 text-white relative overflow-hidden">
+                  <div className="bg-stone-500 p-6 text-white relative overflow-hidden">
                     <div className="hidden"></div>
                     <div className="relative z-10">
                       <h3 className="text-xl font-bold mb-2 line-clamp-2 text-stone-900 dark:text-stone-50">
@@ -519,7 +503,6 @@ const CoursesPage = () => {
                         <span
                           className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 border bg-stone-100 text-stone-700 dark:bg-stone-800 dark:text-stone-300`}
                         >
-                          {getLevelIcon(course.level)}
                           {course.level}
                         </span>
                       </div>
@@ -534,14 +517,16 @@ const CoursesPage = () => {
 
                     {/* Course Meta Info */}
                     <div className="grid grid-cols-2 gap-4 mb-6">
-                      <div className="flex items-center gap-2 p-3 bg-gradient-to-r from-orange-50 to-blue-50 dark:from-stone-900/20 dark:to-blue-900/20 rounded-xl border border-stone-200 dark:border-stone-700">
+                      <div className="flex items-center gap-2 p-3 bg-orange-50 dark:bg-stone-900/20 rounded-xl border border-stone-200 dark:border-stone-700">
                         <Clock className="w-4 h-4 text-stone-500 dark:text-stone-400" />
                         <span className="text-sm font-medium text-stone-700 dark:text-stone-300">
                           {course.duration}
                         </span>
                       </div>
                       <div className="flex items-center gap-2 p-3 surface-panel rounded-xl">
-                        <span className="text-xs font-bold text-stone-500 dark:text-stone-400">Rs.</span>
+                        <span className="text-xs font-bold text-stone-500 dark:text-stone-400">
+                          Rs.
+                        </span>
                         <span className="text-sm font-medium text-stone-700 dark:text-stone-300">
                           {course.price}
                         </span>
@@ -562,7 +547,7 @@ const CoursesPage = () => {
                           <>
                             <button
                               onClick={() => handleEditClick(course)}
-                              className="flex-1 min-w-0 bg-gradient-to-r from-stone-700 to-stone-900 text-white py-3 px-4 rounded-xl font-semibold hover:from-stone-800 hover:to-stone-900 transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 flex items-center justify-center gap-2"
+                              className="flex-1 min-w-0 bg-stone-800 text-white py-3 px-4 rounded-xl font-semibold hover:bg-stone-900 transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 flex items-center justify-center gap-2"
                             >
                               <Pencil className="w-4 h-4" /> Edit
                             </button>
@@ -587,4 +572,3 @@ const CoursesPage = () => {
 };
 
 export default CoursesPage;
-

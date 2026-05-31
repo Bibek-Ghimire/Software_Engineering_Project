@@ -43,12 +43,12 @@ import {
 
 const user = JSON.parse(localStorage.getItem("user"));
 
-const StatCard = ({ title, value, icon, trend, subtitle }) => (
+const StatCard = ({ title, value, subtitle }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     whileHover={{ y: -4 }}
-    className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer"
+    className="bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer"
   >
     <div className="flex justify-between items-start">
       <div className="space-y-1">
@@ -59,16 +59,9 @@ const StatCard = ({ title, value, icon, trend, subtitle }) => (
           <h3 className="text-3xl font-bold text-stone-900 dark:text-stone-50">
             {value}
           </h3>
-          {trend && (
-            <span className="text-orange-600 dark:text-orange-400 text-xs font-semibold">
-              {trend}
-            </span>
-          )}
+       
         </div>
         <p className="text-stone-400 dark:text-stone-500 text-xs">{subtitle}</p>
-      </div>
-      <div className="p-3 rounded-xl bg-orange-50 dark:bg-orange-950/30 border border-orange-100 dark:border-orange-900/40 transition-transform duration-200">
-        {icon}
       </div>
     </div>
   </motion.div>
@@ -468,9 +461,9 @@ const TeacherDashboard = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
           {/* Enhanced Background with Glassmorphism and Gradients */}
-          <div className="absolute inset-0 bg-stone-50 dark:bg-[#0c0a09]">
-            <div className="absolute top-0 right-0 w-2/3 h-full bg-gradient-to-l from-orange-100/40 via-transparent to-transparent dark:from-orange-950/20"></div>
-            <div className="absolute bottom-0 left-0 w-1/2 h-full bg-gradient-to-tr from-stone-200/30 via-transparent to-transparent dark:from-stone-900/40"></div>
+          <div className="absolute inset-0 bg-stone-200 dark:bg-stone-900">
+            {/* <div className="absolute top-0 right-0 w-2/3 h-full bg-gradient-to-l from-orange-100/40 via-transparent to-transparent dark:from-orange-950/20"></div> */}
+            {/* <div className="absolute bottom-0 left-0 w-1/2 h-full bg-gradient-to-tr from-stone-200/30 via-transparent to-transparent dark:from-stone-900/40"></div> */}
           </div>
 
           <div className="relative z-10 h-full flex flex-col md:flex-row items-center justify-between px-10 py-12 md:py-16">
@@ -530,7 +523,7 @@ const TeacherDashboard = () => {
                   <ArrowUpRight className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 </button>
 
-                <div className="flex items-center gap-2 bg-stone-200/50 dark:bg-stone-800/50 backdrop-blur-md rounded-2xl px-6 py-4 border border-stone-200 dark:border-stone-700">
+                <div className="flex items-center gap-2 bg-stone-400/5 backdrop-blur-xl rounded-2xl px-5 py-3 border border-stone-500/35 hover:bg-stone-50/30 transition-all dark:bg-stone-50/20 backdrop-blur-xl border-stone-200/30 hover:bg-stone-50/30">
                   <Calendar className="w-5 h-5 text-stone-600 dark:text-stone-400" />
                   <span className="text-stone-800 dark:text-stone-200 font-bold">
                     {new Date().toLocaleDateString("en-US", {
@@ -575,37 +568,25 @@ const TeacherDashboard = () => {
           <StatCard
             title="Active Courses"
             value={courses.length}
-            icon={
-              <BookMarked className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-            }
-            trend="+12%"
+          
             subtitle="This month"
           />
           <StatCard
             title="Study Groups"
             value={groups.length}
-            icon={
-              <Users className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-            }
-            trend="+8%"
+          
             subtitle="Active groups"
           />
           <StatCard
             title="Total Students"
             value={studentsCount}
-            icon={
-              <User className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-            }
-            trend="+24%"
+         
             subtitle="Enrolled"
           />
           <StatCard
             title="Engagements"
             value={engagements}
-            icon={
-              <TrendingUp className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-            }
-            trend="+18%"
+     
             subtitle="This week"
           />
         </div>
@@ -801,7 +782,7 @@ const TeacherDashboard = () => {
                     description="Check teacher rankings"
                     icon={<Award className="w-8 h-8" />}
                     onClick={() => navigate("/teacher/leaderboard")}
-                    color="from-stone-600 to-stone-700"
+                    color="#c2651a"
                   />
                 </p>
               </motion.div>

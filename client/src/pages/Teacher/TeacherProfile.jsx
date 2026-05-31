@@ -212,7 +212,7 @@ const TeacherProfile = () => {
 
   if (loading)
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
+      <div className="flex justify-center items-center min-h-screen bg-stone-50 dark:bg-stone-950">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-base font-semibold text-stone-700 dark:text-stone-300 ">
@@ -241,8 +241,6 @@ const TeacherProfile = () => {
           )}
         </button>
         {/* Decorative background elements */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br opacity-0"></div>
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr opacity-0"></div>
 
         <motion.div
           className="max-w-6xl mx-auto bg-white/90 dark:bg-stone-900/90 backdrop-blur-sm rounded-3xl shadow-2xl p-10 border border-orange-50/50 dark:border-stone-700/50 relative z-10"
@@ -265,14 +263,13 @@ const TeacherProfile = () => {
                     className="w-40 h-40 rounded-full object-cover border-4 border-white shadow-2xl ring-4 ring-stone-200/50 dark:ring-stone-800/50"
                   />
                 ) : (
-                  <div className="w-40 h-40 rounded-full bg-gradient-to-br from-orange-400 to-blue-600 flex items-center justify-center text-white text-4xl font-bold shadow-2xl ring-4 ring-stone-200/50 dark:ring-stone-800/50">
+                  <div className="w-40 h-40 rounded-full bg-orange-500 flex items-center justify-center text-white text-4xl font-bold shadow-2xl ring-4 ring-stone-200/50 dark:ring-stone-800/50">
                     {profile.name ? profile.name[0] : "T"}
                   </div>
                 )}
-                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-orange-400/20 to-blue-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </motion.div>
               {isEditing && !viewOnly && (
-                <label className="absolute bottom-2 right-2 bg-gradient-to-r from-stone-700 to-stone-900 p-3 rounded-full cursor-pointer hover:from-stone-800 hover:to-stone-900 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-110 border-2 border-white dark:border-stone-700">
+                <label className="absolute bottom-2 right-2 bg-stone-800 p-3 rounded-full cursor-pointer hover:bg-stone-900 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-110 border-2 border-white dark:border-stone-700">
                   <input
                     type="file"
                     className="hidden"
@@ -289,7 +286,7 @@ const TeacherProfile = () => {
 
             <div className="flex-1 text-center md:text-left">
               <h1 className="text-4xl font-bold brand-title text-stone-900 dark:text-stone-50 mb-3 flex items-center justify-center md:justify-start gap-3">
-                <div className="w-8 h-8 bg-gradient-to-r from-stone-700 to-stone-900 rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-stone-800 rounded-lg flex items-center justify-center">
                   <User className="w-4 h-4 text-white" />
                 </div>
                 {profile.name}
@@ -314,8 +311,8 @@ const TeacherProfile = () => {
                 onClick={() => setIsEditing(!isEditing)}
                 className={`px-8 py-3 rounded-full shadow-lg font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 ${
                   isEditing
-                    ? "bg-gradient-to-r from-red-500 to-pink-600 text-white hover:from-red-600 hover:to-pink-700"
-                    : "bg-gradient-to-r from-stone-700 to-stone-900 text-white hover:from-stone-800 hover:to-stone-900"
+                    ? "bg-red-500 text-white hover:bg-red-600"
+                    : "bg-stone-800 text-white hover:bg-stone-900"
                 }`}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -343,7 +340,7 @@ const TeacherProfile = () => {
               transition={{ duration: 0.5, delay: 0.1 }}
             >
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r from-stone-700 to-stone-900 rounded-xl flex items-center justify-center shadow-md">
+                <div className="w-10 h-10 bg-stone-800 rounded-xl flex items-center justify-center shadow-md">
                   <BookOpen className="w-5 h-5 text-white" />
                 </div>
                 <h2 className="text-2xl font-bold text-stone-700 dark:text-stone-300">
@@ -423,7 +420,7 @@ const TeacherProfile = () => {
                     label="Institution"
                     value={profile.college || "Not added yet"}
                   />
-                  <div className="bg-gradient-to-r from-orange-50 to-blue-50 dark:from-gray-700/50 dark:to-gray-600/50 rounded-xl p-6 border-l-4 border-orange-400 shadow-inner">
+                  <div className="bg-stone-100 dark:bg-stone-800 rounded-xl p-6 border-l-4 border-orange-400 shadow-inner">
                     <p className="text-sm font-semibold text-stone-600 dark:text-stone-400 mb-2 uppercase tracking-wide">
                       About
                     </p>
@@ -443,7 +440,7 @@ const TeacherProfile = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r from-amber-500 to-orange-600 rounded-xl flex items-center justify-center shadow-md">
+                <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center shadow-md">
                   <Award className="w-5 h-5 text-white" />
                 </div>
                 <h2 className="text-2xl font-bold text-stone-700 dark:text-stone-300">
@@ -483,7 +480,7 @@ const TeacherProfile = () => {
                   <button
                     type="button"
                     onClick={() => handleAddItem("achievements")}
-                    className="mt-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white px-6 py-3 rounded-xl hover:from-amber-600 hover:to-orange-700 transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 font-semibold"
+                    className="mt-4 bg-amber-500 text-white px-6 py-3 rounded-xl hover:bg-amber-600 transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 font-semibold"
                   >
                     + Add Achievement
                   </button>
@@ -494,7 +491,7 @@ const TeacherProfile = () => {
                     profile.achievements.map((achievement, index) => (
                       <div
                         key={index}
-                        className="flex items-start gap-3 p-4 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl border border-amber-200/50 dark:border-amber-700/50 hover:shadow-md transition-all duration-300"
+                        className="flex items-start gap-3 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-200/50 dark:border-amber-700/50 hover:shadow-md transition-all duration-300"
                       >
                         <CheckCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
                         <p className="text-stone-700 dark:text-stone-300 font-medium">
@@ -504,7 +501,7 @@ const TeacherProfile = () => {
                     ))
                   ) : (
                     <div className="text-center py-8">
-                      <div className="w-16 h-16 bg-gradient-to-br from-amber-200 to-orange-300 rounded-full mx-auto mb-4 flex items-center justify-center">
+                      <div className="w-16 h-16 bg-amber-200 rounded-full mx-auto mb-4 flex items-center justify-center">
                         <Award className="w-6 h-6 text-amber-600" />
                       </div>
                       <p className="text-stone-500 dark:text-stone-400">
@@ -529,7 +526,7 @@ const TeacherProfile = () => {
               >
                 <div className="flex items-center gap-3 mb-6">
                   <div
-                    className={`w-10 h-10 bg-gradient-to-r ${field === "skills" ? "from-emerald-500 to-teal-600" : "from-pink-500 to-rose-600"} rounded-xl flex items-center justify-center shadow-md`}
+                    className={`w-10 h-10 ${field === "skills" ? "bg-emerald-500" : "bg-pink-500"} rounded-xl flex items-center justify-center shadow-md`}
                   >
                     <Star className="w-5 h-5 text-white" />
                   </div>
@@ -566,7 +563,7 @@ const TeacherProfile = () => {
                     <button
                       type="button"
                       onClick={() => handleAddItem(field)}
-                      className={`mt-4 bg-gradient-to-r ${field === "skills" ? "from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700" : "from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700"} text-white px-6 py-3 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 font-semibold`}
+                      className={`mt-4 ${field === "skills" ? "bg-emerald-500 hover:bg-emerald-600" : "bg-pink-500 hover:bg-pink-600"} text-white px-6 py-3 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 font-semibold`}
                     >
                       + Add {field.slice(0, -1)}
                     </button>
@@ -585,7 +582,7 @@ const TeacherProfile = () => {
                     ) : (
                       <div className="text-center py-8 w-full">
                         <div
-                          className={`w-16 h-16 bg-gradient-to-br ${field === "skills" ? "from-emerald-200 to-teal-300" : "from-rose-200 to-pink-300"} rounded-full mx-auto mb-4 flex items-center justify-center`}
+                          className={`w-16 h-16 ${field === "skills" ? "bg-emerald-200" : "bg-rose-200"} rounded-full mx-auto mb-4 flex items-center justify-center`}
                         >
                           <Star
                             className={`w-6 h-6 ${field === "skills" ? "text-emerald-600" : "text-rose-600"}`}
@@ -635,7 +632,7 @@ const TeacherProfile = () => {
                       className="cursor-pointer"
                     >
                       <div className="flex flex-col items-center gap-3">
-                        <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center">
+                        <div className="w-12 h-12 bg-indigo-500 rounded-full flex items-center justify-center">
                           {uploadingResume ? (
                             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                           ) : (
@@ -650,14 +647,14 @@ const TeacherProfile = () => {
                   </div>
                 </div>
               ) : profile.resume ? (
-                <div className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 rounded-xl p-6 border border-indigo-200/50 dark:border-indigo-700/50">
+                <div className="bg-indigo-50 dark:bg-indigo-900/30 rounded-xl p-6 border border-indigo-200/50 dark:border-indigo-700/50">
                   <a
                     href={`http://localhost:5000${profile.resume}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="group flex items-center gap-3 text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 font-semibold transition-all duration-300"
                   >
-                    <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-md">
+                    <div className="w-10 h-10 bg-indigo-500 rounded-lg flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-md">
                       <FileText className="w-5 h-5 text-white" />
                     </div>
                     <span className="group-hover:underline">
@@ -667,7 +664,7 @@ const TeacherProfile = () => {
                 </div>
               ) : (
                 <div className="text-center py-8">
-                  <div className="w-16 h-16 bg-gradient-to-br from-indigo-200 to-purple-300 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <div className="w-16 h-16 bg-indigo-200 rounded-full mx-auto mb-4 flex items-center justify-center">
                     <FileText className="w-6 h-6 text-indigo-600" />
                   </div>
                   <p className="text-stone-500 dark:text-stone-400">
@@ -685,7 +682,7 @@ const TeacherProfile = () => {
               transition={{ duration: 0.5, delay: 0.5 }}
             >
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r from-stone-700 to-stone-900 rounded-xl flex items-center justify-center shadow-md">
+                <div className="w-10 h-10 bg-stone-800 rounded-xl flex items-center justify-center shadow-md">
                   <Mail className="w-5 h-5 text-white" />
                 </div>
                 <h2 className="text-2xl font-bold text-stone-700 dark:text-stone-300">
@@ -729,9 +726,9 @@ const TeacherProfile = () => {
                       href={profile.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex items-center gap-3 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-stone-800/50 dark:to-indigo-900/30 rounded-xl border border-stone-200/50 dark:border-blue-700/50 hover:shadow-md transition-all duration-300 hover:scale-105"
+                      className="group flex items-center gap-3 p-4 bg-blue-50 dark:bg-stone-800/50 rounded-xl border border-stone-200/50 dark:border-blue-700/50 hover:shadow-md transition-all duration-300 hover:scale-105"
                     >
-                      <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
+                      <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
                         <Linkedin className="w-4 h-4 text-white" />
                       </div>
                       <span className="text-orange-600 dark:text-orange-400 font-semibold group-hover:underline">
@@ -756,7 +753,7 @@ const TeacherProfile = () => {
                   )}
                   {!profile.linkedin && !profile.github && (
                     <div className="text-center py-8">
-                      <div className="w-16 h-16 bg-gradient-to-br from-stone-200 to-blue-300 rounded-full mx-auto mb-4 flex items-center justify-center">
+                      <div className="w-16 h-16 bg-stone-200 rounded-full mx-auto mb-4 flex items-center justify-center">
                         <Mail className="w-6 h-6 text-stone-500 dark:text-stone-400" />
                       </div>
                       <p className="text-stone-500 dark:text-stone-400">
@@ -779,7 +776,7 @@ const TeacherProfile = () => {
             >
               <button
                 onClick={handleSave}
-                className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-10 py-4 rounded-full shadow-lg hover:from-green-600 hover:to-emerald-700 flex items-center gap-3 font-bold text-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+                className="bg-green-500 text-white px-10 py-4 rounded-full shadow-lg hover:bg-green-600 flex items-center gap-3 font-bold text-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
               >
                 <Save className="w-5 h-5" /> Save Changes
               </button>
@@ -793,7 +790,7 @@ const TeacherProfile = () => {
 
 // Enhanced InfoCard component
 const InfoCard = ({ icon, label, value }) => (
-  <div className="group p-4 bg-gradient-to-r from-stone-400 to-blue-25 dark:from-stone-900/20 dark:to-blue-900/20 rounded-xl border border-orange-50/50 dark:border-stone-800/50 hover:shadow-md transition-all duration-300">
+  <div className="group p-4 bg-stone-100 dark:bg-stone-900/20 rounded-xl border border-orange-50/50 dark:border-stone-800/50 hover:shadow-md transition-all duration-300">
     <div className="flex items-center gap-2 mb-2">
       <div className="p-1.5 bg-orange-50 dark:bg-stone-900/50 rounded-md group-hover:scale-110 transition-transform duration-300">
         {icon}
@@ -809,5 +806,3 @@ const InfoCard = ({ icon, label, value }) => (
 );
 
 export default TeacherProfile;
-
-
