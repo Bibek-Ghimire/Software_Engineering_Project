@@ -8,18 +8,42 @@ import {
   findTopSimilarUsers,
   calculateDominantInterests,
 } from "../services/batchAllocationService.js";
+
+/**
+ * HELPER: Get algorithm description
+ * Returns human-readable description for each algorithm
+ */
+const getAlgorithmDescription = (algorithm) => {
+  const descriptions = {
+    kmeans:
+      "K-Means Clustering: Divides students into K clusters by minimizing within-cluster variance. Fast and scalable, balances cluster size uniformity with interest similarity.",
+    hierarchical:
+      "Hierarchical Agglomerative Clustering: Bottom-up approach that starts with each student as individual cluster and merges most similar pairs. Produces naturally cohesive interest-based groups.",
+    spectral:
+      "Spectral Clustering: Graph-based method that identifies naturally occurring communities of students with strong interest connections. Creates tight-knit study groups.",
+    dbscan:
+      "DBSCAN Clustering: Density-based algorithm that groups students with high interest overlap while identifying outliers. Flexible cluster sizes, better handles diverse interest profiles.",
+    greedy:
+      "Greedy Interest-Based: Sequential algorithm that assigns each student to the cluster with maximum shared interests. Optimal for real-time allocation.",
+  };
+
+  return descriptions[algorithm] || descriptions.kmeans;
+};
+
 /**
  * AUTO ALLOCATE ALL STUDENTS TO BATCHES
  * POST /api/batches/auto-allocate
  * Query/Body parameters:
- * - algorithm: 'kmeans' (default) | 'hierarchical' | 'greedy' | 'dbscan' | 'spectral'
+ * - algorithm: 'best' (default) | 'kmeans' | 'hierarchical' | 'greedy' | 'dbscan' | 'spectral'
  */
 export const autoAllocateBatches = async (req, res) => {
   try {
     // Get algorithm from query or body parameters
-    const algorithm = req.query.algorithm || req.body.algorithm || "kmeans";
+    const algorithm = req.query.algorithm || req.body.algorithm || "best";
 
     const validAlgorithms = [
+      "best",
+      "auto",
       "kmeans",
       "hierarchical",
       "greedy",
@@ -118,9 +142,8 @@ export const reallocateSingleUser = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: `User reallocated to ${
-        result.created ? "new" : "existing"
-      } batch`,
+      message: `User reallocated to ${result.created ? "new" : "existing"
+        } batch`,
       data: {
         batchId: result.batch._id,
         batchName: result.batch.name,
@@ -328,7 +351,22 @@ export const removeUserFromBatch = async (req, res) => {
       });
     }
 
-    await User.findByIdAndUpdate(userId, { batchId: null });
+    // Multi-batch support: remove batch from user's batchIds array
+    const user = await User.findById(userId);
+    if (user) {
+      // Remove from batchIds array
+      if (user.batchIds && user.batchIds.length > 0) {
+        user.batchIds = user.batchIds.filter((id) => id.toString() !== batchId);
+        await user.save();
+      }
+
+      // For backward compatibility, also update batchId
+      if (user.batchId && user.batchId.toString() === batchId) {
+        user.batchId =
+          user.batchIds && user.batchIds.length > 0 ? user.batchIds[0] : null;
+        await user.save();
+      }
+    }
 
     res.status(200).json({
       success: true,
@@ -360,7 +398,13 @@ export const deleteBatch = async (req, res) => {
       });
     }
 
-    // Remove batch reference from users
+    // Multi-batch support: remove batch from users' batchIds arrays
+    await User.updateMany(
+      { batchIds: batchId },
+      { $pull: { batchIds: batchId } },
+    );
+
+    // Backward compatibility: remove from single batchId field
     await User.updateMany({ batchId }, { batchId: null });
 
     res.status(200).json({
@@ -390,9 +434,9 @@ export const getBatchStatistics = async (req, res) => {
       avgBatchSize:
         batches.length > 0
           ? (
-              batches.reduce((sum, b) => sum + b.members.length, 0) /
-              batches.length
-            ).toFixed(2)
+            batches.reduce((sum, b) => sum + b.members.length, 0) /
+            batches.length
+          ).toFixed(2)
           : 0,
       fullBatches: batches.filter((b) => b.members.length === b.maxSize).length,
       batchDetails: batches.map((batch) => ({
@@ -435,31 +479,38 @@ export const getMyBatch = async (req, res) => {
       });
     }
 
-    if (!user.batchId) {
+    // Support both multi-batch (batchIds) and single-batch (batchId) for backward compatibility
+    const batchIds =
+      user.batchIds && user.batchIds.length > 0
+        ? user.batchIds
+        : user.batchId
+          ? [user.batchId]
+          : [];
+
+    if (batchIds.length === 0) {
       return res.status(404).json({
         success: false,
         message: "You are not assigned to any batch yet",
       });
     }
 
-    const batch = await Batch.findById(user.batchId).populate(
+    // Fetch all user's batches
+    const batches = await Batch.find({ _id: { $in: batchIds } }).populate(
       "members",
       "name email interests skills profilePicture college",
     );
 
-    if (!batch) {
+    if (!batches || batches.length === 0) {
       return res.status(404).json({
         success: false,
         message: "Batch not found",
       });
     }
 
-    // Calculate dominant interests
-    const dominantInterests = calculateDominantInterests(batch.members);
-
-    res.status(200).json({
-      success: true,
-      data: {
+    // Format batch data for frontend
+    const formattedBatches = batches.map((batch) => {
+      const dominantInterests = calculateDominantInterests(batch.members);
+      return {
         _id: batch._id,
         name: batch.name,
         interests: batch.interests,
@@ -470,8 +521,28 @@ export const getMyBatch = async (req, res) => {
         fillPercentage: ((batch.members.length / batch.maxSize) * 100).toFixed(
           2,
         ),
+        allocationAlgorithm: batch.allocationAlgorithm || "kmeans",
+        allocationScore: batch.allocationScore || 0,
+        evaluationMetrics: batch.evaluationMetrics || {
+          silhouetteScore: 0,
+          homogeneityScore: 0,
+          balanceScore: 0,
+          clusterCount: 0,
+          avgClusterSize: 0,
+        },
+        algorithmInfo: {
+          name: batch.allocationAlgorithm || "kmeans",
+          description: getAlgorithmDescription(batch.allocationAlgorithm),
+        },
         createdAt: batch.createdAt,
-      },
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      data:
+        formattedBatches.length === 1 ? formattedBatches[0] : formattedBatches,
+      batchCount: formattedBatches.length,
     });
   } catch (error) {
     res.status(500).json({
