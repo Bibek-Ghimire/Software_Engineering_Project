@@ -8,6 +8,42 @@ import {
 import HumanoidAvatar from "../components/HumanoidAvatar";
 
 /**
+ * Format algorithm name for display
+ */
+const formatAlgorithmName = (algo) => {
+  const algorithmNames = {
+    kmeans: "K-Means Clustering",
+    hierarchical: "Hierarchical Agglomerative Clustering (HAC)",
+    spectral: "Spectral Clustering",
+    dbscan: "DBSCAN Clustering",
+    greedy: "Greedy Interest-Based Clustering",
+  };
+  return algorithmNames[algo?.toLowerCase()] || algo || "Unknown";
+};
+
+/**
+ * Get algorithm description
+ */
+const getAlgorithmDescription = (algo) => {
+  const descriptions = {
+    kmeans:
+      "K-Means partitions students into k clusters by minimizing within-cluster variance, creating balanced, distinct groups.",
+    hierarchical:
+      "Hierarchical Agglomerative Clustering builds a tree of clusters, merging similar students bottom-up for natural groupings.",
+    spectral:
+      "Spectral Clustering uses graph theory to identify connected components of students with similar interests.",
+    dbscan:
+      "DBSCAN groups students based on density, handling outliers and creating clusters of varying sizes naturally.",
+    greedy:
+      "Greedy Interest-Based Clustering sequentially assigns students to batches that best match their learning interests.",
+  };
+  return (
+    descriptions[algo?.toLowerCase()] ||
+    "Advanced clustering algorithm for batch allocation"
+  );
+};
+
+/**
  * STUDY BATCH PAGE
  * Displays the current user's batch information
  * Users can only see their own batch and members
@@ -133,7 +169,7 @@ export default function StudyBatchPage() {
               </p>
               <div className="w-full max-w-xs bg-stone-200 dark:bg-stone-800 rounded-full h-3 overflow-hidden">
                 <div
-                  className="bg-gradient-to-r from-orange-500 to-amber-500 h-full transition-all duration-300"
+                  className="bg-orange-500 h-full transition-all duration-300"
                   style={{ width: `${batch.fillPercentage}%` }}
                 ></div>
               </div>
@@ -164,6 +200,99 @@ export default function StudyBatchPage() {
                     {interest}
                   </span>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* Batch Allocation Algorithm Info */}
+          {batch.allocationAlgorithm && (
+            <div className="mt-6 pt-6 border-t border-stone-200 dark:border-stone-700">
+              <div className="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950/20 dark:to-blue-950/20 border border-purple-200 dark:border-purple-900/40 rounded-lg p-5">
+                <div className="flex items-start gap-4">
+                  <div className="pt-1">
+                    <div className="w-10 h-10 rounded-full bg-purple-200 dark:bg-purple-900/40 flex items-center justify-center">
+                      <svg
+                        className="w-5 h-5 text-purple-600 dark:text-purple-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M13 10V3L4 14h7v7l9-11h-7z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-baseline gap-3 mb-3 flex-wrap">
+                      <h3 className="font-bold text-purple-900 dark:text-purple-100 text-lg">
+                        {formatAlgorithmName(batch.allocationAlgorithm)}
+                      </h3>
+                      {batch.allocationScore > 0 && (
+                        <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold bg-gradient-to-r from-green-200 to-emerald-200 dark:from-green-900/50 dark:to-emerald-900/50 text-green-800 dark:text-green-200">
+                          <span className="inline-block w-2 h-2 bg-green-600 dark:bg-green-400 rounded-full"></span>
+                          Quality Score:{" "}
+                          {(batch.allocationScore * 100).toFixed(1)}%
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-sm text-purple-700 dark:text-purple-200 leading-relaxed mb-4 font-medium">
+                      {getAlgorithmDescription(batch.allocationAlgorithm)}
+                    </p>
+                    {batch.evaluationMetrics && (
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-4 border-t border-purple-200 dark:border-purple-900/50">
+                        <div className="bg-white dark:bg-stone-800/50 rounded p-3">
+                          <p className="text-xs text-stone-500 dark:text-stone-400 font-semibold mb-1">
+                            Interest Similarity
+                          </p>
+                          <p className="text-lg font-bold text-purple-600 dark:text-purple-300">
+                            {(
+                              batch.evaluationMetrics.homogeneityScore * 100
+                            ).toFixed(0)}
+                            %
+                          </p>
+                          <p className="text-xs text-stone-400 dark:text-stone-500">
+                            Homogeneity
+                          </p>
+                        </div>
+                        <div className="bg-white dark:bg-stone-800/50 rounded p-3">
+                          <p className="text-xs text-stone-500 dark:text-stone-400 font-semibold mb-1">
+                            Cluster Separation
+                          </p>
+                          <p className="text-lg font-bold text-blue-600 dark:text-blue-300">
+                            {(
+                              (((batch.evaluationMetrics.silhouetteScore || 0) +
+                                1) /
+                                2) *
+                              100
+                            ).toFixed(0)}
+                            %
+                          </p>
+                          <p className="text-xs text-stone-400 dark:text-stone-500">
+                            Silhouette
+                          </p>
+                        </div>
+                        <div className="bg-white dark:bg-stone-800/50 rounded p-3">
+                          <p className="text-xs text-stone-500 dark:text-stone-400 font-semibold mb-1">
+                            Batch Balance
+                          </p>
+                          <p className="text-lg font-bold text-amber-600 dark:text-amber-300">
+                            {(
+                              batch.evaluationMetrics.balanceScore * 100
+                            ).toFixed(0)}
+                            %
+                          </p>
+                          <p className="text-xs text-stone-400 dark:text-stone-500">
+                            Uniformity
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           )}
@@ -329,4 +458,3 @@ export default function StudyBatchPage() {
     </div>
   );
 }
-
