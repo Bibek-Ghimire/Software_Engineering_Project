@@ -21,6 +21,18 @@ import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
+// PROTECTED ROUTES - Must come FIRST before dynamic routes
+router.get("/protected/my-batch", protect, getMyBatch);
+router.get("/protected/my-batch/members", protect, getMyBatchMembers);
+router.get(
+  "/protected/my-batch/similar-users",
+  protect,
+  getMyBatchSimilarUsers,
+);
+router.get("/protected/:batchId/members", protect, getProtectedBatchMembers);
+router.get("/protected/:batchId/similar-users", protect, getProtectedBatchSimilarUsers);
+router.get("/protected/:batchId", protect, getProtectedBatchById);
+
 // Auto-allocation routes (admin)
 router.post("/auto-allocate", autoAllocateBatches);
 router.post("/allocate-all-students", allocateAllStudents);
@@ -34,17 +46,6 @@ router.get("/:batchId", getBatchById);
 router.get("/user/:userId", getUserBatch);
 router.get("/similar-users/:userId", getSimilarUsers);
 router.get("/:batchId/dominant-interests", getBatchDominantInterests);
-
-// PROTECTED ROUTES - Only authenticated users
-// Must come AFTER non-protected routes
-router.get("/protected/my-batch", protect, getMyBatch);
-router.get("/protected/my-batch/members", protect, getMyBatchMembers);
-router.get(
-  "/protected/my-batch/similar-users",
-  protect,
-  getMyBatchSimilarUsers,
-);
-router.get("/protected/:batchId", protect, getProtectedBatchById);
 
 // Batch management routes
 router.delete("/:batchId/members/:userId", removeUserFromBatch);
